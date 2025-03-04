@@ -1,15 +1,12 @@
 import streamlit as st
-import appdirs as ad
-ad.user_cache_dir = lambda *args: "/tmp"
 import yfinance as yf
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from sklearn.linear_model import LinearRegression
 from datetime import datetime, timedelta
-import plotly.graph_objects as go
-import plotly.express as px
-from plotly.subplots import make_subplots
+
 import requests
 
 # Configuration de l'application Streamlit
@@ -132,7 +129,7 @@ def get_fundamental_data(ticker):
                 "P/E Ratio": info.get('trailingPE', 'N/A'),
                 "EPS": info.get('trailingEPS', 'N/A'),
                 "Prévision croissance EPS": info.get('earningsGrowth', 'N/A'),
-                "Rendement du dividende": f"{info.get('dividendYield', 0)*100:.2f}%" if info.get('dividendYield') else 'N/A',
+                "Rendement du dividende": f"{info.get('dividendYield', 0):.2f}%" if info.get('dividendYield') else 'N/A',
                 "Prix/Valeur comptable": info.get('priceToBook', 'N/A'),
                 "ROA": f"{info.get('returnOnAssets', 0)*100:.2f}%" if info.get('returnOnAssets') else 'N/A',
                 "ROE": f"{info.get('returnOnEquity', 0)*100:.2f}%" if info.get('returnOnEquity') else 'N/A',
@@ -183,8 +180,11 @@ def calculate_regression(df, column='Close'):
         regression_value = df['regression'].iloc[-1]
         
         # Calcul de l'écart en pourcentage
-        deviation = (last_price - regression_value) / regression_value * 100
+        #deviation = (last_price - regression_value) / regression_value * 100
         
+        # Calculer le nombre d'écarts types de l'écart actuel
+        current_deviation = (last_price - regression_value) / std_dev
+
         # Calcul de la progression sur 1 an et 5 ans (approximative)
         days_in_year = 252  # Nombre approximatif de jours de trading dans une année
         prog_1y = None
@@ -202,7 +202,7 @@ def calculate_regression(df, column='Close'):
             'coefficient': coef,
             'model_growth': coef / regression_value * 100 * 252,  # Croissance annualisée
             'correlation': np.corrcoef(df['index'], df[column])[0, 1],
-            'deviation': deviation,
+            'deviation': current_deviation,
             'prog_1y': prog_1y,
             'prog_5y': prog_5y
         }
@@ -240,10 +240,17 @@ def create_gauge(value, title, min_val, max_val, format_str="{:.2f}"):
         normalized_value = 0.5
         color = "gray"
     else:
+        value = round(value, 2)
         value_str = format_str.format(value)
-        normalized_value = (value - min_val) / (max_val - min_val)
-        normalized_value = max(0, min(1, normalized_value))
         
+        # Correction ici pour éviter division par zéro
+        if max_val == min_val:
+            normalized_value = 0.5
+        else:
+            normalized_value = (value - min_val) / (max_val - min_val)
+            
+        normalized_value = max(0, min(1, normalized_value))
+       
         # Déterminer la couleur en fonction de la valeur normalisée
         if normalized_value < 0.3:
             color = "red"
@@ -251,14 +258,20 @@ def create_gauge(value, title, min_val, max_val, format_str="{:.2f}"):
             color = "orange"
         else:
             color = "green"
-    
+   
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=value if value is not None else 50,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': title, 'font': {'size': 14}, 'align': 'center'},  # Alignement du titre
+        title={'text': title, 'font': {'size': 14}, 'align': 'center'},
         gauge={
-            'axis': {'range': [min_val, max_val], 'tickwidth': 1},
+            'axis': {
+                'range': [min_val, max_val], 
+                'tickwidth': 1, 
+                'tickmode': 'linear',
+                'tick0': min_val,
+                'dtick': (max_val - min_val) / 5
+            },
             'bar': {'color': color},
             'bgcolor': "white",
             'borderwidth': 2,
@@ -275,14 +288,97 @@ def create_gauge(value, title, min_val, max_val, format_str="{:.2f}"):
             'valueformat': format_str.replace("{:", "").replace("}", "")
         }
     ))
-    
+   
     fig.update_layout(
         height=150,
         margin=dict(l=10, r=10, t=50, b=10),
-        paper_bgcolor="white"
+        paper_bgcolor="white",
+        # Ajout des paramètres de mise en page
+        showlegend=False,
+        autosize=True,
+        # Centrage de l'indicateur
+        xaxis={'autorange': True, 'showgrid': False, 'zeroline': False, 'showticklabels': False},
+        yaxis={'autorange': True, 'showgrid': False, 'zeroline': False, 'showticklabels': False}
     )
-    
+   
     return fig
+
+# Fonction pour calculer les projections de prix
+def calculate_price_projections(price, growth_rate, years=7):
+    """
+    Calcule les projections de prix pour un nombre d'années donné
+    en fonction d'un taux de croissance annuel.
+    
+    Args:
+        price (float): Prix actuel
+        growth_rate (float): Taux de croissance annuel en pourcentage
+        years (int): Nombre d'années à projeter
+        
+    Returns:
+        dict: Dictionnaire contenant les projections pour chaque année
+    """
+    projections = {}
+    monthly_growth = growth_rate / 100 / 12  # Conversion en taux mensuel
+    
+    current_year = datetime.now().year
+    for year in range(current_year, current_year + years + 1):
+        # Calculer les projections pour chaque mois dans l'année
+        months_dict = {}
+        
+        for i in range(1, 13):
+            # Calculer le nombre de mois depuis le début
+            months_from_start = (year - current_year) * 12 + i
+            # Calculer le prix projeté
+            projected_price = price * (1 + monthly_growth) ** months_from_start
+            
+            # Stocker dans le dictionnaire des mois
+            months_dict[i] = projected_price
+            
+        # Stocker dans le dictionnaire des années
+        projections[year] = months_dict
+    
+    return projections
+
+# Fonction pour calculer les projections sigma
+def calculate_sigma_projections(regression_model, std_dev, current_date, years=7):
+    """
+    Calcule les projections de -1 sigma pour les années à venir
+    
+    Args:
+        regression_model: Modèle de régression linéaire
+        std_dev (float): Écart-type des résidus
+        current_date: Date actuelle
+        years (int): Nombre d'années à projeter
+        
+    Returns:
+        dict: Dictionnaire contenant les projections sigma
+    """
+    sigma_projections = {}
+    current_year = datetime.now().year
+    
+    # Pour chaque année
+    for year in range(current_year, current_year + years + 1):
+        # Pour différentes périodes en mois
+        months_periods = [12, 24, 36, 48, 60, 72, 84]
+        sigma_values = {}
+        
+        for months in months_periods:
+            # Calculer la date future
+            future_date = current_date + pd.DateOffset(months=months)
+            # Projection pour cette date
+            future_index = (future_date - current_date).days / 30  # Approximation en mois
+            projected_value = regression_model[0] * future_index + regression_model[1]
+            
+            # Calculer la valeur -1 sigma
+            neg_sigma_value = projected_value - std_dev
+            
+            # Stocker la valeur dans le dictionnaire
+            period_key = f"{months} mois"
+            sigma_values[period_key] = neg_sigma_value
+        
+        sigma_projections[year] = sigma_values
+    
+    return sigma_projections
 
 # Interface utilisateur Streamlit
 def main():
@@ -304,7 +400,7 @@ def main():
     st.write(f"Vous avez sélectionné: **{stock_name}** ({ticker}) | ISIN: {isin}")
     
     # Création d'onglets pour organiser l'interface
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Analyse technique", "🧮 Données fondamentales", "📊 Graphique avec volumes", "📰 News"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📈 Analyse technique", "🧮 Données fondamentales", "📊 Graphique avec volumes", "📰 News", "🔮 Projection"])
     
     with tab1:
         # Sélection de la période pour l'analyse technique
@@ -368,9 +464,8 @@ def main():
                 # Ne montrer "Prog. 5 ans" que si la période est >= 5 ans
                 {"name": "Prog. 5 ans", "value": indicators.get('prog_5y', 0), "min": -50, "max": 200, "format": "{:.2f}%", 
                  "show": period in ["5 Ans", "Maximum"]},
-                # Ne pas montrer "Écart type" pour la période Maximum
-                {"name": "Écart type", "value": indicators.get('deviation', 0), "min": -30, "max": 30, "format": "{:.2f}%", 
-                 "show": period != "Maximum"}
+                # Ne pas montrer "Écart type" pour la période Maximum "show": period != "Maximum"
+                {"name": "Nb Écart type", "value": indicators.get('deviation', 0), "min": -3, "max": 3, "format": "{:.2f}", "show": True}
             ]
             
             # Filtrer les jauges à afficher
@@ -589,6 +684,186 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.error(f"Impossible de récupérer les données pour {stock_name}")
+
+    with tab5:
+            st.subheader("Projection du cours sur 7 ans")
+            
+            # Récupérer le PRU (Prix de Revient Unitaire)
+            col1, col2 = st.columns([1, 2])
+            with col1:
+                user_pru = st.number_input("Entrez votre PRU (€)", min_value=0.01, step=0.01, value=100.0)
+            
+            # Récupérer les données historiques et calculer la régression
+            proj_df = get_stock_history(ticker, period="5y")
+            
+            if not proj_df.empty:
+                # Calculer la régression
+                _, indicators = calculate_regression(proj_df)
+                
+                # Récupérer le taux de croissance du modèle
+                model_growth = indicators.get('model_growth', 0)
+                
+                # Créer un message d'information
+                with col2:
+                    st.info(f"Croissance annuelle du modèle basée sur les 5 dernières années: {model_growth:.2f}% | Mise à jour: {datetime.now().strftime('%B %Y')}")
+                
+                # Calculer le coefficient de corrélation pour le modèle
+                correlation = indicators.get('correlation', 0)
+                
+                # Calculer la date actuelle
+                current_date = datetime.now()
+                current_year = current_date.year
+                
+                # Récupérer le prix actuel
+                fund_data = get_fundamental_data(ticker)
+                current_price = None
+                if fund_data and "Données de marché" in fund_data:
+                    current_price = fund_data["Données de marché"].get("Prix actuel")
+                
+                if current_price is not None:
+                    # Calculer l'écart-type pour les projections sigma
+                    # Simplification: utiliser la dernière valeur de l'écart-type calculé pour la régression
+                    std_dev = indicators.get('deviation', 0) * current_price / 100
+                    
+                    # Coefficient de la régression linéaire
+                    coef = indicators.get('coefficient', 0)
+                    
+                    # Valeur d'intercept (approximative)
+                    intercept = proj_df['Close'].iloc[-1] - coef * len(proj_df)
+                    
+                    # Créer un tableau de projections
+                    st.subheader("Tableau de projection")
+                    
+                    # Préparer les données pour le tableau
+                    table_data = []
+                    
+                    # En-têtes
+                    headers = ["TICKER", "COURS", "Krach", "PRU", "-1 SIGMA", 
+                            "Croissance\ndu modèle", "coef\ncorr.",
+                            "-1 sigma\ndans 12 mois", "-1 sigma\ndans 24 mois",
+                            "-1 sigma\ndans 36 mois", "-1 sigma\ndans 48 mois",
+                            "-1 sigma\ndans 60 mois", "-1 sigma\ndans 72 mois",
+                            "-1 sigma\ndans 84 mois"]
+                    
+                    # Calculer la valeur du krach (approximation)
+                    krach_value = current_price * 0.85  # 15% de baisse
+                    
+                    # Calculer la valeur -1 sigma actuelle
+                    current_neg_sigma = current_price - std_dev
+                    
+                    # Calculer les projections -1 sigma
+                    years_to_project = 7
+                    neg_sigma_values = []
+                    
+                    for i in range(1, years_to_project + 1):
+                        # Calculer pour une période en années
+                        months = i * 12
+                        # Projection du prix
+                        projected_price = current_price * (1 + model_growth/100) ** i
+                        # Projection -1 sigma
+                        neg_sigma = projected_price - std_dev * (1 + model_growth/200) ** i
+                        neg_sigma_values.append(f"{neg_sigma:.0f} €")
+                    
+                    # Créer la ligne de données
+                    row = [
+                        ticker,
+                        f"{current_price:.2f}",
+                        f"{krach_value:.0f}",
+                        f"{user_pru:.0f}",
+                        f"{current_neg_sigma:.0f}",
+                        f"{model_growth:.1f}%",
+                        f"{correlation:.2f}",
+                    ]
+                    
+                    # Ajouter les valeurs -1 sigma
+                    row.extend(neg_sigma_values)
+                    
+                    # Ajouter la ligne au tableau
+                    table_data.append(row)
+                    
+                    # Créer un DataFrame
+                    df_projection = pd.DataFrame([row], columns=headers)
+                    
+                    # Appliquer un style conditionnel au tableau
+                    def highlight_pru(val):
+                        try:
+                            val_num = float(val.replace(' €', ''))
+                            if val_num < user_pru:
+                                return 'background-color: #ffcccc'  # Rouge clair
+                            else:
+                                return 'background-color: #ccffcc'  # Vert clair
+                        except:
+                            return ''
+                    
+                    # Créer le tableau stylisé
+                    styled_df = df_projection.style.applymap(
+                        highlight_pru, 
+                        subset=pd.IndexSlice[:, df_projection.columns[7:]]
+                    )
+                    
+                    # Afficher le tableau
+                    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+                    
+                    # Explication
+                    st.info("""
+                    **Comment utiliser ce tableau :**
+                    - Les cellules en vert indiquent que la projection est supérieure à votre PRU
+                    - Les cellules en rouge indiquent que la projection est inférieure à votre PRU
+                    - La ligne "-1 sigma" représente le scénario pessimiste (16% des cas)
+                    - La valeur "Krach" représente une baisse de 15% du prix actuel
+                    """)
+                    
+                    # Afficher un graphique de projection
+                    st.subheader("Graphique de projection")
+                    
+                    # Préparer les données pour le graphique
+                    years = list(range(current_year, current_year + years_to_project + 1))
+                    projection_values = [current_price]
+                    
+                    # Calculer les valeurs projetées pour chaque année
+                    for i in range(1, years_to_project + 1):
+                        projected = current_price * (1 + model_growth/100) ** i
+                        projection_values.append(projected)
+                    
+                    # Créer des données pour la ligne représentant le PRU
+                    pru_values = [user_pru] * (years_to_project + 1)
+                    
+                    # Créer le graphique
+                    fig = go.Figure()
+                    
+                    # Ajouter la ligne de projection
+                    fig.add_trace(go.Scatter(
+                        x=years,
+                        y=projection_values,
+                        mode='lines+markers',
+                        name='Projection',
+                        line=dict(color='blue', width=2)
+                    ))
+                    
+                    # Ajouter la ligne du PRU
+                    fig.add_trace(go.Scatter(
+                        x=years,
+                        y=pru_values,
+                        mode='lines',
+                        name='Votre PRU',
+                        line=dict(color='red', width=1, dash='dash')
+                    ))
+                    
+                    # Mise en page du graphique
+                    fig.update_layout(
+                        title=f"Projection du cours de {stock_name} sur 7 ans",
+                        xaxis_title="Année",
+                        yaxis_title="Prix (€)",
+                        height=500,
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                    )
+                    
+                    # Afficher le graphique
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    st.error("Impossible de récupérer le prix actuel pour calculer les projections")
+            else:
+                st.error(f"Impossible de récupérer les données pour {stock_name}")
 
 if __name__ == "__main__":
     main()
