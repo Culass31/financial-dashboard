@@ -5,8 +5,8 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-from scikit-learn.linear_model import LinearRegression
+SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
+from sklearn.linear_model import LinearRegression
 from datetime import datetime, timedelta
 import plotly.graph_objects as go
 import plotly.express as px
