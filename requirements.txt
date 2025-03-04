@@ -1,4 +1,5 @@
 streamlit
+appdirs
 yfinance
 pandas
 numpy
