@@ -156,12 +156,12 @@ FR0000130395;Remy Cointreau;RCO;France;Europe
 FR0000131906;Renault;RNO;France;Europe
 FR0010451203;Rexel;RXL;France;Europe
 FR0000039091;Robertet;RBT;France;Europe
-FR0013269123;Rubis;RUI;France;Europe
+FR0013269123;Rubis;RUI.PA;France;Europe
 FR0000073272;Safran;SAF;France;Europe
 FR0000125007;Saint Gobain;SGO;France;Europe
 FR0000120578;Sanofi;SAN;France;Europe
 FR0013154002;Sartorius Stedim Biotech;DIM;France;Europe
-FR0000121972;Schneider Electric;SU;France;Europe
+FR0000121972;Schneider Electric;SU.PA;France;Europe
 FR0010411983;Scor;SCR;France;Europe
 FR0000121709;Seb;SK;France;Europe
 FR0000039109;Seche Environnement;SCHP;France;Europe
@@ -879,7 +879,6 @@ US9311421039;Walmart Inc;WMT;Allemagne;Europe
 US9314271084;Walgreens Boots Alliance Inc;W8A;Allemagne;Europe
 US94106L1098;Waste Management Inc.;UWS;Allemagne;Europe
 XS2434891219;Fidelity Physical Bitcoin ETP;FBTC;Allemagne;Europe
-ABC000000183;Decentraland;MANAUSD;Etats-Unis;Amérique du Nord
 ABC000000184;Livepeer;LPTUSD;Etats-Unis;Amérique du Nord
 AN8068571086;SCHLUMBERGER LTD;SLB;Etats-Unis;Amérique du Nord
 BBG000FVQ185;Capri Holdings Ltd;CPRI;Etats-Unis;Amérique du Nord
