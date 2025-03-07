@@ -1,4 +1,4 @@
-ISIN;nom;ticker;Pays;Région
+ISIN;nom;ticker;Pays;RÃ©gion
 FR0010557264;Ab Science;AB.PA;France;Europe
 FR0004040608;Abc Arbitrage;ABCA.PA;France;Europe
 FR0012616852;Abionyx Pharma;ABNX.PA;France;Europe
@@ -85,7 +85,7 @@ FR0011271600;Fermentalg;ALGAE.PA;France;Europe
 FR0011476928;Fnac Darty;FNAC.PA;France;Europe
 FR0014005SB3;Forsee Power;FORSE.PA;France;Europe
 FR0000121147;Forvia;FRVIA.PA;France;Europe
-FR0013030152;Francaise de lâ€™Energie;FDE.PA;France;Europe
+FR0013030152;Francaise de lÃ¢â‚¬â„¢Energie;FDE.PA;France;Europe
 FR0013451333;Francaise des jeux;FDJ.PA;France;Europe
 FR0010040865;Gecina Nom.;GFC.PA;France;Europe
 FR0004163111;Genfit;GNFT.PA;France;Europe
@@ -161,7 +161,7 @@ FR0000073272;Safran;SAF.PA;France;Europe
 FR0000125007;Saint Gobain;SGO.PA;France;Europe
 FR0000120578;Sanofi;SAN.PA;France;Europe
 FR0013154002;Sartorius Stedim Biotech;DIM.PA;France;Europe
-FR0000121972;Schneider Electric;SU.PA.PA;France;Europe
+FR0000121972;Schneider Electric;SU.PA;France;Europe
 FR0010411983;Scor;SCR.PA;France;Europe
 FR0000121709;Seb;SK.PA;France;Europe
 FR0000039109;Seche Environnement;SCHP.PA;France;Europe
@@ -351,7 +351,7 @@ AT0000937503;Voestalpine AG;VAS;Allemagne;Europe
 AT0000969985;AT&S Austria Technologie & Systemtechnik AG;AUS;Allemagne;Europe
 AT0000A0E9W5;Kontron AG;KTN;Allemagne;Europe
 AT0000A25NJ6;Wolftank Adisa Holding AG;WAH;Allemagne;Europe
-AT0000APOST4;Ã–sterreichische Post AG;O3P;Allemagne;Europe
+AT0000APOST4;Ãƒâ€“sterreichische Post AG;O3P;Allemagne;Europe
 AT0000BAWAG2;Bawag Group AG;0B2;Allemagne;Europe
 AT000AGRANA3;Agrana Beteiligungs AG;AGB2;Allemagne;Europe
 ATFREQUENT09;Frequentis AG;FQT;Allemagne;Europe
@@ -397,7 +397,7 @@ DE0005202303;Quirin Privatbank AG;QB7;Allemagne;Europe
 DE0005203947;BRAIN Biotechnology Research & Information Network;BNN;Allemagne;Europe
 DE0005209589;artec technologies AG;A6T;Allemagne;Europe
 DE0005218309;Mobotix AG;MBQ;Allemagne;Europe
-DE0005220008;EnBW Energie Baden-WÃ¼rttemberg AG;EBK;Allemagne;Europe
+DE0005220008;EnBW Energie Baden-WÃƒÂ¼rttemberg AG;EBK;Allemagne;Europe
 DE0005220909;Nexus AG;NXU;Allemagne;Europe
 DE0005227201;Biotest AG;BIO;Allemagne;Europe
 DE0005227235;Biotest AG;BIO3;Allemagne;Europe
@@ -410,7 +410,7 @@ DE0005313704;Carl Zeiss Meditec ;AFX;Allemagne;Europe
 DE0005403901;Cewe Color Holding ;CWC;Allemagne;Europe
 DE0005407100;CENIT Aktiengesellschaft;CSH;Allemagne;Europe
 DE0005407407;CeoTronics AG;CEK;Allemagne;Europe
-DE0005408686;Ã–KOWORLD AG;VVV3;Allemagne;Europe
+DE0005408686;Ãƒâ€“KOWORLD AG;VVV3;Allemagne;Europe
 DE0005419105;CANCOM AG;COK;Allemagne;Europe
 DE0005437305;CompuGroup Medical ;COP;Allemagne;Europe
 DE0005439004;Continental AG;CON;Allemagne;Europe
@@ -423,7 +423,7 @@ DE0005493092;Borussia Dortmund G;BVB;Allemagne;Europe
 DE0005493365;Hypoport AG;HYQ;Allemagne;Europe
 DE0005495626;Geratherm Medical AG;GME;Allemagne;Europe
 DE0005498901;Data Modul AG;DAM;Allemagne;Europe
-DE0005533400;Deutsche GrundstÃ¼cksauktionen AG;DGR;Allemagne;Europe
+DE0005533400;Deutsche GrundstÃƒÂ¼cksauktionen AG;DGR;Allemagne;Europe
 DE0005545503;1&1 AG;1U1;Allemagne;Europe
 DE0005550602;Draegerwerk AG & Co;DRW8;Allemagne;Europe
 DE0005550636;Draegerwerk AG & Co;DRW3;Allemagne;Europe
@@ -474,7 +474,7 @@ DE0006201106;FRIWO AG;CEA;Allemagne;Europe
 DE0006202005;Salzgitter AG;SZG;Allemagne;Europe
 DE0006204589;mVISE AG;C1V;Allemagne;Europe
 DE0006208408;KAP AG;IUR;Allemagne;Europe
-DE0006214687;MÃ¼ller - Die lila Logistik AG;MLL;Allemagne;Europe
+DE0006214687;MÃƒÂ¼ller - Die lila Logistik AG;MLL;Allemagne;Europe
 DE0006219934;Jungheinrich AG;JUN3;Allemagne;Europe
 DE0006223407;ProCredit Holding AG & Co KGaA;PCZ;Allemagne;Europe
 DE0006223605;Intertainment AG;ITN;Allemagne;Europe
@@ -545,7 +545,7 @@ DE0007657231;Villeroy & Boch AG;VIB3;Allemagne;Europe
 DE0007664005;Volkswagen AG;VOW;Allemagne;Europe
 DE0007664039;Volkswagen AG;VOW3;Allemagne;Europe
 DE0007667107;Vossloh AG;VOS;Allemagne;Europe
-DE0007830572;Daldrup & SÃ¶hne Aktiengesellschaft;4DS;Allemagne;Europe
+DE0007830572;Daldrup & SÃƒÂ¶hne Aktiengesellschaft;4DS;Allemagne;Europe
 DE0007846867;Viscom AG;V6C;Allemagne;Europe
 DE0007856023;ElringKlinger AG;ZIL2;Allemagne;Europe
 DE0007857476;Klassik Radio AG;KA8;Allemagne;Europe
@@ -775,7 +775,7 @@ FI4000106299;Ferratum Oyj;FRU;Allemagne;Europe
 FI4000297767;Nordea Bank Abp;04Q;Allemagne;Europe
 FR0000120073;Air Liquide SA;AIL;Allemagne;Europe
 FR0000120321;L'Oreal S.A.;LOR;Allemagne;Europe
-FR0000121014;LVMH MoÃ«t Hennessy - Louis Vuitton Societe Europee;MOH;Allemagne;Europe
+FR0000121014;LVMH MoÃƒÂ«t Hennessy - Louis Vuitton Societe Europee;MOH;Allemagne;Europe
 FR0000133308;Orange SA;FTE;Allemagne;Europe
 GB00B7T77214;NatWest Group PLC;RYS1;Allemagne;Europe
 GB00BH4HKS39;Vodafone Group PLC;VODI;Allemagne;Europe
@@ -840,7 +840,7 @@ US0394831020;Archer-Daniels-Midland Company;ADM;Allemagne;Europe
 US0605051046;Bank of America Corp;NCB;Allemagne;Europe
 US08862E1091;Beyond Meat Inc;0Q3;Allemagne;Europe
 US09075V1026;BioNTech SE;22UA;Allemagne;Europe
-US14448C1045;Carrier GlobalÂ Corp;4PN;Allemagne;Europe
+US14448C1045;Carrier GlobalÃ‚Â Corp;4PN;Allemagne;Europe
 US1491231015;Caterpillar Inc;CAT1;Allemagne;Europe
 US1729674242;Citigroup Inc;TRVC;Allemagne;Europe
 US1912161007;The Coca-Cola Company;CCC3;Allemagne;Europe
@@ -879,897 +879,897 @@ US9311421039;Walmart Inc;WMT;Allemagne;Europe
 US9314271084;Walgreens Boots Alliance Inc;W8A;Allemagne;Europe
 US94106L1098;Waste Management Inc.;UWS;Allemagne;Europe
 XS2434891219;Fidelity Physical Bitcoin ETP;FBTC;Allemagne;Europe
-ABC000000184;Livepeer;LPTUSD;Etats-Unis;Amérique du Nord
-AN8068571086;SCHLUMBERGER LTD;SLB;Etats-Unis;Amérique du Nord
-BBG000FVQ185;Capri Holdings Ltd;CPRI;Etats-Unis;Amérique du Nord
-BBG001LKFKJ8;Sequans Communications SA;SQNS;Etats-Unis;Amérique du Nord
-BMG491BT1088;INVESCO LTD;IVZ;Etats-Unis;Amérique du Nord
-BMG5876H1051;Marvell tech Group;MRVL;Etats-Unis;Amérique du Nord
-BMG6359F1032;NABORS INDUSTRIES L;NBR;Etats-Unis;Amérique du Nord
-BMG667211046;NORWEGIAN CRUISE;NCLH;Etats-Unis;Amérique du Nord
-BMG812761002;Signet Jewelers;SIG;Etats-Unis;Amérique du Nord
-CA0084741085;Agnico Eagle Mines;AEM;Etats-Unis;Amérique du Nord
-CA0679011084;Barrick Gold;GOLD;Etats-Unis;Amérique du Nord
-CA09228F1036;BLACKBERRY;BB;Etats-Unis;Amérique du Nord
-CA23345B2003;Dmg Blockchain Solutions;DMGGF;Etats-Unis;Amérique du Nord
-CA29250N1050;Enbridge;ENB;Etats-Unis;Amérique du Nord
-CA4969024047;Kinross Gold;KGC;Etats-Unis;Amérique du Nord
-CA6979001089;Pan American Silver;PAAS;Etats-Unis;Amérique du Nord
-CA7063271034;PEMBINA PIPELINE;PBA;Etats-Unis;Amérique du Nord
-CA80013R2063;Sandstorm Gold Ltd;SAND;Etats-Unis;Amérique du Nord
-CA82509L1076;SHOPIFY;SHOP;Etats-Unis;Amérique du Nord
-CA85210A1049;Sprott Physical Uranium Trust;SRUUF;Etats-Unis;Amérique du Nord
-CAC966571167;Vision Marine Technologies;VMAR;Etats-Unis;Amérique du Nord
-CH0033347318;NOBLE CORP;NE;Etats-Unis;Amérique du Nord
-CH0048265513;TRANSOCEAN;RIG;Etats-Unis;Amérique du Nord
-CH0102993182;TE CONNECTIVITY LTD;TEL;Etats-Unis;Amérique du Nord
-CH0114405324;GARMIN LTD;GRMN;Etats-Unis;Amérique du Nord
-CH0334081137;CRISPR Therapeutics AG;CRSP;Etats-Unis;Amérique du Nord
-CH1125843347;Sophia Genetics;SOPH;Etats-Unis;Amérique du Nord
-GB00B8W67B19;LIBERTY GLOBAL C;LBTYK;Etats-Unis;Amérique du Nord
-GB00BDCPN049;Coca-Cola European Partners PLC;CCEP;Etats-Unis;Amérique du Nord
-GB00BDSFG982;TechnipFMC plc;FTI;Etats-Unis;Amérique du Nord
-GB00BMVP7Y09;Royalty Pharma PLC;RPRX;Etats-Unis;Amérique du Nord
-IE000S9YS762;Linde PLC;LIN;Etats-Unis;Amérique du Nord
-IE00B4BNMY34;ACCENTURE PLC;ACN;Etats-Unis;Amérique du Nord
-IE00B56GVS15;Alkermes Plc;ALKS;Etats-Unis;Amérique du Nord
-IE00B58JVZ52;SEAGATE TECHNOLOGY;STX;Etats-Unis;Amérique du Nord
-IE00B6330302;INGERSOLL-RAND PLC;IR;Etats-Unis;Amérique du Nord
-IE00B8KQN827;EATON CORPORATION;ETN;Etats-Unis;Amérique du Nord
-IE00BFRT3W74;ALLEGION PLC;ALLE;Etats-Unis;Amérique du Nord
-IE00BFY8C754;STERIS plc;STE;Etats-Unis;Amérique du Nord
-IE00BJXRT698;SPDR Bloomberg 1-3 Month T-Bill UCITS ETF;BIL;Etats-Unis;Amérique du Nord
-IE00BK9ZQ967;Trane Technologies plc;TT;Etats-Unis;Amérique du Nord
-IE00BLNN3691;Weatherford International;WFRD;Etats-Unis;Amérique du Nord
-IE00BLP1HW54;AON CORP;AON;Etats-Unis;Amérique du Nord
-IL0010824113;CHECK POINT SOFTWAR;CHKP;Etats-Unis;Amérique du Nord
-IL0010834765;RADWARE;RDWR;Etats-Unis;Amérique du Nord
-IL0011267213;Stratasys;SSYS;Etats-Unis;Amérique du Nord
-IL0011334468;CYBERARK SOFTWARE;CYBR;Etats-Unis;Amérique du Nord
-IL0011582033;FIVERR INTERNATIONAL;FVRR;Etats-Unis;Amérique du Nord
-IL0065100930;ZIM Integrated Shipping Services;ZIM;Etats-Unis;Amérique du Nord
-JE00B783TY65;APTIV;APTV;Etats-Unis;Amérique du Nord
-JE00BJ1F3079;Amcor plc;AMCR;Etats-Unis;Amérique du Nord
-JE00BS44BN30;Birkenstock;BIRK;Etats-Unis;Amérique du Nord
-KYG037AX1015;AMBARELLA;AMBA;Etats-Unis;Amérique du Nord
-KYG3323L1005;FABRINET;FN;Etats-Unis;Amérique du Nord
-KYG393871085;Globalfoundries Inc;GFS;Etats-Unis;Amérique du Nord
-KYG4124C1096;Grab Holdings Ltd;GRAB;Etats-Unis;Amérique du Nord
-KYG4740B1059;ICHOR HOLDINGS;ICHR;Etats-Unis;Amérique du Nord
-KYG5784H1065;Manchester United Ltd;MANU;Etats-Unis;Amérique du Nord
-KYG6683N1034;Nu Holdings;NU;Etats-Unis;Amérique du Nord
-KYG851581069;StoneCo Ltd;STNE;Etats-Unis;Amérique du Nord
-KYG8807B1068;Theravance Biopharma;TBPH;Etats-Unis;Amérique du Nord
-LR0008862868;ROYAL CRUISE LTD;RCL;Etats-Unis;Amérique du Nord
-LU1778762911;SPOTIFY;SPOT;Etats-Unis;Amérique du Nord
-MHY717261066;Pyxis Tankers;PXS;Etats-Unis;Amérique du Nord
-NL0000240000;QIAGEN N.V.;QGEN;Etats-Unis;Amérique du Nord
-NL0009434992;LYONDELLBASELL INDU;LYB;Etats-Unis;Amérique du Nord
-NL0009538784;NXP SEMICONDUCTORS;NXPI;Etats-Unis;Amérique du Nord
-NL0011509302;Ferrari;RACE;Etats-Unis;Amérique du Nord
-NL0015436031;Curevac;CVAC;Etats-Unis;Amérique du Nord
-PA1436583006;CARNIVAL CORP;CCL;Etats-Unis;Amérique du Nord
-SG9999000020;FLEXTRONICS INTL LT;FLEX;Etats-Unis;Amérique du Nord
-SGXZ55111462;VinFast Auto Ltd;VFS;Etats-Unis;Amérique du Nord
-US00101J1060;ADT CORPORATION;ADT;Etats-Unis;Amérique du Nord
-US0010551028;AFLAC INC;AFL;Etats-Unis;Amérique du Nord
-US00130H1059;AES CORP;AES;Etats-Unis;Amérique du Nord
-US00165C1045;AMC Entertainment;AMC;Etats-Unis;Amérique du Nord
-US0017441017;AMN HEALTHCARE SERVICES;AMN;Etats-Unis;Amérique du Nord
-US00206R1023;AT&T;T;Etats-Unis;Amérique du Nord
-US00214Q1040;ARK Innovation ETF;ARKK;Etats-Unis;Amérique du Nord
-US00214Q2030;ARK Autonomous Technology & Robotics ETF;ARKQ;Etats-Unis;Amérique du Nord
-US00214Q3020;ARK Genomic Revolution ETF;ARKG;Etats-Unis;Amérique du Nord
-US00214Q4010;ARK Next Generation Internet ETF;ARKW;Etats-Unis;Amérique du Nord
-US00214Q7088;ARK Fintech Innovation ETF;ARKF;Etats-Unis;Amérique du Nord
-US00217D1000;ASt Spacemobile;ASTS;Etats-Unis;Amérique du Nord
-US0024741045;AZZ Inc;AZZ;Etats-Unis;Amérique du Nord
-US0028241000;ABBOTT LABORATORIES;ABT;Etats-Unis;Amérique du Nord
-US00287Y1091;ABBVIE;ABBV;Etats-Unis;Amérique du Nord
-US0028962076;ABERCROMBIE & FITCH;ANF;Etats-Unis;Amérique du Nord
-US00507K1034;Actavis Inc;ACT;Etats-Unis;Amérique du Nord
-US00507W1071;ACTINIUM PHARMA;ATNM;Etats-Unis;Amérique du Nord
-US00508Y1029;ACUITY BRANDS;AYI;Etats-Unis;Amérique du Nord
-US00724F1012;Adobe Systems Incorporate;ADBE;Etats-Unis;Amérique du Nord
-US00751Y1064;ADVANCE AUTO PARTS;AAP;Etats-Unis;Amérique du Nord
-US0079031078;Advanced Micro Devices;AMD;Etats-Unis;Amérique du Nord
-US0082521081;AFFILIATED MANAGERS;AMG;Etats-Unis;Amérique du Nord
-US00846U1016;AGILENT TECHNOLOGIE;A;Etats-Unis;Amérique du Nord
-US0084921008;Agree Realty Corp.;ADC;Etats-Unis;Amérique du Nord
-US0090661010;AIRBNB;ABNB;Etats-Unis;Amérique du Nord
-US0091581068;AIR PRODUCTS & CHEM;APD;Etats-Unis;Amérique du Nord
-US00971T1016;Akamai Tech;AKAM;Etats-Unis;Amérique du Nord
-US0116591092;ALASKA AIR GROUP;ALK;Etats-Unis;Amérique du Nord
-US0126531013;ABERMARLE;ALB;Etats-Unis;Amérique du Nord
-US0138171014;Alcoa Inc.;AA;Etats-Unis;Amérique du Nord
-US0152711091;ALEXANDRIA REAL EST;ARE;Etats-Unis;Amérique du Nord
-US01609W1027;ALIBABA;BABA;Etats-Unis;Amérique du Nord
-US0162551016;ALIGN TECHNOLOGY;ALGN;Etats-Unis;Amérique du Nord
-US01741R1023;ALLEGHENY TECHNOLOG;ATI;Etats-Unis;Amérique du Nord
-US0188021085;ALLIANT ENERGY;LNT;Etats-Unis;Amérique du Nord
-US0200021014;ALLSTATE CORP;ALL;Etats-Unis;Amérique du Nord
-US02005N1000;Ally Financial Inc;ALLY;Etats-Unis;Amérique du Nord
-US02079K1079;Alphabet C;GOOG;Etats-Unis;Amérique du Nord
-US02079K3059;Alphabet A;GOOGL;Etats-Unis;Amérique du Nord
-US0213691035;ALTAIR ENG.;ALTR;Etats-Unis;Amérique du Nord
-US02156K1034;ALTICE USA INC. A;ATUS;Etats-Unis;Amérique du Nord
-US02209S1033;ALTRIA GROUP INC;MO;Etats-Unis;Amérique du Nord
-US0231351067;Amazon.Com, Inc.;AMZN;Etats-Unis;Amérique du Nord
-US0236081024;AMEREN CORP;AEE;Etats-Unis;Amérique du Nord
-US02376R1023;American Airlines;AAL;Etats-Unis;Amérique du Nord
-US0240611030;American Axle;AXL;Etats-Unis;Amérique du Nord
-US0255371017;AMERICAN ELECTRIC P;AEP;Etats-Unis;Amérique du Nord
-US0258161092;American Express Company;AXP;Etats-Unis;Amérique du Nord
-US0268747849;AMERICAN INTL GROUP;AIG;Etats-Unis;Amérique du Nord
-US03027X1000;AMERICAN TOWER CORP;AMT;Etats-Unis;Amérique du Nord
-US0303711081;American Vanguard Corp.;AVD;Etats-Unis;Amérique du Nord
-US0304201033;AMERICAN WATER WORK;AWK;Etats-Unis;Amérique du Nord
-US03076C1062;AMERIPRISE FINANCIA;AMP;Etats-Unis;Amérique du Nord
-US0311001004;AMETEK INC;AME;Etats-Unis;Amérique du Nord
-US0311621009;Amgen, Inc.;AMGN;Etats-Unis;Amérique du Nord
-US0320951017;AMPHENOL CORP A;APH;Etats-Unis;Amérique du Nord
-US0321086078;Amplify Transformational Data Sharing ETF;BLOK;Etats-Unis;Amérique du Nord
-US0326541051;ANALOG DEVICES INC;ADI;Etats-Unis;Amérique du Nord
-US03662Q1058;ANSYS INC;ANSS;Etats-Unis;Amérique du Nord
-US0374111054;APACHE CORP;APA;Etats-Unis;Amérique du Nord
-US03748R1014;APARTMENT INVESTMEN;AIV;Etats-Unis;Amérique du Nord
-US0378331005;Apple Inc.;AAPL;Etats-Unis;Amérique du Nord
-US03784Y2000;Apple Hospitality REIT;APLE;Etats-Unis;Amérique du Nord
-US0382221051;Applied Materials Inc;AMAT;Etats-Unis;Amérique du Nord
-US03831W1080;Applovin;APP;Etats-Unis;Amérique du Nord
-US0394831020;ARCHER-DANIELS-MIDL;ADM;Etats-Unis;Amérique du Nord
-US03969F1093;Arcus Biosciences;RCUS;Etats-Unis;Amérique du Nord
-US03969T1097;Arcturus Therapeutics;ARCT;Etats-Unis;Amérique du Nord
-US03990B1017;Ares Management;ARES;Etats-Unis;Amérique du Nord
-US04010L1035;Ares Capital;ARCC;Etats-Unis;Amérique du Nord
-US0404131064;ARISTA NETWORKS;ANET;Etats-Unis;Amérique du Nord
-US0413562051;AELINGTON ASSE INVEST CORP;AI;Etats-Unis;Amérique du Nord
-US0420682058;Arm Holdings plc;ARM;Etats-Unis;Amérique du Nord
-US0423155078;Armour Residential REIT;ARR;Etats-Unis;Amérique du Nord
-US04621X1081;ASSURANT INC;AIZ;Etats-Unis;Amérique du Nord
-US0463531089;AstraZeneca PLC ADR;AZN;Etats-Unis;Amérique du Nord
-US0494681010;Atlassian Corp Plc;TEAM;Etats-Unis;Amérique du Nord
-US0495601058;Atmos Energy;ATO;Etats-Unis;Amérique du Nord
-US0527691069;Autodesk;ADSK;Etats-Unis;Amérique du Nord
-US0530151036;AUTOMATIC DATA PROC;ADP;Etats-Unis;Amérique du Nord
-US05329W1027;AUTONATION INC;AN;Etats-Unis;Amérique du Nord
-US0533321024;AUTOZONE INC;AZO;Etats-Unis;Amérique du Nord
-US0534841012;AVALONBAY COMMUNITI;AVB;Etats-Unis;Amérique du Nord
-US05352A1007;AVANTOR;AVTR;Etats-Unis;Amérique du Nord
-US0536111091;AVERY DENNISON CORP;AVY;Etats-Unis;Amérique du Nord
-US05605H1005;BWX TECHNOLOGIES;BWXT;Etats-Unis;Amérique du Nord
-US0567521085;Baidu.com;BIDU;Etats-Unis;Amérique du Nord
-US05722G1004;Baker Hughes Company;BKR;Etats-Unis;Amérique du Nord
-US0605051046;Bank of America;BAC;Etats-Unis;Amérique du Nord
-US0640581007;THE BANK OF NEW YOR;BK;Etats-Unis;Amérique du Nord
-US0708301041;Bath Body Works Inc;BBWI;Etats-Unis;Amérique du Nord
-US0718131099;BAXTER INTL INC;BAX;Etats-Unis;Amérique du Nord
-US0758871091;BECTON;BDX;Etats-Unis;Amérique du Nord
-US0844231029;W. R. Berkley Corporation;WRB;Etats-Unis;Amérique du Nord
-US0846707026;BERKSHIRE HATHAWAY ;BRK.B;Etats-Unis;Amérique du Nord
-US0865161014;BEST BUY CO INC;BBY;Etats-Unis;Amérique du Nord
-US08862E1091;BEYOND MEAT;BYND;Etats-Unis;Amérique du Nord
-US0893021032;BIG LOTS INC;BIG;Etats-Unis;Amérique du Nord
-US0900431000;Bill.com holdings;BILL;Etats-Unis;Amérique du Nord
-US0905722072;Bio-Rad Laboratories Inc;BIO;Etats-Unis;Amérique du Nord
-US09061G1013;Biomarin;BMRN;Etats-Unis;Amérique du Nord
-US09062X1037;Biogen Idec;BIIB;Etats-Unis;Amérique du Nord
-US09073M1045;Bio-Techne Corporation;TECH;Etats-Unis;Amérique du Nord
-US09075V1026;BioNTech SP;BNTX;Etats-Unis;Amérique du Nord
-US09247X1019;BLACKROCK;BLK;Etats-Unis;Amérique du Nord
-US09250U1016;BLACKROCK ENERGY;BGR;Etats-Unis;Amérique du Nord
-US09253U1088;Blackstone;BX;Etats-Unis;Amérique du Nord
-US09257W1009;Blackstone Mortgage Trust;BXMT;Etats-Unis;Amérique du Nord
-US0936711052;BLOCK H & R INC;HRB;Etats-Unis;Amérique du Nord
-US09609G1004;Bluebird Bio;BLUE;Etats-Unis;Amérique du Nord
-US0970231058;Boeing;BA;Etats-Unis;Amérique du Nord
-US09857L1089;Booking Holdings;BKNG;Etats-Unis;Amérique du Nord
-US0994061002;Boot Barn Holdings;BOOT;Etats-Unis;Amérique du Nord
-US0997241064;BORG WARNER INC;BWA;Etats-Unis;Amérique du Nord
-US1011211018;BOSTON PROPERTIES I;BXP;Etats-Unis;Amérique du Nord
-US1011371077;BOSTON SCIENTIFIC C;BSX;Etats-Unis;Amérique du Nord
-US10922N1037;BRIGHTHOUSE FINANCIAL;BHF;Etats-Unis;Amérique du Nord
-US1101221083;BRISTOL-MYERS SQUIB;BMY;Etats-Unis;Amérique du Nord
-US11133T1034;Broadridge Financial Solutions Inc;BR;Etats-Unis;Amérique du Nord
-US11135F1012;BROADCOM INC;AVGO;Etats-Unis;Amérique du Nord
-US1152361010;Brown & Brown Inc;BRO;Etats-Unis;Amérique du Nord
-US1156372096;BROWN-FORMAN CORP;BF.B;Etats-Unis;Amérique du Nord
-US1170431092;BRUNSWICK;BC;Etats-Unis;Amérique du Nord
-US12468P1049;C3Ai Inc;AI;Etats-Unis;Amérique du Nord
-US12503M1080;CBOE HOLDINGS;CBOE;Etats-Unis;Amérique du Nord
-US12504L1098;CBRE Group Inc;CBRE;Etats-Unis;Amérique du Nord
-US12514G1085;CDW Corporation;CDW;Etats-Unis;Amérique du Nord
-US1252691001;CF INDUSTRIES HOLDI;CF;Etats-Unis;Amérique du Nord
-US12541W2098;CH ROBINSON WORLDWI;CHRW;Etats-Unis;Amérique du Nord
-US1255091092;CIGNA CORP;CI;Etats-Unis;Amérique du Nord
-US12572Q1058;CHICAGO MERCANTILE ;CME;Etats-Unis;Amérique du Nord
-US1258961002;CMS ENERGY CORP;CMS;Etats-Unis;Amérique du Nord
-US1264081035;CSX CORP;CSX;Etats-Unis;Amérique du Nord
-US1266501006;CVS Health;CVS;Etats-Unis;Amérique du Nord
-US1270971039;Coterra Energy Inc;CTRA;Etats-Unis;Amérique du Nord
-US1273871087;CADENCE DESIGN SYST;CDNS;Etats-Unis;Amérique du Nord
-US12769G1004;Caesars Entertainment Inc;CZR;Etats-Unis;Amérique du Nord
-US1280302027;Cal-Maine Foods;CALM;Etats-Unis;Amérique du Nord
-US1344291091;CAMPBELL SOUP CO;CPB;Etats-Unis;Amérique du Nord
-US14040H1059;CAPITAL ONE FINANCI;COF;Etats-Unis;Amérique du Nord
-US14149Y1082;CARDINAL HEALTH INC;CAH;Etats-Unis;Amérique du Nord
-US14309L1026;Carlyle Group;CG;Etats-Unis;Amérique du Nord
-US1431301027;CARMAX INC;KMX;Etats-Unis;Amérique du Nord
-US14448C1045;Carrier Global Corp;CARR;Etats-Unis;Amérique du Nord
-US1468691027;Carvana;CVNA;Etats-Unis;Amérique du Nord
-US14817C1071;Cassava Sciences;SAVA;Etats-Unis;Amérique du Nord
-US1488061029;Catalent Inc;CTLT;Etats-Unis;Amérique du Nord
-US1489291021;Cava Group;CAVA;Etats-Unis;Amérique du Nord
-US1491231015;Caterpillar Inc.;CAT;Etats-Unis;Amérique du Nord
-US1508701034;Celanese Corporation;CE;Etats-Unis;Amérique du Nord
-US15117F8077;Cellectar Biosciences;CLRB;Etats-Unis;Amérique du Nord
-US15118V2079;Celsius Holding;CELH;Etats-Unis;Amérique du Nord
-US15135B1017;CENTENE;CNC;Etats-Unis;Amérique du Nord
-US15189T1079;CENTERPOINT ENERGY ;CNP;Etats-Unis;Amérique du Nord
-US15961R1059;ChargePoint Holdings;CHPT;Etats-Unis;Amérique du Nord
-US1598641074;Charles River Laboratories International;CRL;Etats-Unis;Amérique du Nord
-US16117M3051;CHARTER COMMUNICATI;CHTR;Etats-Unis;Amérique du Nord
-US1630921096;CHEGG INC;CHGG;Etats-Unis;Amérique du Nord
-US1638511089;CHEMOURS CO;CC;Etats-Unis;Amérique du Nord
-US16411R2085;Cheniere Energy;LNG;Etats-Unis;Amérique du Nord
-US1651671075;CHESAPEAKE ENERGY C;CHK;Etats-Unis;Amérique du Nord
-US1667641005;Chevron Corp.;CVX;Etats-Unis;Amérique du Nord
-US1696561059;CHIPOTLE MEXICAN GR;CMG;Etats-Unis;Amérique du Nord
-US1712321017;CHUBB CORP;CB;Etats-Unis;Amérique du Nord
-US1713401024;CHURCH & DWIGHT;CHD;Etats-Unis;Amérique du Nord
-US1720621010;CINCINNATI FINANCIA;CINF;Etats-Unis;Amérique du Nord
-US17248W2044;Cingulate;CING;Etats-Unis;Amérique du Nord
-US1727551004;Cirrus Logic Inc.;CRUS;Etats-Unis;Amérique du Nord
-US17275R1023;Cisco Systems, Inc.;CSCO;Etats-Unis;Amérique du Nord
-US1729081059;Cintas Corporation;CTAS;Etats-Unis;Amérique du Nord
-US1729671016;CITIGROUP INC;C;Etats-Unis;Amérique du Nord
-US1746101054;CITIZENS FINANCIAL;CFG;Etats-Unis;Amérique du Nord
-US18383Q7390;GUGGENHEIM SOLAR ETF;TAN;Etats-Unis;Amérique du Nord
-US18467V1098;Clear Secure;YOU;Etats-Unis;Amérique du Nord
-US1851231068;Clearwater Analytics;CWAN;Etats-Unis;Amérique du Nord
-US18683K1016;CLIFFS NATURAL RESO;CLF;Etats-Unis;Amérique du Nord
-US1890541097;CLOROX CO;CLX;Etats-Unis;Amérique du Nord
-US18915M1071;CLOUDFLARE;NET;Etats-Unis;Amérique du Nord
-US1912161007;Coca Cola Co;KO;Etats-Unis;Amérique du Nord
-US1921085049;COEUR MINING;CDE;Etats-Unis;Amérique du Nord
-US1924461023;Cognizant tech.;CTSH;Etats-Unis;Amérique du Nord
-US19249H1032;Coherus BioSciences;CHRS;Etats-Unis;Amérique du Nord
-US19260Q1076;Coinbase;COIN;Etats-Unis;Amérique du Nord
-US1941621039;COLGATE-PALMOLIVE C;CL;Etats-Unis;Amérique du Nord
-US20030N1019;Comcast Corporation;CMCSA;Etats-Unis;Amérique du Nord
-US2003401070;COMERICA INC (MI);CMA;Etats-Unis;Amérique du Nord
-US2041491083;Community Trust Bancorp;CTBI;Etats-Unis;Amérique du Nord
-US20451W1018;Compass Pathways;CMPS;Etats-Unis;Amérique du Nord
-US2058871029;CONAGRA FOODS INC;CAG;Etats-Unis;Amérique du Nord
-US20602D1019;Concentrix;CNXC;Etats-Unis;Amérique du Nord
-US2067871036;CONDUENT;CNDT;Etats-Unis;Amérique du Nord
-US20825C1045;CONOCOPHILLIPS;COP;Etats-Unis;Amérique du Nord
-US20854P1093;CONSOL ENERGY INC;CNX;Etats-Unis;Amérique du Nord
-US2091151041;CONSOLIDATED EDISON;ED;Etats-Unis;Amérique du Nord
-US21036P1084;CONSTELLATION BRAND;STZ;Etats-Unis;Amérique du Nord
-US21037T1097;Constellation Energy Corp;CEG;Etats-Unis;Amérique du Nord
-US2166484020;COOPER COMPANIES;COO;Etats-Unis;Amérique du Nord
-US2172041061;COPART;CPRT;Etats-Unis;Amérique du Nord
-US2193501051;CORNING INC;GLW;Etats-Unis;Amérique du Nord
-US22052L1044;Corteva Inc;CTVA;Etats-Unis;Amérique du Nord
-US22160K1051;Costco Wholesale Corp.;COST;Etats-Unis;Amérique du Nord
-US22160N1090;CoStar Group Inc;CSGP;Etats-Unis;Amérique du Nord
-US2220702037;COTY;COTY;Etats-Unis;Amérique du Nord
-US22266T1097;Coupang;CPNG;Etats-Unis;Amérique du Nord
-US2267181046;CRITEO;CRTO;Etats-Unis;Amérique du Nord
-US2270461096;Crocs Inc;CROX;Etats-Unis;Amérique du Nord
-US22788C1053;Crowdstrike Holdings Inc;CRWD;Etats-Unis;Amérique du Nord
-US2282271046;CROWN CASTLE INTERN;CCI;Etats-Unis;Amérique du Nord
-US22943F1003;CTRIP;TCOM;Etats-Unis;Amérique du Nord
-US2310211063;CUMMINS INC;CMI;Etats-Unis;Amérique du Nord
-US2315611010;Curtiss-Wright;CW;Etats-Unis;Amérique du Nord
-US23331A1097;HORTON;DHI;Etats-Unis;Amérique du Nord
-US2333311072;DTE ENERGY CO;DTE;Etats-Unis;Amérique du Nord
-US23355L1061;DXC TECHNOLOGY;DXC;Etats-Unis;Amérique du Nord
-US2358511028;DANAHER CORP;DHR;Etats-Unis;Amérique du Nord
-US2371941053;DARDEN RESTAURANTS ;DRI;Etats-Unis;Amérique du Nord
-US23804L1035;Datadog Inc;DDOG;Etats-Unis;Amérique du Nord
-US23918K1088;DAVITA INC;DVA;Etats-Unis;Amérique du Nord
-US23954D1090;Day One Biopharmaceuticals;DAWN;Etats-Unis;Amérique du Nord
-US2441991054;DEERE & CO;DE;Etats-Unis;Amérique du Nord
-US24703L2025;DELL TECHNOLOGIES;DELL;Etats-Unis;Amérique du Nord
-US2473617023;Delta Airlines;DAL;Etats-Unis;Amérique du Nord
-US2490301072;Dentsply International In;XRAY;Etats-Unis;Amérique du Nord
-US25179M1036;DEVON ENERGY CORP;DVN;Etats-Unis;Amérique du Nord
-US2521311074;DexCom Inc;DXCM;Etats-Unis;Amérique du Nord
-US25278X1090;Diamondback Energy Inc;FANG;Etats-Unis;Amérique du Nord
-US2533931026;DICKS SPORTING GOODS;DKS;Etats-Unis;Amérique du Nord
-US2538681030;DIGITAL REALTY TRUST;DLR;Etats-Unis;Amérique du Nord
-US25400Q1058;Trump Media;DJT;Etats-Unis;Amérique du Nord
-US25400W1027;Digital Turbine Inc;APPS;Etats-Unis;Amérique du Nord
-US25459W1027;Direxion Daily Techno. Bull 3X Shares;TECL;Etats-Unis;Amérique du Nord
-US25459W4583;Direxion Daily Semiconductor Bull 3X;SOXL;Etats-Unis;Amérique du Nord
-US25460G3939;Direxion Daily Techno. Bear 3X Shares;TECS;Etats-Unis;Amérique du Nord
-US25460G7732;DIREXION WORK FROM HOME;WFH;Etats-Unis;Amérique du Nord
-US2546871060;Walt Disney Company;DIS;Etats-Unis;Amérique du Nord
-US2547091080;DISCOVER FINANCIAL ;DFS;Etats-Unis;Amérique du Nord
-US2561631068;Docusign Inc.;DOCU;Etats-Unis;Amérique du Nord
-US2566771059;DOLLAR GENERAL CORP;DG;Etats-Unis;Amérique du Nord
-US2567461080;DOLLAR TREE INC;DLTR;Etats-Unis;Amérique du Nord
-US25746U1097;DOMINION RESOURCES ;D;Etats-Unis;Amérique du Nord
-US25754A2015;Domino's Pizza Inc;DPZ;Etats-Unis;Amérique du Nord
-US25809K1051;Doordash;DASH;Etats-Unis;Amérique du Nord
-US25862V1052;DoubleVerify Holdings;DV;Etats-Unis;Amérique du Nord
-US2600031080;DOVER CORP;DOV;Etats-Unis;Amérique du Nord
-US2605571031;Dow Inc;DOW;Etats-Unis;Amérique du Nord
-US26441C1053;DUKE ENERGY CORP;DUK;Etats-Unis;Amérique du Nord
-US26483E1001;DUN & BRADSTREET CO;DNB;Etats-Unis;Amérique du Nord
-US26614N1028;DuPont de Nemours Inc;DD;Etats-Unis;Amérique du Nord
-US26853E1029;Ehang Holdings Ltd;EH;Etats-Unis;Amérique du Nord
-US26875P1012;EOG RESOURCES;EOG;Etats-Unis;Amérique du Nord
-US26884L1098;EQT CORPORATION;EQT;Etats-Unis;Amérique du Nord
-US2774321002;EASTMAN CHEMICAL CO;EMN;Etats-Unis;Amérique du Nord
-US2786421030;Ebay Inc.;EBAY;Etats-Unis;Amérique du Nord
-US2788651006;ECOLAB INC;ECL;Etats-Unis;Amérique du Nord
-US2810201077;EDISON INTL;EIX;Etats-Unis;Amérique du Nord
-US28106W1036;Editas Medicine;EDIT;Etats-Unis;Amérique du Nord
-US28176E1082;EDWARDS LIFESCIENCE;EW;Etats-Unis;Amérique du Nord
-US28414H1032;Elanco Animal Health;ELAN;Etats-Unis;Amérique du Nord
-US2855121099;Electronic Arts;EA;Etats-Unis;Amérique du Nord
-US29082A1079;EMBRAER;ERJ;Etats-Unis;Amérique du Nord
-US2910111044;EMERSON ELECTRIC CO;EMR;Etats-Unis;Amérique du Nord
-US29272C1036;Energous Corporation;WATT;Etats-Unis;Amérique du Nord
-US29273V1008;Energy Transfer LP;ET;Etats-Unis;Amérique du Nord
-US29355A1079;Enphase Energy;ENPH;Etats-Unis;Amérique du Nord
-US2935941078;Enovix Corp;ENVX;Etats-Unis;Amérique du Nord
-US29364G1031;ENTERGY CORP;ETR;Etats-Unis;Amérique du Nord
-US2937921078;Entreprise Products Partners LP;EPD;Etats-Unis;Amérique du Nord
-US2944291051;EQUIFAX INC;EFX;Etats-Unis;Amérique du Nord
-US29444U5020;EQUINIX INC.;EQIX;Etats-Unis;Amérique du Nord
-US29476L1070;EQUITY RESIDENTIAL;EQR;Etats-Unis;Amérique du Nord
-US29670E1073;ESSENTIAL PROPERTIES;EPRT;Etats-Unis;Amérique du Nord
-US2971781057;ESSEX PROPERTY;ESS;Etats-Unis;Amérique du Nord
-US29786A1060;Etsy Inc;ETSY;Etats-Unis;Amérique du Nord
-US30034W1062;Evergy Inc;EVRG;Etats-Unis;Amérique du Nord
-US30040W1080;EVERSOURCE ENERGY;ES;Etats-Unis;Amérique du Nord
-US30161N1019;EXELON CORP;EXC;Etats-Unis;Amérique du Nord
-US30161Q1040;EXELIXIS;EXEL;Etats-Unis;Amérique du Nord
-US3021041047;Exone;XONE;Etats-Unis;Amérique du Nord
-US30212P1057;Expedia Inc;EXPE;Etats-Unis;Amérique du Nord
-US3021301094;Expeditors Int'l Of Wa;EXPD;Etats-Unis;Amérique du Nord
-US30214U1025;Exponent;EXPO;Etats-Unis;Amérique du Nord
-US30223G1022;Exscientia;EXAI;Etats-Unis;Amérique du Nord
-US30225T1025;EXTRA SPACE STORAGE;EXR;Etats-Unis;Amérique du Nord
-US30231G1022;Exxon Mobil Corporation;XOM;Etats-Unis;Amérique du Nord
-US3026352068;FS KKR Capital Corp;FSK;Etats-Unis;Amérique du Nord
-US30303M1027;Meta Platforms Inc;META;Etats-Unis;Amérique du Nord
-US3119001044;Fastenal Company;FAST;Etats-Unis;Amérique du Nord
-US3137472060;FEDERAL REALTY INV;FRT;Etats-Unis;Amérique du Nord
-US31428X1063;FEDEX CORP;FDX;Etats-Unis;Amérique du Nord
-US3156161024;F5 NETWORKS INC;FFIV;Etats-Unis;Amérique du Nord
-US31572Q8087;Fibrogen;FGEN;Etats-Unis;Amérique du Nord
-US31620M1062;FIDELITY NATIONAL I;FIS;Etats-Unis;Amérique du Nord
-US3167731005;FIFTH THIRD BANCORP;FITB;Etats-Unis;Amérique du Nord
-US3205171057;FIRST HORIZON NATIO;FHN;Etats-Unis;Amérique du Nord
-US3207341062;First of Long Island Corp;FLIC;Etats-Unis;Amérique du Nord
-US3364331070;FIRST SOLAR INC;FSLR;Etats-Unis;Amérique du Nord
-US3379321074;FIRSTENERGY CORP;FE;Etats-Unis;Amérique du Nord
-US3383071012;Five9 Inc;FIVN;Etats-Unis;Amérique du Nord
-US3390411052;FLEETCOR Technologies Inc;FLT;Etats-Unis;Amérique du Nord
-US3434121022;FLUOR CORP;FLR;Etats-Unis;Amérique du Nord
-US34354P1057;FLOWSERVE CORP;FLS;Etats-Unis;Amérique du Nord
-US3448491049;FOOT LOCKER;FL;Etats-Unis;Amérique du Nord
-US3453708600;FORD MOTOR CO;F;Etats-Unis;Amérique du Nord
-US34959E1091;Fortinet Inc;FTNT;Etats-Unis;Amérique du Nord
-US34959J1088;FORTIVE CORP;FTV;Etats-Unis;Amérique du Nord
-US3498821004;FOSSIL INC.;FOSL;Etats-Unis;Amérique du Nord
-US3546131018;FRANKLIN RESOURCES ;BEN;Etats-Unis;Amérique du Nord
-US35671D8570;FREEPORT MCMORAN CO;FCX;Etats-Unis;Amérique du Nord
-US35952H6018;FuelCell Energy Inc;FCEL;Etats-Unis;Amérique du Nord
-US36116M1062;FUTURE FUEL;FF;Etats-Unis;Amérique du Nord
-US36266G1076;GE HealthCare Technologies;GEHC;Etats-Unis;Amérique du Nord
-US36269P1049;GAIA;GAIA;Etats-Unis;Amérique du Nord
-US3635761097;ARTHUR J. GALLAGHER;AJG;Etats-Unis;Amérique du Nord
-US36467W1099;GAMESTOP CORP A;GME;Etats-Unis;Amérique du Nord
-US3647301015;GANNETT CO INC;GCI;Etats-Unis;Amérique du Nord
-US3647601083;GAP INC;GPS;Etats-Unis;Amérique du Nord
-US3666511072;GARTNER;IT;Etats-Unis;Amérique du Nord
-US36828A1016;GE Vernova;GEV;Etats-Unis;Amérique du Nord
-US3687361044;Generac Holdings Inc;GNRC;Etats-Unis;Amérique du Nord
-US3695501086;GENERAL DYNAMICS;GD;Etats-Unis;Amérique du Nord
-US3696043013;GE Aerospace;GE;Etats-Unis;Amérique du Nord
-US3703341046;GENERAL MILLS INC;GIS;Etats-Unis;Amérique du Nord
-US37045V1008;GENERAL MOTORS;GM;Etats-Unis;Amérique du Nord
-US3719011096;GENTEX CORP;GNTX;Etats-Unis;Amérique du Nord
-US3724601055;GENUINE PARTS CO;GPC;Etats-Unis;Amérique du Nord
-US37247D1063;GENWORTH FINANCIAL ;GNW;Etats-Unis;Amérique du Nord
-US3755581036;Gilead Sciences, Inc.;GILD;Etats-Unis;Amérique du Nord
-US37940X1028;GLOBAL PAYMENTS;GPN;Etats-Unis;Amérique du Nord
-US37954Y8710;Global X Uranium ETF;URA;Etats-Unis;Amérique du Nord
-US37959E1029;Globe Life Inc;GL;Etats-Unis;Amérique du Nord
-US38059T1060;Gold Fields ADR;GFI;Etats-Unis;Amérique du Nord
-US38141G1040;Goldman Sachs Group;GS;Etats-Unis;Amérique du Nord
-US3825501014;GOODYEAR TIRE & RUB;GT;Etats-Unis;Amérique du Nord
-US38268T1034;GOPRO;GPRO;Etats-Unis;Amérique du Nord
-US3841091040;GRACO;GGG;Etats-Unis;Amérique du Nord
-US3846371041;GRAHAM HLDG (WPO);GHC;Etats-Unis;Amérique du Nord
-US3848021040;GRAINGER;GWW;Etats-Unis;Amérique du Nord
-US3896371099;Grayscale Bitcoin Trust;GBTC;Etats-Unis;Amérique du Nord
-US4016171054;Guess;GES;Etats-Unis;Amérique du Nord
-US40412C1018;HCA HOLDING;HCA;Etats-Unis;Amérique du Nord
-US40434L1052;HP inc;HPQ;Etats-Unis;Amérique du Nord
-US4062161017;HALLIBURTON CO;HAL;Etats-Unis;Amérique du Nord
-US4103451021;Hanesbrands Inc.;HBI;Etats-Unis;Amérique du Nord
-US4128221086;HARLEY-DAVIDSON INC;HOG;Etats-Unis;Amérique du Nord
-US4132163001;Harmony gold;HMY;Etats-Unis;Amérique du Nord
-US4165151048;HARTFORD FINL SERVI;HIG;Etats-Unis;Amérique du Nord
-US4180561072;HASBRO INC;HAS;Etats-Unis;Amérique du Nord
-US4234521015;HELMERICH & PAYNE I;HP;Etats-Unis;Amérique du Nord
-US4262811015;Jack Henry & Associates Inc;JKHY;Etats-Unis;Amérique du Nord
-US4278661081;HERSHEY FOODS CORP;HSY;Etats-Unis;Amérique du Nord
-US42806J1060;Hertz Global Holdings;HTZ;Etats-Unis;Amérique du Nord
-US42809H1077;HESS CORP;HES;Etats-Unis;Amérique du Nord
-US42824C1099;HP ENTERPRISE;HPE;Etats-Unis;Amérique du Nord
-US43289P1066;HIMAX;HIMX;Etats-Unis;Amérique du Nord
-US43300A2033;HILTON WORLDWIDE;HLT;Etats-Unis;Amérique du Nord
-US4364401012;HOLOGIC;HOLX;Etats-Unis;Amérique du Nord
-US4370761029;Home Depot;HD;Etats-Unis;Amérique du Nord
-US4381283088;Honda Motor ADR;HMC;Etats-Unis;Amérique du Nord
-US4385161066;Honeywell Intl Inc;HON;Etats-Unis;Amérique du Nord
-US4404521001;HORMEL FOODS CORP;HRL;Etats-Unis;Amérique du Nord
-US44107P1049;HOST HOTELS & RESOR;HST;Etats-Unis;Amérique du Nord
-US4432011082;Howmet Aerospace Inc;HWM;Etats-Unis;Amérique du Nord
-US4435731009;Hubspot;HUBS;Etats-Unis;Amérique du Nord
-US4448591028;HUMANA INC;HUM;Etats-Unis;Amérique du Nord
-US4456581077;J.B. HUNT TRANSPORT;JBHT;Etats-Unis;Amérique du Nord
-US4461501045;HUNTINGTON BANCSHAR;HBAN;Etats-Unis;Amérique du Nord
-US4464131063;Huntington ingalls;HII;Etats-Unis;Amérique du Nord
-US44980X1090;IPG Photonics Corporation;IPGP;Etats-Unis;Amérique du Nord
-US4509111021;ITT CORPORATION;ITT;Etats-Unis;Amérique du Nord
-US4511001012;Icahn Enterprises;IEP;Etats-Unis;Amérique du Nord
-US45167R1041;IDEX Corporation;IEX;Etats-Unis;Amérique du Nord
-US45168D1046;IDEXX LABORATORIES;IDXX;Etats-Unis;Amérique du Nord
-US4523081093;ILLINOIS TOOL WORKS;ITW;Etats-Unis;Amérique du Nord
-US4523271090;ILLUMINA INC.;ILMN;Etats-Unis;Amérique du Nord
-US4525253062;ImmuCell Corporation;ICCC;Etats-Unis;Amérique du Nord
-US45337C1027;INCYTE CORP;INCY;Etats-Unis;Amérique du Nord
-US4567881085;Infosys Tech.;INFY;Etats-Unis;Amérique du Nord
-US45773H2013;Inovio Pharmeceuticals;INO;Etats-Unis;Amérique du Nord
-US45781V1017;Innovative Industrial Properties Inc. A;IIPR;Etats-Unis;Amérique du Nord
-US4581401001;Intel Corporation;INTC;Etats-Unis;Amérique du Nord
-US45826J1051;Intellia therapeutics;NTLA;Etats-Unis;Amérique du Nord
-US45865V1008;INTERCONTINENTALEXC;ICE;Etats-Unis;Amérique du Nord
-US4592001014;IBM;IBM;Etats-Unis;Amérique du Nord
-US4595061015;INTL FLAVORS & FRAG;IFF;Etats-Unis;Amérique du Nord
-US4599021023;INTL GAME TECHNOLOG;IGT;Etats-Unis;Amérique du Nord
-US4601461035;INTL PAPER CO;IP;Etats-Unis;Amérique du Nord
-US4606901001;INTERPUBLIC GROUP C;IPG;Etats-Unis;Amérique du Nord
-US4611471008;INTEST;INTT;Etats-Unis;Amérique du Nord
-US4612021034;Intuit Inc.;INTU;Etats-Unis;Amérique du Nord
-US46120E6023;Intuitive surgical;ISRG;Etats-Unis;Amérique du Nord
-US46121Y1029;INTREPID POTASH;IPI;Etats-Unis;Amérique du Nord
-US46137V2337;INVESCO S&P 500 TOP 50 ETF;XLG;Etats-Unis;Amérique du Nord
-US46138G6310;Invesco NASDAQ Next Gen 100 ETF;QQQJ;Etats-Unis;Amérique du Nord
-US46141D2036;Invesco DB US Dollar Index Bullish Fund ETF;UUP;Etats-Unis;Amérique du Nord
-US46222L1089;Ionq;IONQ;Etats-Unis;Amérique du Nord
-US46266C1053;IQVIA HOLDINGS;IQV;Etats-Unis;Amérique du Nord
-US4628461067;IRON MOUNTAIN INC;IRM;Etats-Unis;Amérique du Nord
-US4642874329;iShares 20+ Year Treasury Bond ETF;TLT;Etats-Unis;Amérique du Nord
-US4642875235;iShares Semiconductor;SOXX;Etats-Unis;Amérique du Nord
-US4642886794;iShares Short Treasury Bond ETF;SHV;Etats-Unis;Amérique du Nord
-US46625H1005;JPMorgan Chase Co.;JPM;Etats-Unis;Amérique du Nord
-US4663131039;JABIL CIRCUIT INC;JBL;Etats-Unis;Amérique du Nord
-US4698141078;JACOBS ENGINEERING;J;Etats-Unis;Amérique du Nord
-US47215P1066;JD.COM;JD;Etats-Unis;Amérique du Nord
-US4771431016;JET BLUE;JBLU;Etats-Unis;Amérique du Nord
-US47759T1007;JINKOSOLAR;JKS;Etats-Unis;Amérique du Nord
-US4778391049;JOHN BEAM TECHNOLOGIES;JBT;Etats-Unis;Amérique du Nord
-US4781601046;Johnson et Johnson;JNJ;Etats-Unis;Amérique du Nord
-US4783661071;JOHNSON CONTROLS IN;JCI;Etats-Unis;Amérique du Nord
-US48203R1041;Juniper Networks, Inc.;JNPR;Etats-Unis;Amérique du Nord
-US4824801009;Kla-Tencor Corporation;KLAC;Etats-Unis;Amérique du Nord
-US48251W1045;KKR & Co;KKR;Etats-Unis;Amérique du Nord
-US48268K1016;KOREA TELECOM CORP;KT;Etats-Unis;Amérique du Nord
-US4878361082;KELLOGG CO;K;Etats-Unis;Amérique du Nord
-US49271V1008;Keurig Dr Pepper Inc;KDP;Etats-Unis;Amérique du Nord
-US4932671088;KEYCORP;KEY;Etats-Unis;Amérique du Nord
-US49338L1035;Keysight Technologies Inc;KEYS;Etats-Unis;Amérique du Nord
-US4943681035;KIMBERLY-CLARK;KMB;Etats-Unis;Amérique du Nord
-US49446R1095;KIMCO REALTY CORP;KIM;Etats-Unis;Amérique du Nord
-US49456B1017;KINDER MORGAN INC;KMI;Etats-Unis;Amérique du Nord
-US49714P1084;Kinsale Capital;KNSL;Etats-Unis;Amérique du Nord
-US4974981056;KIRKLANDS;KIRK;Etats-Unis;Amérique du Nord
-US5002551043;KOHL'S CORP;KSS;Etats-Unis;Amérique du Nord
-US5007541064;KRAFT HEINZ;KHC;Etats-Unis;Amérique du Nord
-US5010441013;KROGER CO;KR;Etats-Unis;Amérique du Nord
-US5018892084;LKQ CORP;LKQ;Etats-Unis;Amérique du Nord
-US50202M1027;LI Auto;LI;Etats-Unis;Amérique du Nord
-US5021751020;LTC PROPERTIES;LTC;Etats-Unis;Amérique du Nord
-US5024311095;L3Harris Technologies Inc;LHX;Etats-Unis;Amérique du Nord
-US50540R4092;LAB CORP OF AMERICA;LH;Etats-Unis;Amérique du Nord
-US5128071082;Lam Research;LRCX;Etats-Unis;Amérique du Nord
-US5132721045;Lamb Weston Holdings Inc;LW;Etats-Unis;Amérique du Nord
-US5178341070;Las Vegas Sands;LVS;Etats-Unis;Amérique du Nord
-US5184391044;ESTEE LAUDER COS.;EL;Etats-Unis;Amérique du Nord
-US5218652049;LEAR;LEA;Etats-Unis;Amérique du Nord
-US5246601075;LEGGETT & PLATT;LEG;Etats-Unis;Amérique du Nord
-US5253271028;Leidos Holdings Inc;LDOS;Etats-Unis;Amérique du Nord
-US52567D1072;Lemonade;LMND;Etats-Unis;Amérique du Nord
-US52603A1097;Lending Club;LC;Etats-Unis;Amérique du Nord
-US52603B1070;LendingTree;TREE;Etats-Unis;Amérique du Nord
-US5260571048;LENNAR CORP;LEN;Etats-Unis;Amérique du Nord
-US52736R1023;Levi Strauss & Co;LEVI;Etats-Unis;Amérique du Nord
-US5324571083;ELI LILLY;LLY;Etats-Unis;Amérique du Nord
-US5341871094;LINCOLN NATIONAL CO;LNC;Etats-Unis;Amérique du Nord
-US5380341090;Live Nation Entertainment Inc;LYV;Etats-Unis;Amérique du Nord
-US5398301094;LOCKHEED MARTIN;LMT;Etats-Unis;Amérique du Nord
-US5404241086;LOEWS CORP;L;Etats-Unis;Amérique du Nord
-US54738L1098;The Lovesac Company;LOVE;Etats-Unis;Amérique du Nord
-US5486611073;Lowe's Companies Inc;LOW;Etats-Unis;Amérique du Nord
-US5494981039;Lucid Group;LCID;Etats-Unis;Amérique du Nord
-US5500211090;Lululemon Athletica;LULU;Etats-Unis;Amérique du Nord
-US5502411037;Lumen Technologies Inc;LUMN;Etats-Unis;Amérique du Nord
-US5504241051;Luminar Technologies;LAZR;Etats-Unis;Amérique du Nord
-US55087P1049;LYFT;LYFT;Etats-Unis;Amérique du Nord
-US55261F1049;M&T BANK CORP;MTB;Etats-Unis;Amérique du Nord
-US5529531015;MGM RESORTS;MGM;Etats-Unis;Amérique du Nord
-US55306N1046;MKS INSTRUMENT;MKSI;Etats-Unis;Amérique du Nord
-US5533681012;Mp Materials Corp;MP;Etats-Unis;Amérique du Nord
-US55354G1004;MSCI Inc;MSCI;Etats-Unis;Amérique du Nord
-US5543821012;MACERICH CO.;MAC;Etats-Unis;Amérique du Nord
-US55616P1049;MACY'S INC;M;Etats-Unis;Amérique du Nord
-US56035L1044;MAIN STREET CAPITAL;MAIN;Etats-Unis;Amérique du Nord
-US5653941030;Maplebear;CART;Etats-Unis;Amérique du Nord
-US5657881067;Marathon Digital Holdings;MARA;Etats-Unis;Amérique du Nord
-US5658491064;MARATHON OIL CORP;MRO;Etats-Unis;Amérique du Nord
-US56585A1025;MARATHON PETROLEUM ;MPC;Etats-Unis;Amérique du Nord
-US57060D1081;MARKETAXESS HOLDING;MKTX;Etats-Unis;Amérique du Nord
-US57164Y1073;Marriott Vacations Worldwide Corp;VAC;Etats-Unis;Amérique du Nord
-US5717481023;MARSH & MCLENNAN CO;MMC;Etats-Unis;Amérique du Nord
-US5719032022;MARRIOTT INTL A;MAR;Etats-Unis;Amérique du Nord
-US5732841060;MARTIN MARIETTA MAT;MLM;Etats-Unis;Amérique du Nord
-US5745991068;MASCO CORP;MAS;Etats-Unis;Amérique du Nord
-US5763231090;MASTEC;MTZ;Etats-Unis;Amérique du Nord
-US57636Q1040;MASTERCARD INC A;MA;Etats-Unis;Amérique du Nord
-US57667L1070;Match Group Inc;MTCH;Etats-Unis;Amérique du Nord
-US57667T1007;Materialise;MTLS;Etats-Unis;Amérique du Nord
-US5770811025;MATTEL INC;MAT;Etats-Unis;Amérique du Nord
-US5797802064;MCCORMICK & CO;MKC;Etats-Unis;Amérique du Nord
-US5801351017;Mcdonald's Corporation;MCD;Etats-Unis;Amérique du Nord
-US58155Q1031;MCKESSON CORP;MCK;Etats-Unis;Amérique du Nord
-US58463J3041;Medical Properties Trust;MPW;Etats-Unis;Amérique du Nord
-US5850551061;MEDTRONIC INC;MDT;Etats-Unis;Amérique du Nord
-US58733R1023;MERCADOLIBRE INC;MELI;Etats-Unis;Amérique du Nord
-US58933Y1055;Merck Co;MRK;Etats-Unis;Amérique du Nord
-US59156R1086;METLIFE INC;MET;Etats-Unis;Amérique du Nord
-US5926881054;METTLER-TOLEDO;MTD;Etats-Unis;Amérique du Nord
-US5949181045;Microsoft Corp.;MSFT;Etats-Unis;Amérique du Nord
-US5949724083;MicroStrategy Incorporated;MSTR;Etats-Unis;Amérique du Nord
-US5950171042;Microchip Technology Inc.;MCHP;Etats-Unis;Amérique du Nord
-US5951121038;MICRON TECHNOLOGY;MU;Etats-Unis;Amérique du Nord
-US59522J1034;MID AMERICA APPART;MAA;Etats-Unis;Amérique du Nord
-US60770K1079;Moderna;MRNA;Etats-Unis;Amérique du Nord
-US60786M1053;MOELIS AND CO;MC;Etats-Unis;Amérique du Nord
-US6081901042;MOHAWK INDUSTRIES;MHK;Etats-Unis;Amérique du Nord
-US60871R2094;MOLSON COORS BREWIN;TAP;Etats-Unis;Amérique du Nord
-US6092071058;MONDELEZ;MDLZ;Etats-Unis;Amérique du Nord
-US60937P1066;MongoDB Inc;MDB;Etats-Unis;Amérique du Nord
-US6098391054;Monolithic Power Systems Inc;MPWR;Etats-Unis;Amérique du Nord
-US6117401017;MONSTER BEVERAGE;MNST;Etats-Unis;Amérique du Nord
-US6153691059;MOODY'S CORP;MCO;Etats-Unis;Amérique du Nord
-US6174464486;MORGAN STANLEY;MS;Etats-Unis;Amérique du Nord
-US61945A1079;MOSAIC CO (THE);MOS;Etats-Unis;Amérique du Nord
-US6200763075;MOTOROLA SOLUTIONS;MSI;Etats-Unis;Amérique du Nord
-US6267171022;MURPHY OIL CORP;MUR;Etats-Unis;Amérique du Nord
-US62914V1061;NIO Inc;NIO;Etats-Unis;Amérique du Nord
-US6292093050;NMI HOLDINGS;NMIH;Etats-Unis;Amérique du Nord
-US6293775085;NRG ENERGY;NRG;Etats-Unis;Amérique du Nord
-US62944T1051;NVR Inc;NVR;Etats-Unis;Amérique du Nord
-US6311031081;NASDAQ OMX GROUP/TH;NDAQ;Etats-Unis;Amérique du Nord
-US6361801011;National Fuel Gas Company;NFG;Etats-Unis;Amérique du Nord
-US6370711011;NATIONAL OILWELL VA;NOV;Etats-Unis;Amérique du Nord
-US6374171063;National Retail Properties;NNN;Etats-Unis;Amérique du Nord
-US63938C1080;NAVIENT CORP.;NAVI;Etats-Unis;Amérique du Nord
-US64110D1046;NETAPP INC;NTAP;Etats-Unis;Amérique du Nord
-US64110L1061;NETFLIX INC;NFLX;Etats-Unis;Amérique du Nord
-US64110W1027;Netease;NTES;Etats-Unis;Amérique du Nord
-US64111Q1040;Netgear;NTGR;Etats-Unis;Amérique du Nord
-US6512291062;Newell Brands;NWL;Etats-Unis;Amérique du Nord
-US6516391066;NEWMONT MINING CORP;NEM;Etats-Unis;Amérique du Nord
-US65249B1098;NEWS CORPORATION;NWSA;Etats-Unis;Amérique du Nord
-US65249B2088;NEWS CORPORATION B;NWS;Etats-Unis;Amérique du Nord
-US65339F1012;NEXTERA ENERGY INC;NEE;Etats-Unis;Amérique du Nord
-US6536561086;NICE Ltd ADR;NICE;Etats-Unis;Amérique du Nord
-US6541061031;Nike Inc B;NKE;Etats-Unis;Amérique du Nord
-US6541101050;Nikola Corporation;NKLA;Etats-Unis;Amérique du Nord
-US6544453037;Nintendo;NTDOY;Etats-Unis;Amérique du Nord
-US65473P1057;NISOURCE INC;NI;Etats-Unis;Amérique du Nord
-US6556641008;NORDSTROM INC;JWN;Etats-Unis;Amérique du Nord
-US6558441084;NORFOLK SOUTHERN CO;NSC;Etats-Unis;Amérique du Nord
-US6658591044;NORTHERN TRUST CORP;NTRS;Etats-Unis;Amérique du Nord
-US6668071029;NORTHROP GRUMMAN CO;NOC;Etats-Unis;Amérique du Nord
-US66765N1054;Northwest Natural Gas Co;NWN;Etats-Unis;Amérique du Nord
-US66987V1098;Novartis ADR;NVS;Etats-Unis;Amérique du Nord
-US6700024010;Novavax;NVAX;Etats-Unis;Amérique du Nord
-US6701002056;Novo Nordisk ADR;NVO;Etats-Unis;Amérique du Nord
-US6703461052;NUCOR CORP;NUE;Etats-Unis;Amérique du Nord
-US67059N1081;Nutanix;NTNX;Etats-Unis;Amérique du Nord
-US67066G1040;Nvidia Corporation;NVDA;Etats-Unis;Amérique du Nord
-US67103H1077;O'REILLY AUTOMOTIVE;ORLY;Etats-Unis;Amérique du Nord
-US6745991058;OCCIDENTAL PETROLEU;OXY;Etats-Unis;Amérique du Nord
-US6792951054;OKTA INC;OKTA;Etats-Unis;Amérique du Nord
-US6795801009;Old Dominion Freight Line Inc;ODFL;Etats-Unis;Amérique du Nord
-US6819191064;OMNICOM GROUP;OMC;Etats-Unis;Amérique du Nord
-US6821891057;On Semiconductor;ON;Etats-Unis;Amérique du Nord
-US6826801036;ONEOK INC;OKE;Etats-Unis;Amérique du Nord
-US68389X1054;Oracle Corporation;ORCL;Etats-Unis;Amérique du Nord
-US68571X1037;Orchid Island Capital;ORC;Etats-Unis;Amérique du Nord
-US68622V1061;Organon & Co;OGN;Etats-Unis;Amérique du Nord
-US6866881021;Ormat Technologies;ORA;Etats-Unis;Amérique du Nord
-US68902V1070;Otis Worldwide Corp;OTIS;Etats-Unis;Amérique du Nord
-US69012T2069;OUTLOOK THERAPEUTICS;OTLK;Etats-Unis;Amérique du Nord
-US6907684038;OWENS-ILLINOIS INC;OI;Etats-Unis;Amérique du Nord
-US69331C1080;PG&E CORPORATION;PCG;Etats-Unis;Amérique du Nord
-US6934751057;PNC FINL SERVICES G;PNC;Etats-Unis;Amérique du Nord
-US6935061076;PPG INDUSTRIES INC;PPG;Etats-Unis;Amérique du Nord
-US69351T1060;PPL CORP;PPL;Etats-Unis;Amérique du Nord
-US6936561009;PVH;PVH;Etats-Unis;Amérique du Nord
-US69370C1009;PTC Inc;PTC;Etats-Unis;Amérique du Nord
-US6937181088;Paccar Inc.;PCAR;Etats-Unis;Amérique du Nord
-US6951561090;PACKAGING CORP;PKG;Etats-Unis;Amérique du Nord
-US69608A1088;PALANTIR TECHNOLOGIES;PLTR;Etats-Unis;Amérique du Nord
-US6964293079;PALL CORP;PLL;Etats-Unis;Amérique du Nord
-US6974351057;Palo Alto Networks;PANW;Etats-Unis;Amérique du Nord
-US7010941042;PARKER-HANNIFIN COR;PH;Etats-Unis;Amérique du Nord
-US7033951036;PATTERSON COS INC;PDCO;Etats-Unis;Amérique du Nord
-US7043261079;Paychex, Inc.;PAYX;Etats-Unis;Amérique du Nord
-US70432V1026;Paycom Software Inc;PAYC;Etats-Unis;Amérique du Nord
-US70450Y1038;PAYPAL;PYPL;Etats-Unis;Amérique du Nord
-US7045491047;PEABODY ENERGY CORP;BTU;Etats-Unis;Amérique du Nord
-US70614W1009;Peloton Interactive;PTON;Etats-Unis;Amérique du Nord
-US7075691094;Penn National Gaming Inc;PENN;Etats-Unis;Amérique du Nord
-US7096311052;PENTAIR INC;PNR;Etats-Unis;Amérique du Nord
-US7134481081;PEPSICO INC;PEP;Etats-Unis;Amérique du Nord
-US71424F1057;Permian Resources;PR;Etats-Unis;Amérique du Nord
-US7142901039;PERRIGO COMPANY;PRGO;Etats-Unis;Amérique du Nord
-US71654V4086;Petrobras;PBR;Etats-Unis;Amérique du Nord
-US7170811035;Pfizer;PFE;Etats-Unis;Amérique du Nord
-US7181721090;PHILIP MORRIS INTL;PM;Etats-Unis;Amérique du Nord
-US7185461040;PHILLIPS 66;PSX;Etats-Unis;Amérique du Nord
-US72147K1088;PILGRIMS PRIDE CORP;PPC;Etats-Unis;Amérique du Nord
-US7223041028;Pinduoduo;PDD;Etats-Unis;Amérique du Nord
-US7234841010;PINNACLE WEST CAPIT;PNW;Etats-Unis;Amérique du Nord
-US72352L1061;PINTEREST;PINS;Etats-Unis;Amérique du Nord
-US7244791007;PITNEY BOWES INC;PBI;Etats-Unis;Amérique du Nord
-US72919P2020;PLUG POWER;PLUG;Etats-Unis;Amérique du Nord
-US72942G1040;Pluri Inc;PLUR;Etats-Unis;Amérique du Nord
-US73278L1052;Pool Corporation;POOL;Etats-Unis;Amérique du Nord
-US74144T1088;T ROWE PRICE GROUP ;TROW;Etats-Unis;Amérique du Nord
-US74251V1026;PRINCIPAL FINANCIAL;PFG;Etats-Unis;Amérique du Nord
-US7427181091;Procter Gamble Co.;PG;Etats-Unis;Amérique du Nord
-US7433151039;PROGRESSIVE CORP;PGR;Etats-Unis;Amérique du Nord
-US7434101025;PROLOGIS;PLD;Etats-Unis;Amérique du Nord
-US74347B1109;ProShares UltraPro Short S&P500;SPXU;Etats-Unis;Amérique du Nord
-US74347Y8883;ProShares Ultra Bloomberg Crude Oil;UCO;Etats-Unis;Amérique du Nord
-US7443201022;PRUDENTIAL FINANCIA;PRU;Etats-Unis;Amérique du Nord
-US7445731067;PUBLIC SERVICE ENTE;PEG;Etats-Unis;Amérique du Nord
-US74460D1090;PUBLIC STORAGE;PSA;Etats-Unis;Amérique du Nord
-US7458671010;PULTE GROUP INC;PHM;Etats-Unis;Amérique du Nord
-US74736K1016;QORVO INC;QRVO;Etats-Unis;Amérique du Nord
-US7475251036;Qualcomm, Inc.;QCOM;Etats-Unis;Amérique du Nord
-US74758T3032;QUALYS;QLYS;Etats-Unis;Amérique du Nord
-US74762E1029;QUANTA SERVICES INC;PWR;Etats-Unis;Amérique du Nord
-US74766W1080;Quantum Computing;QUBT;Etats-Unis;Amérique du Nord
-US74834L1008;QUEST DIAGNOSTICS;DGX;Etats-Unis;Amérique du Nord
-US74967X1037;RH;RH;Etats-Unis;Amérique du Nord
-US7512121010;Ralph Lauren Corp;RL;Etats-Unis;Amérique du Nord
-US75281A1097;RANGE RESOURCES COR;RRC;Etats-Unis;Amérique du Nord
-US7547301090;RAYMOND JAMES FINANCIAL;RJF;Etats-Unis;Amérique du Nord
-US75513E1010;Raytheon Technologies Corp;RTX;Etats-Unis;Amérique du Nord
-US7561091049;REALTY INCOME CORP;O;Etats-Unis;Amérique du Nord
-US75734B1008;Reddit;RDDT;Etats-Unis;Amérique du Nord
-US75776W1036;Redwire;RDW;Etats-Unis;Amérique du Nord
-US7588491032;REGENCY CENTERS;REG;Etats-Unis;Amérique du Nord
-US75886F1075;REGENERON PHARMACEU;REGN;Etats-Unis;Amérique du Nord
-US7591EP1005;REGIONS FINANCIAL C;RF;Etats-Unis;Amérique du Nord
-US7607591002;REPUBLIC SERVICES I;RSG;Etats-Unis;Amérique du Nord
-US7611521078;RESMED INC;RMD;Etats-Unis;Amérique du Nord
-US76655K1034;Rigetti Computing;RGTI;Etats-Unis;Amérique du Nord
-US76680R2067;RingCentral;RNG;Etats-Unis;Amérique du Nord
-US7672921050;Riot Blockchain;RIOT;Etats-Unis;Amérique du Nord
-US76954A1034;Rivian Automotive Inc;RIVN;Etats-Unis;Amérique du Nord
-US7703231032;ROBERT HALF INTL IN;RHI;Etats-Unis;Amérique du Nord
-US7707001027;Robinhood Markets;HOOD;Etats-Unis;Amérique du Nord
-US7710491033;Roblox Corp;RBLX;Etats-Unis;Amérique du Nord
-US7731221062;Rocket Lab;RKLB;Etats-Unis;Amérique du Nord
-US7739031091;ROCKWELL AUTOMATION;ROK;Etats-Unis;Amérique du Nord
-US77543R1023;Roku Inc;ROKU;Etats-Unis;Amérique du Nord
-US7757111049;ROLLINS INC;ROL;Etats-Unis;Amérique du Nord
-US7766961061;ROPER INDUSTRIES IN;ROP;Etats-Unis;Amérique du Nord
-US7782961038;ROSS STORES INC;ROST;Etats-Unis;Amérique du Nord
-US7802593050;Shell PLS (ADR);SHEL;Etats-Unis;Amérique du Nord
-US7835132033;Ryanair Holdings plc-ADR;RYAAY;Etats-Unis;Amérique du Nord
-US7835491082;RYDER SYSTEM INC;R;Etats-Unis;Amérique du Nord
-US78388J1060;SBA COMMUNICATIONS;SBAC;Etats-Unis;Amérique du Nord
-US78409V1044;S&P GLOBAL;SPGI;Etats-Unis;Amérique du Nord
-US7843051043;SJW Corporation;SJW;Etats-Unis;Amérique du Nord
-US78440X1019;SL Green Realty Cor;SLG;Etats-Unis;Amérique du Nord
-US78442P1066;SLM CORP;SLM;Etats-Unis;Amérique du Nord
-US78462F1030;SPDR S&P 500 ETF;SPY;Etats-Unis;Amérique du Nord
-US78463V1070;SPDR Gold ETF;GLD;Etats-Unis;Amérique du Nord
-US78467X1090;SPDR Dow Jones Industrial Average ETF Trust;DIA;Etats-Unis;Amérique du Nord
-US78645L1008;SAFEHOLD INC;SAFE;Etats-Unis;Amérique du Nord
-US79466L3024;Salesforce Inc;CRM;Etats-Unis;Amérique du Nord
-US8030542042;SAP SE;SAP;Etats-Unis;Amérique du Nord
-US8036071004;Sarepta Therapeutics Inc;SRPT;Etats-Unis;Amérique du Nord
-US8064071025;Henry Schein, Inc.;HSIC;Etats-Unis;Amérique du Nord
-US8085131055;Charles Schwab Corp;SCHW;Etats-Unis;Amérique du Nord
-US81141R1005;Sea Ltd;SE;Etats-Unis;Amérique du Nord
-US81211K1007;SEALED AIR CORP;SEE;Etats-Unis;Amérique du Nord
-US81369Y5069;Energy Select Sector SPDR;XLE;Etats-Unis;Amérique du Nord
-US81369Y8600;Real Estate Select Sector SPDR Fund;XLRE;Etats-Unis;Amérique du Nord
-US81577F1093;Seelos Therapeutics;SEEL;Etats-Unis;Amérique du Nord
-US8168511090;SEMPRA ENERGY;SRE;Etats-Unis;Amérique du Nord
-US81762P1021;ServiceNow;NOW;Etats-Unis;Amérique du Nord
-US8243481061;Sherwin-Williams Co.;SHW;Etats-Unis;Amérique du Nord
-US82669G1040;Signature Bank;SBNY;Etats-Unis;Amérique du Nord
-US8288061091;SIMON PROPERTY GROU;SPG;Etats-Unis;Amérique du Nord
-US8292261091;Sinclair Broadcast Group;SBGI;Etats-Unis;Amérique du Nord
-US82967N1081;SIRIUS XM RADIO INC;SIRI;Etats-Unis;Amérique du Nord
-US83088M1027;SKYWORKS SOLUTIONS ;SWKS;Etats-Unis;Amérique du Nord
-US8317541063;American Outdoor Brands;SWBI;Etats-Unis;Amérique du Nord
-US8318652091;A.O. SMITH CORP;AOS;Etats-Unis;Amérique du Nord
-US8326964058;SMUCKER;SJM;Etats-Unis;Amérique du Nord
-US8330341012;SNAP ON INC;SNA;Etats-Unis;Amérique du Nord
-US83304A1060;SNAP INC;SNAP;Etats-Unis;Amérique du Nord
-US8334451098;Snowflake;SNOW;Etats-Unis;Amérique du Nord
-US83406F1021;Sofi Technologies;SOFI;Etats-Unis;Amérique du Nord
-US83417M1045;SOLAREDGE;SEDG;Etats-Unis;Amérique du Nord
-US83548F1012;Sonim Technologies;SONM;Etats-Unis;Amérique du Nord
-US8354951027;Sonoco Products Company;SON;Etats-Unis;Amérique du Nord
-US8361001071;SoundHound AI;SOUN;Etats-Unis;Amérique du Nord
-US8425871071;SOUTHERN CO;SO;Etats-Unis;Amérique du Nord
-US8447411088;SOUTHWEST AIRLINES ;LUV;Etats-Unis;Amérique du Nord
-US8454671095;SOUTHWESTERN ENERGY;SWN;Etats-Unis;Amérique du Nord
-US8475601097;SPECTRA ENERGY CORP;SE;Etats-Unis;Amérique du Nord
-US8485741099;SPIRIT AEROSYSTEMS HOLDING;SPR;Etats-Unis;Amérique du Nord
-US8520611000;SPRINT NEXTEL CORP;S;Etats-Unis;Amérique du Nord
-US8522341036;Block RG-A;SQ;Etats-Unis;Amérique du Nord
-US85254J1025;Stag Industrial;STAG;Etats-Unis;Amérique du Nord
-US8545021011;STANLEY BLACK & DEC;SWK;Etats-Unis;Amérique du Nord
-US8552441094;Starbucks Corporation;SBUX;Etats-Unis;Amérique du Nord
-US8574771031;STATE STREET CORP;STT;Etats-Unis;Amérique du Nord
-US8589121081;Stericycle;SRCL;Etats-Unis;Amérique du Nord
-US8636671013;STRYKER CORP;SYK;Etats-Unis;Amérique du Nord
-US86745K1043;Sunnova Energy International;NOVA;Etats-Unis;Amérique du Nord
-US86765K1097;Sunoco LP;SUN;Etats-Unis;Amérique du Nord
-US86800U1043;Super Micro Computer;SMCI;Etats-Unis;Amérique du Nord
-US8716071076;SYNOPSYS INC;SNPS;Etats-Unis;Amérique du Nord
-US87165B1035;SYNCHRONY FINANCIAL;SYF;Etats-Unis;Amérique du Nord
-US87168W2035;Syra Health;SYRA;Etats-Unis;Amérique du Nord
-US8718291078;SYSCO CORP;SYY;Etats-Unis;Amérique du Nord
-US8725401090;TJX COS INC;TJX;Etats-Unis;Amérique du Nord
-US8725901040;T-MOBILE US;TMUS;Etats-Unis;Amérique du Nord
-US87305R1095;TTM TECHNOLOGIES;TTMI;Etats-Unis;Amérique du Nord
-US8740391003;Taiwan Semiconductor;TSM;Etats-Unis;Amérique du Nord
-US8740541094;TAKE TWO INTERACTIVE;TTWO;Etats-Unis;Amérique du Nord
-US8760301072;TAPESTRY;TPR;Etats-Unis;Amérique du Nord
-US87612E1064;TARGET CORP;TGT;Etats-Unis;Amérique du Nord
-US87901J1051;TEGNA;TGNA;Etats-Unis;Amérique du Nord
-US87918A1051;Teladoc Health;TDOC;Etats-Unis;Amérique du Nord
-US8793601050;Teledyne Techonlogies;TDY;Etats-Unis;Amérique du Nord
-US8793691069;Teleflex Incorporated;TFX;Etats-Unis;Amérique du Nord
-US87936R1068;TELEFONICA BRASIL;VIV;Etats-Unis;Amérique du Nord
-US8794338298;Telephone and Data Systems Inc;TDS;Etats-Unis;Amérique du Nord
-US88032Q1094;Tencent Holding Ltd;TCEHY;Etats-Unis;Amérique du Nord
-US88033G1004;TENET HEALTHCARE;THC;Etats-Unis;Amérique du Nord
-US88034P1093;Tencent Music Enter.;TME;Etats-Unis;Amérique du Nord
-US88076W1036;TERADATA CORP;TDC;Etats-Unis;Amérique du Nord
-US8807701029;TERADYNE INC;TER;Etats-Unis;Amérique du Nord
-US88160R1014;TESLA MOTORS;TSLA;Etats-Unis;Amérique du Nord
-US8816242098;Teva Pharmaceutical Indus;TEVA;Etats-Unis;Amérique du Nord
-US8825081040;TEXAS INSTRUMENTS I;TXN;Etats-Unis;Amérique du Nord
-US8832031012;TEXTRON INC;TXT;Etats-Unis;Amérique du Nord
-US88339J1051;THE TRASE DESK A;TTD;Etats-Unis;Amérique du Nord
-US8835561023;THERMO FISHER SCIEN;TMO;Etats-Unis;Amérique du Nord
-US8851601018;THOR INDUSTRIES;THO;Etats-Unis;Amérique du Nord
-US88554D2053;3D Systems;DDD;Etats-Unis;Amérique du Nord
-US88579Y1010;3M Company;MMM;Etats-Unis;Amérique du Nord
-US88688T1007;Tilray Inc;TLRY;Etats-Unis;Amérique du Nord
-US89151E1091;TotalEnergies SE (US);TTE;Etats-Unis;Amérique du Nord
-US8923561067;TRACTOR SUPPLY CO;TSCO;Etats-Unis;Amérique du Nord
-US8936411003;TRANSDIGM GROUP;TDG;Etats-Unis;Amérique du Nord
-US89417E1091;The Travelers Companies;TRV;Etats-Unis;Amérique du Nord
-US8962391004;Trimble;TRMB;Etats-Unis;Amérique du Nord
-US8969452015;TRIPADVISOR INC.;TRIP;Etats-Unis;Amérique du Nord
-US89785L1070;TrueCar Inc;TRUE;Etats-Unis;Amérique du Nord
-US89832Q1094;Truist Financial Corporation;TFC;Etats-Unis;Amérique du Nord
-US8998961044;Tupperware Brands Corp;TUP;Etats-Unis;Amérique du Nord
-US90130A1016;21ST CENT FOX A CM;FOXA;Etats-Unis;Amérique du Nord
-US90130A2006;21ST CENTURY FOX B;FOX;Etats-Unis;Amérique du Nord
-US90138F1021;TWILIO-A;TWLO;Etats-Unis;Amérique du Nord
-US9022521051;Tyler Technologies Inc;TYL;Etats-Unis;Amérique du Nord
-US9024941034;TYSON FOODS INC A;TSN;Etats-Unis;Amérique du Nord
-US9026531049;UDR;UDR;Etats-Unis;Amérique du Nord
-US9026811052;UGI Corporation;UGI;Etats-Unis;Amérique du Nord
-US9029733048;US BANCORP;USB;Etats-Unis;Amérique du Nord
-US90353T1007;UBER TECH;UBER;Etats-Unis;Amérique du Nord
-US90364P1057;UIPATH RG-A;PATH;Etats-Unis;Amérique du Nord
-US9037311076;Ul Solutions;ULS;Etats-Unis;Amérique du Nord
-US90384S3031;ULTA SALON COSMETICS;ULTA;Etats-Unis;Amérique du Nord
-US9043111072;UNDER ARMOUR INC.;UA;Etats-Unis;Amérique du Nord
-US9078181081;UNION PACIFIC CORP;UNP;Etats-Unis;Amérique du Nord
-US9100471096;UNITED AIRLINES;UAL;Etats-Unis;Amérique du Nord
-US9113121068;UNITED PARCEL SERVI;UPS;Etats-Unis;Amérique du Nord
-US9113631090;UNITED RENTALS INC.;URI;Etats-Unis;Amérique du Nord
-US9129091081;UNITED STATES STEEL;X;Etats-Unis;Amérique du Nord
-US91324P1021;UnitedHealth Group;UNH;Etats-Unis;Amérique du Nord
-US91332U1016;Unity Software;U;Etats-Unis;Amérique du Nord
-US9139031002;UNIVERSAL HEALTH SE;UHS;Etats-Unis;Amérique du Nord
-US91529Y1064;UNUM GROUP;UNM;Etats-Unis;Amérique du Nord
-US91531W1062;UP Fintech Holding Limited;TIGR;Etats-Unis;Amérique du Nord
-US91680M1071;Upstart Holdings;UPST;Etats-Unis;Amérique du Nord
-US9168961038;Uranium Energy Corp;UEC;Etats-Unis;Amérique du Nord
-US9170471026;URBAN OUTFITTERS;URBN;Etats-Unis;Amérique du Nord
-US9182041080;VF CORP;VFC;Etats-Unis;Amérique du Nord
-US91912E1055;VALE SP;VALE;Etats-Unis;Amérique du Nord
-US91913Y1001;VALERO ENERGY CORP;VLO;Etats-Unis;Amérique du Nord
-US92189F6768;VanEck Vectors Semiconductor ETF;SMH;Etats-Unis;Amérique du Nord
-US92240M1080;Vector Group Ltd;VGR;Etats-Unis;Amérique du Nord
-US9224751084;VEEVA SYSTEMS;VEEV;Etats-Unis;Amérique du Nord
-US92276F1003;VENTAS INC;VTR;Etats-Unis;Amérique du Nord
-US9229085538;Vanguard Real Estate Index Fund ETF Shares;VNQ;Etats-Unis;Amérique du Nord
-US92343E1029;Verisign, Inc.;VRSN;Etats-Unis;Amérique du Nord
-US92343V1044;Verizon;VZ;Etats-Unis;Amérique du Nord
-US92345Y1064;VERISK ANALYTICS IN;VRSK;Etats-Unis;Amérique du Nord
-US92532F1003;Vertex Pharma;VRTX;Etats-Unis;Amérique du Nord
-US92537N1081;Vertiv Holdings A;VRT;Etats-Unis;Amérique du Nord
-US92556H2067;Paramount Global;PARA;Etats-Unis;Amérique du Nord
-US92556V1061;Viatris Inc;VTRS;Etats-Unis;Amérique du Nord
-US9256521090;VICI PROPERTIES;VICI;Etats-Unis;Amérique du Nord
-US9264001028;Victoria's Secret;VSCO;Etats-Unis;Amérique du Nord
-US92766K1060;VIRGIN GALACTIC HOLDINGS;SPCE;Etats-Unis;Amérique du Nord
-US92826C8394;Visa Inc;V;Etats-Unis;Amérique du Nord
-US92839U2069;VISTEON CORPORATION;VC;Etats-Unis;Amérique du Nord
-US92857W2098;VODAFONE GROUP PLC;VOD;Etats-Unis;Amérique du Nord
-US9290421091;VORNADO REALTY TRUS;VNO;Etats-Unis;Amérique du Nord
-US9291601097;VULCAN MATERIALS CO;VMC;Etats-Unis;Amérique du Nord
-US92936U1097;W.P. Carey Inc;WPC;Etats-Unis;Amérique du Nord
-US9297401088;Westinghouse Air Brake Technologies Corp;WAB;Etats-Unis;Amérique du Nord
-US9311421039;Walmart;WMT;Etats-Unis;Amérique du Nord
-US9314271084;WALGREENS BOOTS AL;WBA;Etats-Unis;Amérique du Nord
-US9344231041;Warner Bros Discovery Inc;WBD;Etats-Unis;Amérique du Nord
-US93627C1018;Warrior Met Coal Inc;HCC;Etats-Unis;Amérique du Nord
-US94106L1098;WASTE MANAGEMENT IN;WM;Etats-Unis;Amérique du Nord
-US9418481035;WATERS CORP;WAT;Etats-Unis;Amérique du Nord
-US94419L1017;Wayfair;W;Etats-Unis;Amérique du Nord
-US9497461015;WELLS FARGO & CO;WFC;Etats-Unis;Amérique du Nord
-US95040Q1040;Welltower Inc;WELL;Etats-Unis;Amérique du Nord
-US9553061055;West Pharmaceutical Services Inc;WST;Etats-Unis;Amérique du Nord
-US9570901036;Westamerica Bancorporation;WABC;Etats-Unis;Amérique du Nord
-US9576381092;WESTERN ALLIANCE;WAL;Etats-Unis;Amérique du Nord
-US9581021055;WESTERN DIGITAL COR;WDC;Etats-Unis;Amérique du Nord
-US9598021098;WESTERN UNION CO;WU;Etats-Unis;Amérique du Nord
-US96145D1054;WESTROCK;WRK;Etats-Unis;Amérique du Nord
-US9621661043;WEYERHAEUSER CO;WY;Etats-Unis;Amérique du Nord
-US9633201069;WHIRLPOOL CORP;WHR;Etats-Unis;Amérique du Nord
-US9694571004;WILLIAMS COS INC;WMB;Etats-Unis;Amérique du Nord
-US9766571064;WISCONSIN ENERGY CO;WEC;Etats-Unis;Amérique du Nord
-US98138H1014;WORKDAY;WDAY;Etats-Unis;Amérique du Nord
-US98262P1012;Weight Watcher;WW;Etats-Unis;Amérique du Nord
-US9831341071;Wynn resorts inc.;WYNN;Etats-Unis;Amérique du Nord
-US98389B1008;XCEL ENERGY INC;XEL;Etats-Unis;Amérique du Nord
-US9841211033;XEROX CORP;XRX;Etats-Unis;Amérique du Nord
-US98419M1009;XYLEM;XYL;Etats-Unis;Amérique du Nord
-US98422D1054;Xpeng;XPEV;Etats-Unis;Amérique du Nord
-US98426T1060;YY Inc;YY;Etats-Unis;Amérique du Nord
-US9858171054;YELP;YELP;Etats-Unis;Amérique du Nord
-US9884981013;YUM! BRANDS INC;YUM;Etats-Unis;Amérique du Nord
-US9892071054;Zebra Technologies Corporation;ZBRA;Etats-Unis;Amérique du Nord
-US98954M1018;ZILLOW GROUP;ZG;Etats-Unis;Amérique du Nord
-US98956P1021;ZIMMER HOLDINGS;ZBH;Etats-Unis;Amérique du Nord
-US9897011071;ZIONS BANCORP (UT);ZION;Etats-Unis;Amérique du Nord
-US98978V1035;ZOETIS;ZTS;Etats-Unis;Amérique du Nord
-US98980F1049;ZoomInfo Technologies;ZI;Etats-Unis;Amérique du Nord
-US98980G1022;Zscaler;ZS;Etats-Unis;Amérique du Nord
-US98980L1017;ZOOM VIDEO COMMUNICATIONS;ZM;Etats-Unis;Amérique du Nord
-USN070592100;ASML HOLDING;ASML;Etats-Unis;Amérique du Nord
-VGG456671053;Hollysys Automation Tech;HOLI;Etats-Unis;Amérique du Nord
+ABC000000184;Livepeer;LPTUSD;Etats-Unis;AmÃ©rique du Nord
+AN8068571086;SCHLUMBERGER LTD;SLB;Etats-Unis;AmÃ©rique du Nord
+BBG000FVQ185;Capri Holdings Ltd;CPRI;Etats-Unis;AmÃ©rique du Nord
+BBG001LKFKJ8;Sequans Communications SA;SQNS;Etats-Unis;AmÃ©rique du Nord
+BMG491BT1088;INVESCO LTD;IVZ;Etats-Unis;AmÃ©rique du Nord
+BMG5876H1051;Marvell tech Group;MRVL;Etats-Unis;AmÃ©rique du Nord
+BMG6359F1032;NABORS INDUSTRIES L;NBR;Etats-Unis;AmÃ©rique du Nord
+BMG667211046;NORWEGIAN CRUISE;NCLH;Etats-Unis;AmÃ©rique du Nord
+BMG812761002;Signet Jewelers;SIG;Etats-Unis;AmÃ©rique du Nord
+CA0084741085;Agnico Eagle Mines;AEM;Etats-Unis;AmÃ©rique du Nord
+CA0679011084;Barrick Gold;GOLD;Etats-Unis;AmÃ©rique du Nord
+CA09228F1036;BLACKBERRY;BB;Etats-Unis;AmÃ©rique du Nord
+CA23345B2003;Dmg Blockchain Solutions;DMGGF;Etats-Unis;AmÃ©rique du Nord
+CA29250N1050;Enbridge;ENB;Etats-Unis;AmÃ©rique du Nord
+CA4969024047;Kinross Gold;KGC;Etats-Unis;AmÃ©rique du Nord
+CA6979001089;Pan American Silver;PAAS;Etats-Unis;AmÃ©rique du Nord
+CA7063271034;PEMBINA PIPELINE;PBA;Etats-Unis;AmÃ©rique du Nord
+CA80013R2063;Sandstorm Gold Ltd;SAND;Etats-Unis;AmÃ©rique du Nord
+CA82509L1076;SHOPIFY;SHOP;Etats-Unis;AmÃ©rique du Nord
+CA85210A1049;Sprott Physical Uranium Trust;SRUUF;Etats-Unis;AmÃ©rique du Nord
+CAC966571167;Vision Marine Technologies;VMAR;Etats-Unis;AmÃ©rique du Nord
+CH0033347318;NOBLE CORP;NE;Etats-Unis;AmÃ©rique du Nord
+CH0048265513;TRANSOCEAN;RIG;Etats-Unis;AmÃ©rique du Nord
+CH0102993182;TE CONNECTIVITY LTD;TEL;Etats-Unis;AmÃ©rique du Nord
+CH0114405324;GARMIN LTD;GRMN;Etats-Unis;AmÃ©rique du Nord
+CH0334081137;CRISPR Therapeutics AG;CRSP;Etats-Unis;AmÃ©rique du Nord
+CH1125843347;Sophia Genetics;SOPH;Etats-Unis;AmÃ©rique du Nord
+GB00B8W67B19;LIBERTY GLOBAL C;LBTYK;Etats-Unis;AmÃ©rique du Nord
+GB00BDCPN049;Coca-Cola European Partners PLC;CCEP;Etats-Unis;AmÃ©rique du Nord
+GB00BDSFG982;TechnipFMC plc;FTI;Etats-Unis;AmÃ©rique du Nord
+GB00BMVP7Y09;Royalty Pharma PLC;RPRX;Etats-Unis;AmÃ©rique du Nord
+IE000S9YS762;Linde PLC;LIN;Etats-Unis;AmÃ©rique du Nord
+IE00B4BNMY34;ACCENTURE PLC;ACN;Etats-Unis;AmÃ©rique du Nord
+IE00B56GVS15;Alkermes Plc;ALKS;Etats-Unis;AmÃ©rique du Nord
+IE00B58JVZ52;SEAGATE TECHNOLOGY;STX;Etats-Unis;AmÃ©rique du Nord
+IE00B6330302;INGERSOLL-RAND PLC;IR;Etats-Unis;AmÃ©rique du Nord
+IE00B8KQN827;EATON CORPORATION;ETN;Etats-Unis;AmÃ©rique du Nord
+IE00BFRT3W74;ALLEGION PLC;ALLE;Etats-Unis;AmÃ©rique du Nord
+IE00BFY8C754;STERIS plc;STE;Etats-Unis;AmÃ©rique du Nord
+IE00BJXRT698;SPDR Bloomberg 1-3 Month T-Bill UCITS ETF;BIL;Etats-Unis;AmÃ©rique du Nord
+IE00BK9ZQ967;Trane Technologies plc;TT;Etats-Unis;AmÃ©rique du Nord
+IE00BLNN3691;Weatherford International;WFRD;Etats-Unis;AmÃ©rique du Nord
+IE00BLP1HW54;AON CORP;AON;Etats-Unis;AmÃ©rique du Nord
+IL0010824113;CHECK POINT SOFTWAR;CHKP;Etats-Unis;AmÃ©rique du Nord
+IL0010834765;RADWARE;RDWR;Etats-Unis;AmÃ©rique du Nord
+IL0011267213;Stratasys;SSYS;Etats-Unis;AmÃ©rique du Nord
+IL0011334468;CYBERARK SOFTWARE;CYBR;Etats-Unis;AmÃ©rique du Nord
+IL0011582033;FIVERR INTERNATIONAL;FVRR;Etats-Unis;AmÃ©rique du Nord
+IL0065100930;ZIM Integrated Shipping Services;ZIM;Etats-Unis;AmÃ©rique du Nord
+JE00B783TY65;APTIV;APTV;Etats-Unis;AmÃ©rique du Nord
+JE00BJ1F3079;Amcor plc;AMCR;Etats-Unis;AmÃ©rique du Nord
+JE00BS44BN30;Birkenstock;BIRK;Etats-Unis;AmÃ©rique du Nord
+KYG037AX1015;AMBARELLA;AMBA;Etats-Unis;AmÃ©rique du Nord
+KYG3323L1005;FABRINET;FN;Etats-Unis;AmÃ©rique du Nord
+KYG393871085;Globalfoundries Inc;GFS;Etats-Unis;AmÃ©rique du Nord
+KYG4124C1096;Grab Holdings Ltd;GRAB;Etats-Unis;AmÃ©rique du Nord
+KYG4740B1059;ICHOR HOLDINGS;ICHR;Etats-Unis;AmÃ©rique du Nord
+KYG5784H1065;Manchester United Ltd;MANU;Etats-Unis;AmÃ©rique du Nord
+KYG6683N1034;Nu Holdings;NU;Etats-Unis;AmÃ©rique du Nord
+KYG851581069;StoneCo Ltd;STNE;Etats-Unis;AmÃ©rique du Nord
+KYG8807B1068;Theravance Biopharma;TBPH;Etats-Unis;AmÃ©rique du Nord
+LR0008862868;ROYAL CRUISE LTD;RCL;Etats-Unis;AmÃ©rique du Nord
+LU1778762911;SPOTIFY;SPOT;Etats-Unis;AmÃ©rique du Nord
+MHY717261066;Pyxis Tankers;PXS;Etats-Unis;AmÃ©rique du Nord
+NL0000240000;QIAGEN N.V.;QGEN;Etats-Unis;AmÃ©rique du Nord
+NL0009434992;LYONDELLBASELL INDU;LYB;Etats-Unis;AmÃ©rique du Nord
+NL0009538784;NXP SEMICONDUCTORS;NXPI;Etats-Unis;AmÃ©rique du Nord
+NL0011509302;Ferrari;RACE;Etats-Unis;AmÃ©rique du Nord
+NL0015436031;Curevac;CVAC;Etats-Unis;AmÃ©rique du Nord
+PA1436583006;CARNIVAL CORP;CCL;Etats-Unis;AmÃ©rique du Nord
+SG9999000020;FLEXTRONICS INTL LT;FLEX;Etats-Unis;AmÃ©rique du Nord
+SGXZ55111462;VinFast Auto Ltd;VFS;Etats-Unis;AmÃ©rique du Nord
+US00101J1060;ADT CORPORATION;ADT;Etats-Unis;AmÃ©rique du Nord
+US0010551028;AFLAC INC;AFL;Etats-Unis;AmÃ©rique du Nord
+US00130H1059;AES CORP;AES;Etats-Unis;AmÃ©rique du Nord
+US00165C1045;AMC Entertainment;AMC;Etats-Unis;AmÃ©rique du Nord
+US0017441017;AMN HEALTHCARE SERVICES;AMN;Etats-Unis;AmÃ©rique du Nord
+US00206R1023;AT&T;T;Etats-Unis;AmÃ©rique du Nord
+US00214Q1040;ARK Innovation ETF;ARKK;Etats-Unis;AmÃ©rique du Nord
+US00214Q2030;ARK Autonomous Technology & Robotics ETF;ARKQ;Etats-Unis;AmÃ©rique du Nord
+US00214Q3020;ARK Genomic Revolution ETF;ARKG;Etats-Unis;AmÃ©rique du Nord
+US00214Q4010;ARK Next Generation Internet ETF;ARKW;Etats-Unis;AmÃ©rique du Nord
+US00214Q7088;ARK Fintech Innovation ETF;ARKF;Etats-Unis;AmÃ©rique du Nord
+US00217D1000;ASt Spacemobile;ASTS;Etats-Unis;AmÃ©rique du Nord
+US0024741045;AZZ Inc;AZZ;Etats-Unis;AmÃ©rique du Nord
+US0028241000;ABBOTT LABORATORIES;ABT;Etats-Unis;AmÃ©rique du Nord
+US00287Y1091;ABBVIE;ABBV;Etats-Unis;AmÃ©rique du Nord
+US0028962076;ABERCROMBIE & FITCH;ANF;Etats-Unis;AmÃ©rique du Nord
+US00507K1034;Actavis Inc;ACT;Etats-Unis;AmÃ©rique du Nord
+US00507W1071;ACTINIUM PHARMA;ATNM;Etats-Unis;AmÃ©rique du Nord
+US00508Y1029;ACUITY BRANDS;AYI;Etats-Unis;AmÃ©rique du Nord
+US00724F1012;Adobe Systems Incorporate;ADBE;Etats-Unis;AmÃ©rique du Nord
+US00751Y1064;ADVANCE AUTO PARTS;AAP;Etats-Unis;AmÃ©rique du Nord
+US0079031078;Advanced Micro Devices;AMD;Etats-Unis;AmÃ©rique du Nord
+US0082521081;AFFILIATED MANAGERS;AMG;Etats-Unis;AmÃ©rique du Nord
+US00846U1016;AGILENT TECHNOLOGIE;A;Etats-Unis;AmÃ©rique du Nord
+US0084921008;Agree Realty Corp.;ADC;Etats-Unis;AmÃ©rique du Nord
+US0090661010;AIRBNB;ABNB;Etats-Unis;AmÃ©rique du Nord
+US0091581068;AIR PRODUCTS & CHEM;APD;Etats-Unis;AmÃ©rique du Nord
+US00971T1016;Akamai Tech;AKAM;Etats-Unis;AmÃ©rique du Nord
+US0116591092;ALASKA AIR GROUP;ALK;Etats-Unis;AmÃ©rique du Nord
+US0126531013;ABERMARLE;ALB;Etats-Unis;AmÃ©rique du Nord
+US0138171014;Alcoa Inc.;AA;Etats-Unis;AmÃ©rique du Nord
+US0152711091;ALEXANDRIA REAL EST;ARE;Etats-Unis;AmÃ©rique du Nord
+US01609W1027;ALIBABA;BABA;Etats-Unis;AmÃ©rique du Nord
+US0162551016;ALIGN TECHNOLOGY;ALGN;Etats-Unis;AmÃ©rique du Nord
+US01741R1023;ALLEGHENY TECHNOLOG;ATI;Etats-Unis;AmÃ©rique du Nord
+US0188021085;ALLIANT ENERGY;LNT;Etats-Unis;AmÃ©rique du Nord
+US0200021014;ALLSTATE CORP;ALL;Etats-Unis;AmÃ©rique du Nord
+US02005N1000;Ally Financial Inc;ALLY;Etats-Unis;AmÃ©rique du Nord
+US02079K1079;Alphabet C;GOOG;Etats-Unis;AmÃ©rique du Nord
+US02079K3059;Alphabet A;GOOGL;Etats-Unis;AmÃ©rique du Nord
+US0213691035;ALTAIR ENG.;ALTR;Etats-Unis;AmÃ©rique du Nord
+US02156K1034;ALTICE USA INC. A;ATUS;Etats-Unis;AmÃ©rique du Nord
+US02209S1033;ALTRIA GROUP INC;MO;Etats-Unis;AmÃ©rique du Nord
+US0231351067;Amazon.Com, Inc.;AMZN;Etats-Unis;AmÃ©rique du Nord
+US0236081024;AMEREN CORP;AEE;Etats-Unis;AmÃ©rique du Nord
+US02376R1023;American Airlines;AAL;Etats-Unis;AmÃ©rique du Nord
+US0240611030;American Axle;AXL;Etats-Unis;AmÃ©rique du Nord
+US0255371017;AMERICAN ELECTRIC P;AEP;Etats-Unis;AmÃ©rique du Nord
+US0258161092;American Express Company;AXP;Etats-Unis;AmÃ©rique du Nord
+US0268747849;AMERICAN INTL GROUP;AIG;Etats-Unis;AmÃ©rique du Nord
+US03027X1000;AMERICAN TOWER CORP;AMT;Etats-Unis;AmÃ©rique du Nord
+US0303711081;American Vanguard Corp.;AVD;Etats-Unis;AmÃ©rique du Nord
+US0304201033;AMERICAN WATER WORK;AWK;Etats-Unis;AmÃ©rique du Nord
+US03076C1062;AMERIPRISE FINANCIA;AMP;Etats-Unis;AmÃ©rique du Nord
+US0311001004;AMETEK INC;AME;Etats-Unis;AmÃ©rique du Nord
+US0311621009;Amgen, Inc.;AMGN;Etats-Unis;AmÃ©rique du Nord
+US0320951017;AMPHENOL CORP A;APH;Etats-Unis;AmÃ©rique du Nord
+US0321086078;Amplify Transformational Data Sharing ETF;BLOK;Etats-Unis;AmÃ©rique du Nord
+US0326541051;ANALOG DEVICES INC;ADI;Etats-Unis;AmÃ©rique du Nord
+US03662Q1058;ANSYS INC;ANSS;Etats-Unis;AmÃ©rique du Nord
+US0374111054;APACHE CORP;APA;Etats-Unis;AmÃ©rique du Nord
+US03748R1014;APARTMENT INVESTMEN;AIV;Etats-Unis;AmÃ©rique du Nord
+US0378331005;Apple Inc.;AAPL;Etats-Unis;AmÃ©rique du Nord
+US03784Y2000;Apple Hospitality REIT;APLE;Etats-Unis;AmÃ©rique du Nord
+US0382221051;Applied Materials Inc;AMAT;Etats-Unis;AmÃ©rique du Nord
+US03831W1080;Applovin;APP;Etats-Unis;AmÃ©rique du Nord
+US0394831020;ARCHER-DANIELS-MIDL;ADM;Etats-Unis;AmÃ©rique du Nord
+US03969F1093;Arcus Biosciences;RCUS;Etats-Unis;AmÃ©rique du Nord
+US03969T1097;Arcturus Therapeutics;ARCT;Etats-Unis;AmÃ©rique du Nord
+US03990B1017;Ares Management;ARES;Etats-Unis;AmÃ©rique du Nord
+US04010L1035;Ares Capital;ARCC;Etats-Unis;AmÃ©rique du Nord
+US0404131064;ARISTA NETWORKS;ANET;Etats-Unis;AmÃ©rique du Nord
+US0413562051;AELINGTON ASSE INVEST CORP;AI;Etats-Unis;AmÃ©rique du Nord
+US0420682058;Arm Holdings plc;ARM;Etats-Unis;AmÃ©rique du Nord
+US0423155078;Armour Residential REIT;ARR;Etats-Unis;AmÃ©rique du Nord
+US04621X1081;ASSURANT INC;AIZ;Etats-Unis;AmÃ©rique du Nord
+US0463531089;AstraZeneca PLC ADR;AZN;Etats-Unis;AmÃ©rique du Nord
+US0494681010;Atlassian Corp Plc;TEAM;Etats-Unis;AmÃ©rique du Nord
+US0495601058;Atmos Energy;ATO;Etats-Unis;AmÃ©rique du Nord
+US0527691069;Autodesk;ADSK;Etats-Unis;AmÃ©rique du Nord
+US0530151036;AUTOMATIC DATA PROC;ADP;Etats-Unis;AmÃ©rique du Nord
+US05329W1027;AUTONATION INC;AN;Etats-Unis;AmÃ©rique du Nord
+US0533321024;AUTOZONE INC;AZO;Etats-Unis;AmÃ©rique du Nord
+US0534841012;AVALONBAY COMMUNITI;AVB;Etats-Unis;AmÃ©rique du Nord
+US05352A1007;AVANTOR;AVTR;Etats-Unis;AmÃ©rique du Nord
+US0536111091;AVERY DENNISON CORP;AVY;Etats-Unis;AmÃ©rique du Nord
+US05605H1005;BWX TECHNOLOGIES;BWXT;Etats-Unis;AmÃ©rique du Nord
+US0567521085;Baidu.com;BIDU;Etats-Unis;AmÃ©rique du Nord
+US05722G1004;Baker Hughes Company;BKR;Etats-Unis;AmÃ©rique du Nord
+US0605051046;Bank of America;BAC;Etats-Unis;AmÃ©rique du Nord
+US0640581007;THE BANK OF NEW YOR;BK;Etats-Unis;AmÃ©rique du Nord
+US0708301041;Bath Body Works Inc;BBWI;Etats-Unis;AmÃ©rique du Nord
+US0718131099;BAXTER INTL INC;BAX;Etats-Unis;AmÃ©rique du Nord
+US0758871091;BECTON;BDX;Etats-Unis;AmÃ©rique du Nord
+US0844231029;W. R. Berkley Corporation;WRB;Etats-Unis;AmÃ©rique du Nord
+US0846707026;BERKSHIRE HATHAWAY ;BRK.B;Etats-Unis;AmÃ©rique du Nord
+US0865161014;BEST BUY CO INC;BBY;Etats-Unis;AmÃ©rique du Nord
+US08862E1091;BEYOND MEAT;BYND;Etats-Unis;AmÃ©rique du Nord
+US0893021032;BIG LOTS INC;BIG;Etats-Unis;AmÃ©rique du Nord
+US0900431000;Bill.com holdings;BILL;Etats-Unis;AmÃ©rique du Nord
+US0905722072;Bio-Rad Laboratories Inc;BIO;Etats-Unis;AmÃ©rique du Nord
+US09061G1013;Biomarin;BMRN;Etats-Unis;AmÃ©rique du Nord
+US09062X1037;Biogen Idec;BIIB;Etats-Unis;AmÃ©rique du Nord
+US09073M1045;Bio-Techne Corporation;TECH;Etats-Unis;AmÃ©rique du Nord
+US09075V1026;BioNTech SP;BNTX;Etats-Unis;AmÃ©rique du Nord
+US09247X1019;BLACKROCK;BLK;Etats-Unis;AmÃ©rique du Nord
+US09250U1016;BLACKROCK ENERGY;BGR;Etats-Unis;AmÃ©rique du Nord
+US09253U1088;Blackstone;BX;Etats-Unis;AmÃ©rique du Nord
+US09257W1009;Blackstone Mortgage Trust;BXMT;Etats-Unis;AmÃ©rique du Nord
+US0936711052;BLOCK H & R INC;HRB;Etats-Unis;AmÃ©rique du Nord
+US09609G1004;Bluebird Bio;BLUE;Etats-Unis;AmÃ©rique du Nord
+US0970231058;Boeing;BA;Etats-Unis;AmÃ©rique du Nord
+US09857L1089;Booking Holdings;BKNG;Etats-Unis;AmÃ©rique du Nord
+US0994061002;Boot Barn Holdings;BOOT;Etats-Unis;AmÃ©rique du Nord
+US0997241064;BORG WARNER INC;BWA;Etats-Unis;AmÃ©rique du Nord
+US1011211018;BOSTON PROPERTIES I;BXP;Etats-Unis;AmÃ©rique du Nord
+US1011371077;BOSTON SCIENTIFIC C;BSX;Etats-Unis;AmÃ©rique du Nord
+US10922N1037;BRIGHTHOUSE FINANCIAL;BHF;Etats-Unis;AmÃ©rique du Nord
+US1101221083;BRISTOL-MYERS SQUIB;BMY;Etats-Unis;AmÃ©rique du Nord
+US11133T1034;Broadridge Financial Solutions Inc;BR;Etats-Unis;AmÃ©rique du Nord
+US11135F1012;BROADCOM INC;AVGO;Etats-Unis;AmÃ©rique du Nord
+US1152361010;Brown & Brown Inc;BRO;Etats-Unis;AmÃ©rique du Nord
+US1156372096;BROWN-FORMAN CORP;BF.B;Etats-Unis;AmÃ©rique du Nord
+US1170431092;BRUNSWICK;BC;Etats-Unis;AmÃ©rique du Nord
+US12468P1049;C3Ai Inc;AI;Etats-Unis;AmÃ©rique du Nord
+US12503M1080;CBOE HOLDINGS;CBOE;Etats-Unis;AmÃ©rique du Nord
+US12504L1098;CBRE Group Inc;CBRE;Etats-Unis;AmÃ©rique du Nord
+US12514G1085;CDW Corporation;CDW;Etats-Unis;AmÃ©rique du Nord
+US1252691001;CF INDUSTRIES HOLDI;CF;Etats-Unis;AmÃ©rique du Nord
+US12541W2098;CH ROBINSON WORLDWI;CHRW;Etats-Unis;AmÃ©rique du Nord
+US1255091092;CIGNA CORP;CI;Etats-Unis;AmÃ©rique du Nord
+US12572Q1058;CHICAGO MERCANTILE ;CME;Etats-Unis;AmÃ©rique du Nord
+US1258961002;CMS ENERGY CORP;CMS;Etats-Unis;AmÃ©rique du Nord
+US1264081035;CSX CORP;CSX;Etats-Unis;AmÃ©rique du Nord
+US1266501006;CVS Health;CVS;Etats-Unis;AmÃ©rique du Nord
+US1270971039;Coterra Energy Inc;CTRA;Etats-Unis;AmÃ©rique du Nord
+US1273871087;CADENCE DESIGN SYST;CDNS;Etats-Unis;AmÃ©rique du Nord
+US12769G1004;Caesars Entertainment Inc;CZR;Etats-Unis;AmÃ©rique du Nord
+US1280302027;Cal-Maine Foods;CALM;Etats-Unis;AmÃ©rique du Nord
+US1344291091;CAMPBELL SOUP CO;CPB;Etats-Unis;AmÃ©rique du Nord
+US14040H1059;CAPITAL ONE FINANCI;COF;Etats-Unis;AmÃ©rique du Nord
+US14149Y1082;CARDINAL HEALTH INC;CAH;Etats-Unis;AmÃ©rique du Nord
+US14309L1026;Carlyle Group;CG;Etats-Unis;AmÃ©rique du Nord
+US1431301027;CARMAX INC;KMX;Etats-Unis;AmÃ©rique du Nord
+US14448C1045;Carrier Global Corp;CARR;Etats-Unis;AmÃ©rique du Nord
+US1468691027;Carvana;CVNA;Etats-Unis;AmÃ©rique du Nord
+US14817C1071;Cassava Sciences;SAVA;Etats-Unis;AmÃ©rique du Nord
+US1488061029;Catalent Inc;CTLT;Etats-Unis;AmÃ©rique du Nord
+US1489291021;Cava Group;CAVA;Etats-Unis;AmÃ©rique du Nord
+US1491231015;Caterpillar Inc.;CAT;Etats-Unis;AmÃ©rique du Nord
+US1508701034;Celanese Corporation;CE;Etats-Unis;AmÃ©rique du Nord
+US15117F8077;Cellectar Biosciences;CLRB;Etats-Unis;AmÃ©rique du Nord
+US15118V2079;Celsius Holding;CELH;Etats-Unis;AmÃ©rique du Nord
+US15135B1017;CENTENE;CNC;Etats-Unis;AmÃ©rique du Nord
+US15189T1079;CENTERPOINT ENERGY ;CNP;Etats-Unis;AmÃ©rique du Nord
+US15961R1059;ChargePoint Holdings;CHPT;Etats-Unis;AmÃ©rique du Nord
+US1598641074;Charles River Laboratories International;CRL;Etats-Unis;AmÃ©rique du Nord
+US16117M3051;CHARTER COMMUNICATI;CHTR;Etats-Unis;AmÃ©rique du Nord
+US1630921096;CHEGG INC;CHGG;Etats-Unis;AmÃ©rique du Nord
+US1638511089;CHEMOURS CO;CC;Etats-Unis;AmÃ©rique du Nord
+US16411R2085;Cheniere Energy;LNG;Etats-Unis;AmÃ©rique du Nord
+US1651671075;CHESAPEAKE ENERGY C;CHK;Etats-Unis;AmÃ©rique du Nord
+US1667641005;Chevron Corp.;CVX;Etats-Unis;AmÃ©rique du Nord
+US1696561059;CHIPOTLE MEXICAN GR;CMG;Etats-Unis;AmÃ©rique du Nord
+US1712321017;CHUBB CORP;CB;Etats-Unis;AmÃ©rique du Nord
+US1713401024;CHURCH & DWIGHT;CHD;Etats-Unis;AmÃ©rique du Nord
+US1720621010;CINCINNATI FINANCIA;CINF;Etats-Unis;AmÃ©rique du Nord
+US17248W2044;Cingulate;CING;Etats-Unis;AmÃ©rique du Nord
+US1727551004;Cirrus Logic Inc.;CRUS;Etats-Unis;AmÃ©rique du Nord
+US17275R1023;Cisco Systems, Inc.;CSCO;Etats-Unis;AmÃ©rique du Nord
+US1729081059;Cintas Corporation;CTAS;Etats-Unis;AmÃ©rique du Nord
+US1729671016;CITIGROUP INC;C;Etats-Unis;AmÃ©rique du Nord
+US1746101054;CITIZENS FINANCIAL;CFG;Etats-Unis;AmÃ©rique du Nord
+US18383Q7390;GUGGENHEIM SOLAR ETF;TAN;Etats-Unis;AmÃ©rique du Nord
+US18467V1098;Clear Secure;YOU;Etats-Unis;AmÃ©rique du Nord
+US1851231068;Clearwater Analytics;CWAN;Etats-Unis;AmÃ©rique du Nord
+US18683K1016;CLIFFS NATURAL RESO;CLF;Etats-Unis;AmÃ©rique du Nord
+US1890541097;CLOROX CO;CLX;Etats-Unis;AmÃ©rique du Nord
+US18915M1071;CLOUDFLARE;NET;Etats-Unis;AmÃ©rique du Nord
+US1912161007;Coca Cola Co;KO;Etats-Unis;AmÃ©rique du Nord
+US1921085049;COEUR MINING;CDE;Etats-Unis;AmÃ©rique du Nord
+US1924461023;Cognizant tech.;CTSH;Etats-Unis;AmÃ©rique du Nord
+US19249H1032;Coherus BioSciences;CHRS;Etats-Unis;AmÃ©rique du Nord
+US19260Q1076;Coinbase;COIN;Etats-Unis;AmÃ©rique du Nord
+US1941621039;COLGATE-PALMOLIVE C;CL;Etats-Unis;AmÃ©rique du Nord
+US20030N1019;Comcast Corporation;CMCSA;Etats-Unis;AmÃ©rique du Nord
+US2003401070;COMERICA INC (MI);CMA;Etats-Unis;AmÃ©rique du Nord
+US2041491083;Community Trust Bancorp;CTBI;Etats-Unis;AmÃ©rique du Nord
+US20451W1018;Compass Pathways;CMPS;Etats-Unis;AmÃ©rique du Nord
+US2058871029;CONAGRA FOODS INC;CAG;Etats-Unis;AmÃ©rique du Nord
+US20602D1019;Concentrix;CNXC;Etats-Unis;AmÃ©rique du Nord
+US2067871036;CONDUENT;CNDT;Etats-Unis;AmÃ©rique du Nord
+US20825C1045;CONOCOPHILLIPS;COP;Etats-Unis;AmÃ©rique du Nord
+US20854P1093;CONSOL ENERGY INC;CNX;Etats-Unis;AmÃ©rique du Nord
+US2091151041;CONSOLIDATED EDISON;ED;Etats-Unis;AmÃ©rique du Nord
+US21036P1084;CONSTELLATION BRAND;STZ;Etats-Unis;AmÃ©rique du Nord
+US21037T1097;Constellation Energy Corp;CEG;Etats-Unis;AmÃ©rique du Nord
+US2166484020;COOPER COMPANIES;COO;Etats-Unis;AmÃ©rique du Nord
+US2172041061;COPART;CPRT;Etats-Unis;AmÃ©rique du Nord
+US2193501051;CORNING INC;GLW;Etats-Unis;AmÃ©rique du Nord
+US22052L1044;Corteva Inc;CTVA;Etats-Unis;AmÃ©rique du Nord
+US22160K1051;Costco Wholesale Corp.;COST;Etats-Unis;AmÃ©rique du Nord
+US22160N1090;CoStar Group Inc;CSGP;Etats-Unis;AmÃ©rique du Nord
+US2220702037;COTY;COTY;Etats-Unis;AmÃ©rique du Nord
+US22266T1097;Coupang;CPNG;Etats-Unis;AmÃ©rique du Nord
+US2267181046;CRITEO;CRTO;Etats-Unis;AmÃ©rique du Nord
+US2270461096;Crocs Inc;CROX;Etats-Unis;AmÃ©rique du Nord
+US22788C1053;Crowdstrike Holdings Inc;CRWD;Etats-Unis;AmÃ©rique du Nord
+US2282271046;CROWN CASTLE INTERN;CCI;Etats-Unis;AmÃ©rique du Nord
+US22943F1003;CTRIP;TCOM;Etats-Unis;AmÃ©rique du Nord
+US2310211063;CUMMINS INC;CMI;Etats-Unis;AmÃ©rique du Nord
+US2315611010;Curtiss-Wright;CW;Etats-Unis;AmÃ©rique du Nord
+US23331A1097;HORTON;DHI;Etats-Unis;AmÃ©rique du Nord
+US2333311072;DTE ENERGY CO;DTE;Etats-Unis;AmÃ©rique du Nord
+US23355L1061;DXC TECHNOLOGY;DXC;Etats-Unis;AmÃ©rique du Nord
+US2358511028;DANAHER CORP;DHR;Etats-Unis;AmÃ©rique du Nord
+US2371941053;DARDEN RESTAURANTS ;DRI;Etats-Unis;AmÃ©rique du Nord
+US23804L1035;Datadog Inc;DDOG;Etats-Unis;AmÃ©rique du Nord
+US23918K1088;DAVITA INC;DVA;Etats-Unis;AmÃ©rique du Nord
+US23954D1090;Day One Biopharmaceuticals;DAWN;Etats-Unis;AmÃ©rique du Nord
+US2441991054;DEERE & CO;DE;Etats-Unis;AmÃ©rique du Nord
+US24703L2025;DELL TECHNOLOGIES;DELL;Etats-Unis;AmÃ©rique du Nord
+US2473617023;Delta Airlines;DAL;Etats-Unis;AmÃ©rique du Nord
+US2490301072;Dentsply International In;XRAY;Etats-Unis;AmÃ©rique du Nord
+US25179M1036;DEVON ENERGY CORP;DVN;Etats-Unis;AmÃ©rique du Nord
+US2521311074;DexCom Inc;DXCM;Etats-Unis;AmÃ©rique du Nord
+US25278X1090;Diamondback Energy Inc;FANG;Etats-Unis;AmÃ©rique du Nord
+US2533931026;DICKS SPORTING GOODS;DKS;Etats-Unis;AmÃ©rique du Nord
+US2538681030;DIGITAL REALTY TRUST;DLR;Etats-Unis;AmÃ©rique du Nord
+US25400Q1058;Trump Media;DJT;Etats-Unis;AmÃ©rique du Nord
+US25400W1027;Digital Turbine Inc;APPS;Etats-Unis;AmÃ©rique du Nord
+US25459W1027;Direxion Daily Techno. Bull 3X Shares;TECL;Etats-Unis;AmÃ©rique du Nord
+US25459W4583;Direxion Daily Semiconductor Bull 3X;SOXL;Etats-Unis;AmÃ©rique du Nord
+US25460G3939;Direxion Daily Techno. Bear 3X Shares;TECS;Etats-Unis;AmÃ©rique du Nord
+US25460G7732;DIREXION WORK FROM HOME;WFH;Etats-Unis;AmÃ©rique du Nord
+US2546871060;Walt Disney Company;DIS;Etats-Unis;AmÃ©rique du Nord
+US2547091080;DISCOVER FINANCIAL ;DFS;Etats-Unis;AmÃ©rique du Nord
+US2561631068;Docusign Inc.;DOCU;Etats-Unis;AmÃ©rique du Nord
+US2566771059;DOLLAR GENERAL CORP;DG;Etats-Unis;AmÃ©rique du Nord
+US2567461080;DOLLAR TREE INC;DLTR;Etats-Unis;AmÃ©rique du Nord
+US25746U1097;DOMINION RESOURCES ;D;Etats-Unis;AmÃ©rique du Nord
+US25754A2015;Domino's Pizza Inc;DPZ;Etats-Unis;AmÃ©rique du Nord
+US25809K1051;Doordash;DASH;Etats-Unis;AmÃ©rique du Nord
+US25862V1052;DoubleVerify Holdings;DV;Etats-Unis;AmÃ©rique du Nord
+US2600031080;DOVER CORP;DOV;Etats-Unis;AmÃ©rique du Nord
+US2605571031;Dow Inc;DOW;Etats-Unis;AmÃ©rique du Nord
+US26441C1053;DUKE ENERGY CORP;DUK;Etats-Unis;AmÃ©rique du Nord
+US26483E1001;DUN & BRADSTREET CO;DNB;Etats-Unis;AmÃ©rique du Nord
+US26614N1028;DuPont de Nemours Inc;DD;Etats-Unis;AmÃ©rique du Nord
+US26853E1029;Ehang Holdings Ltd;EH;Etats-Unis;AmÃ©rique du Nord
+US26875P1012;EOG RESOURCES;EOG;Etats-Unis;AmÃ©rique du Nord
+US26884L1098;EQT CORPORATION;EQT;Etats-Unis;AmÃ©rique du Nord
+US2774321002;EASTMAN CHEMICAL CO;EMN;Etats-Unis;AmÃ©rique du Nord
+US2786421030;Ebay Inc.;EBAY;Etats-Unis;AmÃ©rique du Nord
+US2788651006;ECOLAB INC;ECL;Etats-Unis;AmÃ©rique du Nord
+US2810201077;EDISON INTL;EIX;Etats-Unis;AmÃ©rique du Nord
+US28106W1036;Editas Medicine;EDIT;Etats-Unis;AmÃ©rique du Nord
+US28176E1082;EDWARDS LIFESCIENCE;EW;Etats-Unis;AmÃ©rique du Nord
+US28414H1032;Elanco Animal Health;ELAN;Etats-Unis;AmÃ©rique du Nord
+US2855121099;Electronic Arts;EA;Etats-Unis;AmÃ©rique du Nord
+US29082A1079;EMBRAER;ERJ;Etats-Unis;AmÃ©rique du Nord
+US2910111044;EMERSON ELECTRIC CO;EMR;Etats-Unis;AmÃ©rique du Nord
+US29272C1036;Energous Corporation;WATT;Etats-Unis;AmÃ©rique du Nord
+US29273V1008;Energy Transfer LP;ET;Etats-Unis;AmÃ©rique du Nord
+US29355A1079;Enphase Energy;ENPH;Etats-Unis;AmÃ©rique du Nord
+US2935941078;Enovix Corp;ENVX;Etats-Unis;AmÃ©rique du Nord
+US29364G1031;ENTERGY CORP;ETR;Etats-Unis;AmÃ©rique du Nord
+US2937921078;Entreprise Products Partners LP;EPD;Etats-Unis;AmÃ©rique du Nord
+US2944291051;EQUIFAX INC;EFX;Etats-Unis;AmÃ©rique du Nord
+US29444U5020;EQUINIX INC.;EQIX;Etats-Unis;AmÃ©rique du Nord
+US29476L1070;EQUITY RESIDENTIAL;EQR;Etats-Unis;AmÃ©rique du Nord
+US29670E1073;ESSENTIAL PROPERTIES;EPRT;Etats-Unis;AmÃ©rique du Nord
+US2971781057;ESSEX PROPERTY;ESS;Etats-Unis;AmÃ©rique du Nord
+US29786A1060;Etsy Inc;ETSY;Etats-Unis;AmÃ©rique du Nord
+US30034W1062;Evergy Inc;EVRG;Etats-Unis;AmÃ©rique du Nord
+US30040W1080;EVERSOURCE ENERGY;ES;Etats-Unis;AmÃ©rique du Nord
+US30161N1019;EXELON CORP;EXC;Etats-Unis;AmÃ©rique du Nord
+US30161Q1040;EXELIXIS;EXEL;Etats-Unis;AmÃ©rique du Nord
+US3021041047;Exone;XONE;Etats-Unis;AmÃ©rique du Nord
+US30212P1057;Expedia Inc;EXPE;Etats-Unis;AmÃ©rique du Nord
+US3021301094;Expeditors Int'l Of Wa;EXPD;Etats-Unis;AmÃ©rique du Nord
+US30214U1025;Exponent;EXPO;Etats-Unis;AmÃ©rique du Nord
+US30223G1022;Exscientia;EXAI;Etats-Unis;AmÃ©rique du Nord
+US30225T1025;EXTRA SPACE STORAGE;EXR;Etats-Unis;AmÃ©rique du Nord
+US30231G1022;Exxon Mobil Corporation;XOM;Etats-Unis;AmÃ©rique du Nord
+US3026352068;FS KKR Capital Corp;FSK;Etats-Unis;AmÃ©rique du Nord
+US30303M1027;Meta Platforms Inc;META;Etats-Unis;AmÃ©rique du Nord
+US3119001044;Fastenal Company;FAST;Etats-Unis;AmÃ©rique du Nord
+US3137472060;FEDERAL REALTY INV;FRT;Etats-Unis;AmÃ©rique du Nord
+US31428X1063;FEDEX CORP;FDX;Etats-Unis;AmÃ©rique du Nord
+US3156161024;F5 NETWORKS INC;FFIV;Etats-Unis;AmÃ©rique du Nord
+US31572Q8087;Fibrogen;FGEN;Etats-Unis;AmÃ©rique du Nord
+US31620M1062;FIDELITY NATIONAL I;FIS;Etats-Unis;AmÃ©rique du Nord
+US3167731005;FIFTH THIRD BANCORP;FITB;Etats-Unis;AmÃ©rique du Nord
+US3205171057;FIRST HORIZON NATIO;FHN;Etats-Unis;AmÃ©rique du Nord
+US3207341062;First of Long Island Corp;FLIC;Etats-Unis;AmÃ©rique du Nord
+US3364331070;FIRST SOLAR INC;FSLR;Etats-Unis;AmÃ©rique du Nord
+US3379321074;FIRSTENERGY CORP;FE;Etats-Unis;AmÃ©rique du Nord
+US3383071012;Five9 Inc;FIVN;Etats-Unis;AmÃ©rique du Nord
+US3390411052;FLEETCOR Technologies Inc;FLT;Etats-Unis;AmÃ©rique du Nord
+US3434121022;FLUOR CORP;FLR;Etats-Unis;AmÃ©rique du Nord
+US34354P1057;FLOWSERVE CORP;FLS;Etats-Unis;AmÃ©rique du Nord
+US3448491049;FOOT LOCKER;FL;Etats-Unis;AmÃ©rique du Nord
+US3453708600;FORD MOTOR CO;F;Etats-Unis;AmÃ©rique du Nord
+US34959E1091;Fortinet Inc;FTNT;Etats-Unis;AmÃ©rique du Nord
+US34959J1088;FORTIVE CORP;FTV;Etats-Unis;AmÃ©rique du Nord
+US3498821004;FOSSIL INC.;FOSL;Etats-Unis;AmÃ©rique du Nord
+US3546131018;FRANKLIN RESOURCES ;BEN;Etats-Unis;AmÃ©rique du Nord
+US35671D8570;FREEPORT MCMORAN CO;FCX;Etats-Unis;AmÃ©rique du Nord
+US35952H6018;FuelCell Energy Inc;FCEL;Etats-Unis;AmÃ©rique du Nord
+US36116M1062;FUTURE FUEL;FF;Etats-Unis;AmÃ©rique du Nord
+US36266G1076;GE HealthCare Technologies;GEHC;Etats-Unis;AmÃ©rique du Nord
+US36269P1049;GAIA;GAIA;Etats-Unis;AmÃ©rique du Nord
+US3635761097;ARTHUR J. GALLAGHER;AJG;Etats-Unis;AmÃ©rique du Nord
+US36467W1099;GAMESTOP CORP A;GME;Etats-Unis;AmÃ©rique du Nord
+US3647301015;GANNETT CO INC;GCI;Etats-Unis;AmÃ©rique du Nord
+US3647601083;GAP INC;GPS;Etats-Unis;AmÃ©rique du Nord
+US3666511072;GARTNER;IT;Etats-Unis;AmÃ©rique du Nord
+US36828A1016;GE Vernova;GEV;Etats-Unis;AmÃ©rique du Nord
+US3687361044;Generac Holdings Inc;GNRC;Etats-Unis;AmÃ©rique du Nord
+US3695501086;GENERAL DYNAMICS;GD;Etats-Unis;AmÃ©rique du Nord
+US3696043013;GE Aerospace;GE;Etats-Unis;AmÃ©rique du Nord
+US3703341046;GENERAL MILLS INC;GIS;Etats-Unis;AmÃ©rique du Nord
+US37045V1008;GENERAL MOTORS;GM;Etats-Unis;AmÃ©rique du Nord
+US3719011096;GENTEX CORP;GNTX;Etats-Unis;AmÃ©rique du Nord
+US3724601055;GENUINE PARTS CO;GPC;Etats-Unis;AmÃ©rique du Nord
+US37247D1063;GENWORTH FINANCIAL ;GNW;Etats-Unis;AmÃ©rique du Nord
+US3755581036;Gilead Sciences, Inc.;GILD;Etats-Unis;AmÃ©rique du Nord
+US37940X1028;GLOBAL PAYMENTS;GPN;Etats-Unis;AmÃ©rique du Nord
+US37954Y8710;Global X Uranium ETF;URA;Etats-Unis;AmÃ©rique du Nord
+US37959E1029;Globe Life Inc;GL;Etats-Unis;AmÃ©rique du Nord
+US38059T1060;Gold Fields ADR;GFI;Etats-Unis;AmÃ©rique du Nord
+US38141G1040;Goldman Sachs Group;GS;Etats-Unis;AmÃ©rique du Nord
+US3825501014;GOODYEAR TIRE & RUB;GT;Etats-Unis;AmÃ©rique du Nord
+US38268T1034;GOPRO;GPRO;Etats-Unis;AmÃ©rique du Nord
+US3841091040;GRACO;GGG;Etats-Unis;AmÃ©rique du Nord
+US3846371041;GRAHAM HLDG (WPO);GHC;Etats-Unis;AmÃ©rique du Nord
+US3848021040;GRAINGER;GWW;Etats-Unis;AmÃ©rique du Nord
+US3896371099;Grayscale Bitcoin Trust;GBTC;Etats-Unis;AmÃ©rique du Nord
+US4016171054;Guess;GES;Etats-Unis;AmÃ©rique du Nord
+US40412C1018;HCA HOLDING;HCA;Etats-Unis;AmÃ©rique du Nord
+US40434L1052;HP inc;HPQ;Etats-Unis;AmÃ©rique du Nord
+US4062161017;HALLIBURTON CO;HAL;Etats-Unis;AmÃ©rique du Nord
+US4103451021;Hanesbrands Inc.;HBI;Etats-Unis;AmÃ©rique du Nord
+US4128221086;HARLEY-DAVIDSON INC;HOG;Etats-Unis;AmÃ©rique du Nord
+US4132163001;Harmony gold;HMY;Etats-Unis;AmÃ©rique du Nord
+US4165151048;HARTFORD FINL SERVI;HIG;Etats-Unis;AmÃ©rique du Nord
+US4180561072;HASBRO INC;HAS;Etats-Unis;AmÃ©rique du Nord
+US4234521015;HELMERICH & PAYNE I;HP;Etats-Unis;AmÃ©rique du Nord
+US4262811015;Jack Henry & Associates Inc;JKHY;Etats-Unis;AmÃ©rique du Nord
+US4278661081;HERSHEY FOODS CORP;HSY;Etats-Unis;AmÃ©rique du Nord
+US42806J1060;Hertz Global Holdings;HTZ;Etats-Unis;AmÃ©rique du Nord
+US42809H1077;HESS CORP;HES;Etats-Unis;AmÃ©rique du Nord
+US42824C1099;HP ENTERPRISE;HPE;Etats-Unis;AmÃ©rique du Nord
+US43289P1066;HIMAX;HIMX;Etats-Unis;AmÃ©rique du Nord
+US43300A2033;HILTON WORLDWIDE;HLT;Etats-Unis;AmÃ©rique du Nord
+US4364401012;HOLOGIC;HOLX;Etats-Unis;AmÃ©rique du Nord
+US4370761029;Home Depot;HD;Etats-Unis;AmÃ©rique du Nord
+US4381283088;Honda Motor ADR;HMC;Etats-Unis;AmÃ©rique du Nord
+US4385161066;Honeywell Intl Inc;HON;Etats-Unis;AmÃ©rique du Nord
+US4404521001;HORMEL FOODS CORP;HRL;Etats-Unis;AmÃ©rique du Nord
+US44107P1049;HOST HOTELS & RESOR;HST;Etats-Unis;AmÃ©rique du Nord
+US4432011082;Howmet Aerospace Inc;HWM;Etats-Unis;AmÃ©rique du Nord
+US4435731009;Hubspot;HUBS;Etats-Unis;AmÃ©rique du Nord
+US4448591028;HUMANA INC;HUM;Etats-Unis;AmÃ©rique du Nord
+US4456581077;J.B. HUNT TRANSPORT;JBHT;Etats-Unis;AmÃ©rique du Nord
+US4461501045;HUNTINGTON BANCSHAR;HBAN;Etats-Unis;AmÃ©rique du Nord
+US4464131063;Huntington ingalls;HII;Etats-Unis;AmÃ©rique du Nord
+US44980X1090;IPG Photonics Corporation;IPGP;Etats-Unis;AmÃ©rique du Nord
+US4509111021;ITT CORPORATION;ITT;Etats-Unis;AmÃ©rique du Nord
+US4511001012;Icahn Enterprises;IEP;Etats-Unis;AmÃ©rique du Nord
+US45167R1041;IDEX Corporation;IEX;Etats-Unis;AmÃ©rique du Nord
+US45168D1046;IDEXX LABORATORIES;IDXX;Etats-Unis;AmÃ©rique du Nord
+US4523081093;ILLINOIS TOOL WORKS;ITW;Etats-Unis;AmÃ©rique du Nord
+US4523271090;ILLUMINA INC.;ILMN;Etats-Unis;AmÃ©rique du Nord
+US4525253062;ImmuCell Corporation;ICCC;Etats-Unis;AmÃ©rique du Nord
+US45337C1027;INCYTE CORP;INCY;Etats-Unis;AmÃ©rique du Nord
+US4567881085;Infosys Tech.;INFY;Etats-Unis;AmÃ©rique du Nord
+US45773H2013;Inovio Pharmeceuticals;INO;Etats-Unis;AmÃ©rique du Nord
+US45781V1017;Innovative Industrial Properties Inc. A;IIPR;Etats-Unis;AmÃ©rique du Nord
+US4581401001;Intel Corporation;INTC;Etats-Unis;AmÃ©rique du Nord
+US45826J1051;Intellia therapeutics;NTLA;Etats-Unis;AmÃ©rique du Nord
+US45865V1008;INTERCONTINENTALEXC;ICE;Etats-Unis;AmÃ©rique du Nord
+US4592001014;IBM;IBM;Etats-Unis;AmÃ©rique du Nord
+US4595061015;INTL FLAVORS & FRAG;IFF;Etats-Unis;AmÃ©rique du Nord
+US4599021023;INTL GAME TECHNOLOG;IGT;Etats-Unis;AmÃ©rique du Nord
+US4601461035;INTL PAPER CO;IP;Etats-Unis;AmÃ©rique du Nord
+US4606901001;INTERPUBLIC GROUP C;IPG;Etats-Unis;AmÃ©rique du Nord
+US4611471008;INTEST;INTT;Etats-Unis;AmÃ©rique du Nord
+US4612021034;Intuit Inc.;INTU;Etats-Unis;AmÃ©rique du Nord
+US46120E6023;Intuitive surgical;ISRG;Etats-Unis;AmÃ©rique du Nord
+US46121Y1029;INTREPID POTASH;IPI;Etats-Unis;AmÃ©rique du Nord
+US46137V2337;INVESCO S&P 500 TOP 50 ETF;XLG;Etats-Unis;AmÃ©rique du Nord
+US46138G6310;Invesco NASDAQ Next Gen 100 ETF;QQQJ;Etats-Unis;AmÃ©rique du Nord
+US46141D2036;Invesco DB US Dollar Index Bullish Fund ETF;UUP;Etats-Unis;AmÃ©rique du Nord
+US46222L1089;Ionq;IONQ;Etats-Unis;AmÃ©rique du Nord
+US46266C1053;IQVIA HOLDINGS;IQV;Etats-Unis;AmÃ©rique du Nord
+US4628461067;IRON MOUNTAIN INC;IRM;Etats-Unis;AmÃ©rique du Nord
+US4642874329;iShares 20+ Year Treasury Bond ETF;TLT;Etats-Unis;AmÃ©rique du Nord
+US4642875235;iShares Semiconductor;SOXX;Etats-Unis;AmÃ©rique du Nord
+US4642886794;iShares Short Treasury Bond ETF;SHV;Etats-Unis;AmÃ©rique du Nord
+US46625H1005;JPMorgan Chase Co.;JPM;Etats-Unis;AmÃ©rique du Nord
+US4663131039;JABIL CIRCUIT INC;JBL;Etats-Unis;AmÃ©rique du Nord
+US4698141078;JACOBS ENGINEERING;J;Etats-Unis;AmÃ©rique du Nord
+US47215P1066;JD.COM;JD;Etats-Unis;AmÃ©rique du Nord
+US4771431016;JET BLUE;JBLU;Etats-Unis;AmÃ©rique du Nord
+US47759T1007;JINKOSOLAR;JKS;Etats-Unis;AmÃ©rique du Nord
+US4778391049;JOHN BEAM TECHNOLOGIES;JBT;Etats-Unis;AmÃ©rique du Nord
+US4781601046;Johnson et Johnson;JNJ;Etats-Unis;AmÃ©rique du Nord
+US4783661071;JOHNSON CONTROLS IN;JCI;Etats-Unis;AmÃ©rique du Nord
+US48203R1041;Juniper Networks, Inc.;JNPR;Etats-Unis;AmÃ©rique du Nord
+US4824801009;Kla-Tencor Corporation;KLAC;Etats-Unis;AmÃ©rique du Nord
+US48251W1045;KKR & Co;KKR;Etats-Unis;AmÃ©rique du Nord
+US48268K1016;KOREA TELECOM CORP;KT;Etats-Unis;AmÃ©rique du Nord
+US4878361082;KELLOGG CO;K;Etats-Unis;AmÃ©rique du Nord
+US49271V1008;Keurig Dr Pepper Inc;KDP;Etats-Unis;AmÃ©rique du Nord
+US4932671088;KEYCORP;KEY;Etats-Unis;AmÃ©rique du Nord
+US49338L1035;Keysight Technologies Inc;KEYS;Etats-Unis;AmÃ©rique du Nord
+US4943681035;KIMBERLY-CLARK;KMB;Etats-Unis;AmÃ©rique du Nord
+US49446R1095;KIMCO REALTY CORP;KIM;Etats-Unis;AmÃ©rique du Nord
+US49456B1017;KINDER MORGAN INC;KMI;Etats-Unis;AmÃ©rique du Nord
+US49714P1084;Kinsale Capital;KNSL;Etats-Unis;AmÃ©rique du Nord
+US4974981056;KIRKLANDS;KIRK;Etats-Unis;AmÃ©rique du Nord
+US5002551043;KOHL'S CORP;KSS;Etats-Unis;AmÃ©rique du Nord
+US5007541064;KRAFT HEINZ;KHC;Etats-Unis;AmÃ©rique du Nord
+US5010441013;KROGER CO;KR;Etats-Unis;AmÃ©rique du Nord
+US5018892084;LKQ CORP;LKQ;Etats-Unis;AmÃ©rique du Nord
+US50202M1027;LI Auto;LI;Etats-Unis;AmÃ©rique du Nord
+US5021751020;LTC PROPERTIES;LTC;Etats-Unis;AmÃ©rique du Nord
+US5024311095;L3Harris Technologies Inc;LHX;Etats-Unis;AmÃ©rique du Nord
+US50540R4092;LAB CORP OF AMERICA;LH;Etats-Unis;AmÃ©rique du Nord
+US5128071082;Lam Research;LRCX;Etats-Unis;AmÃ©rique du Nord
+US5132721045;Lamb Weston Holdings Inc;LW;Etats-Unis;AmÃ©rique du Nord
+US5178341070;Las Vegas Sands;LVS;Etats-Unis;AmÃ©rique du Nord
+US5184391044;ESTEE LAUDER COS.;EL;Etats-Unis;AmÃ©rique du Nord
+US5218652049;LEAR;LEA;Etats-Unis;AmÃ©rique du Nord
+US5246601075;LEGGETT & PLATT;LEG;Etats-Unis;AmÃ©rique du Nord
+US5253271028;Leidos Holdings Inc;LDOS;Etats-Unis;AmÃ©rique du Nord
+US52567D1072;Lemonade;LMND;Etats-Unis;AmÃ©rique du Nord
+US52603A1097;Lending Club;LC;Etats-Unis;AmÃ©rique du Nord
+US52603B1070;LendingTree;TREE;Etats-Unis;AmÃ©rique du Nord
+US5260571048;LENNAR CORP;LEN;Etats-Unis;AmÃ©rique du Nord
+US52736R1023;Levi Strauss & Co;LEVI;Etats-Unis;AmÃ©rique du Nord
+US5324571083;ELI LILLY;LLY;Etats-Unis;AmÃ©rique du Nord
+US5341871094;LINCOLN NATIONAL CO;LNC;Etats-Unis;AmÃ©rique du Nord
+US5380341090;Live Nation Entertainment Inc;LYV;Etats-Unis;AmÃ©rique du Nord
+US5398301094;LOCKHEED MARTIN;LMT;Etats-Unis;AmÃ©rique du Nord
+US5404241086;LOEWS CORP;L;Etats-Unis;AmÃ©rique du Nord
+US54738L1098;The Lovesac Company;LOVE;Etats-Unis;AmÃ©rique du Nord
+US5486611073;Lowe's Companies Inc;LOW;Etats-Unis;AmÃ©rique du Nord
+US5494981039;Lucid Group;LCID;Etats-Unis;AmÃ©rique du Nord
+US5500211090;Lululemon Athletica;LULU;Etats-Unis;AmÃ©rique du Nord
+US5502411037;Lumen Technologies Inc;LUMN;Etats-Unis;AmÃ©rique du Nord
+US5504241051;Luminar Technologies;LAZR;Etats-Unis;AmÃ©rique du Nord
+US55087P1049;LYFT;LYFT;Etats-Unis;AmÃ©rique du Nord
+US55261F1049;M&T BANK CORP;MTB;Etats-Unis;AmÃ©rique du Nord
+US5529531015;MGM RESORTS;MGM;Etats-Unis;AmÃ©rique du Nord
+US55306N1046;MKS INSTRUMENT;MKSI;Etats-Unis;AmÃ©rique du Nord
+US5533681012;Mp Materials Corp;MP;Etats-Unis;AmÃ©rique du Nord
+US55354G1004;MSCI Inc;MSCI;Etats-Unis;AmÃ©rique du Nord
+US5543821012;MACERICH CO.;MAC;Etats-Unis;AmÃ©rique du Nord
+US55616P1049;MACY'S INC;M;Etats-Unis;AmÃ©rique du Nord
+US56035L1044;MAIN STREET CAPITAL;MAIN;Etats-Unis;AmÃ©rique du Nord
+US5653941030;Maplebear;CART;Etats-Unis;AmÃ©rique du Nord
+US5657881067;Marathon Digital Holdings;MARA;Etats-Unis;AmÃ©rique du Nord
+US5658491064;MARATHON OIL CORP;MRO;Etats-Unis;AmÃ©rique du Nord
+US56585A1025;MARATHON PETROLEUM ;MPC;Etats-Unis;AmÃ©rique du Nord
+US57060D1081;MARKETAXESS HOLDING;MKTX;Etats-Unis;AmÃ©rique du Nord
+US57164Y1073;Marriott Vacations Worldwide Corp;VAC;Etats-Unis;AmÃ©rique du Nord
+US5717481023;MARSH & MCLENNAN CO;MMC;Etats-Unis;AmÃ©rique du Nord
+US5719032022;MARRIOTT INTL A;MAR;Etats-Unis;AmÃ©rique du Nord
+US5732841060;MARTIN MARIETTA MAT;MLM;Etats-Unis;AmÃ©rique du Nord
+US5745991068;MASCO CORP;MAS;Etats-Unis;AmÃ©rique du Nord
+US5763231090;MASTEC;MTZ;Etats-Unis;AmÃ©rique du Nord
+US57636Q1040;MASTERCARD INC A;MA;Etats-Unis;AmÃ©rique du Nord
+US57667L1070;Match Group Inc;MTCH;Etats-Unis;AmÃ©rique du Nord
+US57667T1007;Materialise;MTLS;Etats-Unis;AmÃ©rique du Nord
+US5770811025;MATTEL INC;MAT;Etats-Unis;AmÃ©rique du Nord
+US5797802064;MCCORMICK & CO;MKC;Etats-Unis;AmÃ©rique du Nord
+US5801351017;Mcdonald's Corporation;MCD;Etats-Unis;AmÃ©rique du Nord
+US58155Q1031;MCKESSON CORP;MCK;Etats-Unis;AmÃ©rique du Nord
+US58463J3041;Medical Properties Trust;MPW;Etats-Unis;AmÃ©rique du Nord
+US5850551061;MEDTRONIC INC;MDT;Etats-Unis;AmÃ©rique du Nord
+US58733R1023;MERCADOLIBRE INC;MELI;Etats-Unis;AmÃ©rique du Nord
+US58933Y1055;Merck Co;MRK;Etats-Unis;AmÃ©rique du Nord
+US59156R1086;METLIFE INC;MET;Etats-Unis;AmÃ©rique du Nord
+US5926881054;METTLER-TOLEDO;MTD;Etats-Unis;AmÃ©rique du Nord
+US5949181045;Microsoft Corp.;MSFT;Etats-Unis;AmÃ©rique du Nord
+US5949724083;MicroStrategy Incorporated;MSTR;Etats-Unis;AmÃ©rique du Nord
+US5950171042;Microchip Technology Inc.;MCHP;Etats-Unis;AmÃ©rique du Nord
+US5951121038;MICRON TECHNOLOGY;MU;Etats-Unis;AmÃ©rique du Nord
+US59522J1034;MID AMERICA APPART;MAA;Etats-Unis;AmÃ©rique du Nord
+US60770K1079;Moderna;MRNA;Etats-Unis;AmÃ©rique du Nord
+US60786M1053;MOELIS AND CO;MC;Etats-Unis;AmÃ©rique du Nord
+US6081901042;MOHAWK INDUSTRIES;MHK;Etats-Unis;AmÃ©rique du Nord
+US60871R2094;MOLSON COORS BREWIN;TAP;Etats-Unis;AmÃ©rique du Nord
+US6092071058;MONDELEZ;MDLZ;Etats-Unis;AmÃ©rique du Nord
+US60937P1066;MongoDB Inc;MDB;Etats-Unis;AmÃ©rique du Nord
+US6098391054;Monolithic Power Systems Inc;MPWR;Etats-Unis;AmÃ©rique du Nord
+US6117401017;MONSTER BEVERAGE;MNST;Etats-Unis;AmÃ©rique du Nord
+US6153691059;MOODY'S CORP;MCO;Etats-Unis;AmÃ©rique du Nord
+US6174464486;MORGAN STANLEY;MS;Etats-Unis;AmÃ©rique du Nord
+US61945A1079;MOSAIC CO (THE);MOS;Etats-Unis;AmÃ©rique du Nord
+US6200763075;MOTOROLA SOLUTIONS;MSI;Etats-Unis;AmÃ©rique du Nord
+US6267171022;MURPHY OIL CORP;MUR;Etats-Unis;AmÃ©rique du Nord
+US62914V1061;NIO Inc;NIO;Etats-Unis;AmÃ©rique du Nord
+US6292093050;NMI HOLDINGS;NMIH;Etats-Unis;AmÃ©rique du Nord
+US6293775085;NRG ENERGY;NRG;Etats-Unis;AmÃ©rique du Nord
+US62944T1051;NVR Inc;NVR;Etats-Unis;AmÃ©rique du Nord
+US6311031081;NASDAQ OMX GROUP/TH;NDAQ;Etats-Unis;AmÃ©rique du Nord
+US6361801011;National Fuel Gas Company;NFG;Etats-Unis;AmÃ©rique du Nord
+US6370711011;NATIONAL OILWELL VA;NOV;Etats-Unis;AmÃ©rique du Nord
+US6374171063;National Retail Properties;NNN;Etats-Unis;AmÃ©rique du Nord
+US63938C1080;NAVIENT CORP.;NAVI;Etats-Unis;AmÃ©rique du Nord
+US64110D1046;NETAPP INC;NTAP;Etats-Unis;AmÃ©rique du Nord
+US64110L1061;NETFLIX INC;NFLX;Etats-Unis;AmÃ©rique du Nord
+US64110W1027;Netease;NTES;Etats-Unis;AmÃ©rique du Nord
+US64111Q1040;Netgear;NTGR;Etats-Unis;AmÃ©rique du Nord
+US6512291062;Newell Brands;NWL;Etats-Unis;AmÃ©rique du Nord
+US6516391066;NEWMONT MINING CORP;NEM;Etats-Unis;AmÃ©rique du Nord
+US65249B1098;NEWS CORPORATION;NWSA;Etats-Unis;AmÃ©rique du Nord
+US65249B2088;NEWS CORPORATION B;NWS;Etats-Unis;AmÃ©rique du Nord
+US65339F1012;NEXTERA ENERGY INC;NEE;Etats-Unis;AmÃ©rique du Nord
+US6536561086;NICE Ltd ADR;NICE;Etats-Unis;AmÃ©rique du Nord
+US6541061031;Nike Inc B;NKE;Etats-Unis;AmÃ©rique du Nord
+US6541101050;Nikola Corporation;NKLA;Etats-Unis;AmÃ©rique du Nord
+US6544453037;Nintendo;NTDOY;Etats-Unis;AmÃ©rique du Nord
+US65473P1057;NISOURCE INC;NI;Etats-Unis;AmÃ©rique du Nord
+US6556641008;NORDSTROM INC;JWN;Etats-Unis;AmÃ©rique du Nord
+US6558441084;NORFOLK SOUTHERN CO;NSC;Etats-Unis;AmÃ©rique du Nord
+US6658591044;NORTHERN TRUST CORP;NTRS;Etats-Unis;AmÃ©rique du Nord
+US6668071029;NORTHROP GRUMMAN CO;NOC;Etats-Unis;AmÃ©rique du Nord
+US66765N1054;Northwest Natural Gas Co;NWN;Etats-Unis;AmÃ©rique du Nord
+US66987V1098;Novartis ADR;NVS;Etats-Unis;AmÃ©rique du Nord
+US6700024010;Novavax;NVAX;Etats-Unis;AmÃ©rique du Nord
+US6701002056;Novo Nordisk ADR;NVO;Etats-Unis;AmÃ©rique du Nord
+US6703461052;NUCOR CORP;NUE;Etats-Unis;AmÃ©rique du Nord
+US67059N1081;Nutanix;NTNX;Etats-Unis;AmÃ©rique du Nord
+US67066G1040;Nvidia Corporation;NVDA;Etats-Unis;AmÃ©rique du Nord
+US67103H1077;O'REILLY AUTOMOTIVE;ORLY;Etats-Unis;AmÃ©rique du Nord
+US6745991058;OCCIDENTAL PETROLEU;OXY;Etats-Unis;AmÃ©rique du Nord
+US6792951054;OKTA INC;OKTA;Etats-Unis;AmÃ©rique du Nord
+US6795801009;Old Dominion Freight Line Inc;ODFL;Etats-Unis;AmÃ©rique du Nord
+US6819191064;OMNICOM GROUP;OMC;Etats-Unis;AmÃ©rique du Nord
+US6821891057;On Semiconductor;ON;Etats-Unis;AmÃ©rique du Nord
+US6826801036;ONEOK INC;OKE;Etats-Unis;AmÃ©rique du Nord
+US68389X1054;Oracle Corporation;ORCL;Etats-Unis;AmÃ©rique du Nord
+US68571X1037;Orchid Island Capital;ORC;Etats-Unis;AmÃ©rique du Nord
+US68622V1061;Organon & Co;OGN;Etats-Unis;AmÃ©rique du Nord
+US6866881021;Ormat Technologies;ORA;Etats-Unis;AmÃ©rique du Nord
+US68902V1070;Otis Worldwide Corp;OTIS;Etats-Unis;AmÃ©rique du Nord
+US69012T2069;OUTLOOK THERAPEUTICS;OTLK;Etats-Unis;AmÃ©rique du Nord
+US6907684038;OWENS-ILLINOIS INC;OI;Etats-Unis;AmÃ©rique du Nord
+US69331C1080;PG&E CORPORATION;PCG;Etats-Unis;AmÃ©rique du Nord
+US6934751057;PNC FINL SERVICES G;PNC;Etats-Unis;AmÃ©rique du Nord
+US6935061076;PPG INDUSTRIES INC;PPG;Etats-Unis;AmÃ©rique du Nord
+US69351T1060;PPL CORP;PPL;Etats-Unis;AmÃ©rique du Nord
+US6936561009;PVH;PVH;Etats-Unis;AmÃ©rique du Nord
+US69370C1009;PTC Inc;PTC;Etats-Unis;AmÃ©rique du Nord
+US6937181088;Paccar Inc.;PCAR;Etats-Unis;AmÃ©rique du Nord
+US6951561090;PACKAGING CORP;PKG;Etats-Unis;AmÃ©rique du Nord
+US69608A1088;PALANTIR TECHNOLOGIES;PLTR;Etats-Unis;AmÃ©rique du Nord
+US6964293079;PALL CORP;PLL;Etats-Unis;AmÃ©rique du Nord
+US6974351057;Palo Alto Networks;PANW;Etats-Unis;AmÃ©rique du Nord
+US7010941042;PARKER-HANNIFIN COR;PH;Etats-Unis;AmÃ©rique du Nord
+US7033951036;PATTERSON COS INC;PDCO;Etats-Unis;AmÃ©rique du Nord
+US7043261079;Paychex, Inc.;PAYX;Etats-Unis;AmÃ©rique du Nord
+US70432V1026;Paycom Software Inc;PAYC;Etats-Unis;AmÃ©rique du Nord
+US70450Y1038;PAYPAL;PYPL;Etats-Unis;AmÃ©rique du Nord
+US7045491047;PEABODY ENERGY CORP;BTU;Etats-Unis;AmÃ©rique du Nord
+US70614W1009;Peloton Interactive;PTON;Etats-Unis;AmÃ©rique du Nord
+US7075691094;Penn National Gaming Inc;PENN;Etats-Unis;AmÃ©rique du Nord
+US7096311052;PENTAIR INC;PNR;Etats-Unis;AmÃ©rique du Nord
+US7134481081;PEPSICO INC;PEP;Etats-Unis;AmÃ©rique du Nord
+US71424F1057;Permian Resources;PR;Etats-Unis;AmÃ©rique du Nord
+US7142901039;PERRIGO COMPANY;PRGO;Etats-Unis;AmÃ©rique du Nord
+US71654V4086;Petrobras;PBR;Etats-Unis;AmÃ©rique du Nord
+US7170811035;Pfizer;PFE;Etats-Unis;AmÃ©rique du Nord
+US7181721090;PHILIP MORRIS INTL;PM;Etats-Unis;AmÃ©rique du Nord
+US7185461040;PHILLIPS 66;PSX;Etats-Unis;AmÃ©rique du Nord
+US72147K1088;PILGRIMS PRIDE CORP;PPC;Etats-Unis;AmÃ©rique du Nord
+US7223041028;Pinduoduo;PDD;Etats-Unis;AmÃ©rique du Nord
+US7234841010;PINNACLE WEST CAPIT;PNW;Etats-Unis;AmÃ©rique du Nord
+US72352L1061;PINTEREST;PINS;Etats-Unis;AmÃ©rique du Nord
+US7244791007;PITNEY BOWES INC;PBI;Etats-Unis;AmÃ©rique du Nord
+US72919P2020;PLUG POWER;PLUG;Etats-Unis;AmÃ©rique du Nord
+US72942G1040;Pluri Inc;PLUR;Etats-Unis;AmÃ©rique du Nord
+US73278L1052;Pool Corporation;POOL;Etats-Unis;AmÃ©rique du Nord
+US74144T1088;T ROWE PRICE GROUP ;TROW;Etats-Unis;AmÃ©rique du Nord
+US74251V1026;PRINCIPAL FINANCIAL;PFG;Etats-Unis;AmÃ©rique du Nord
+US7427181091;Procter Gamble Co.;PG;Etats-Unis;AmÃ©rique du Nord
+US7433151039;PROGRESSIVE CORP;PGR;Etats-Unis;AmÃ©rique du Nord
+US7434101025;PROLOGIS;PLD;Etats-Unis;AmÃ©rique du Nord
+US74347B1109;ProShares UltraPro Short S&P500;SPXU;Etats-Unis;AmÃ©rique du Nord
+US74347Y8883;ProShares Ultra Bloomberg Crude Oil;UCO;Etats-Unis;AmÃ©rique du Nord
+US7443201022;PRUDENTIAL FINANCIA;PRU;Etats-Unis;AmÃ©rique du Nord
+US7445731067;PUBLIC SERVICE ENTE;PEG;Etats-Unis;AmÃ©rique du Nord
+US74460D1090;PUBLIC STORAGE;PSA;Etats-Unis;AmÃ©rique du Nord
+US7458671010;PULTE GROUP INC;PHM;Etats-Unis;AmÃ©rique du Nord
+US74736K1016;QORVO INC;QRVO;Etats-Unis;AmÃ©rique du Nord
+US7475251036;Qualcomm, Inc.;QCOM;Etats-Unis;AmÃ©rique du Nord
+US74758T3032;QUALYS;QLYS;Etats-Unis;AmÃ©rique du Nord
+US74762E1029;QUANTA SERVICES INC;PWR;Etats-Unis;AmÃ©rique du Nord
+US74766W1080;Quantum Computing;QUBT;Etats-Unis;AmÃ©rique du Nord
+US74834L1008;QUEST DIAGNOSTICS;DGX;Etats-Unis;AmÃ©rique du Nord
+US74967X1037;RH;RH;Etats-Unis;AmÃ©rique du Nord
+US7512121010;Ralph Lauren Corp;RL;Etats-Unis;AmÃ©rique du Nord
+US75281A1097;RANGE RESOURCES COR;RRC;Etats-Unis;AmÃ©rique du Nord
+US7547301090;RAYMOND JAMES FINANCIAL;RJF;Etats-Unis;AmÃ©rique du Nord
+US75513E1010;Raytheon Technologies Corp;RTX;Etats-Unis;AmÃ©rique du Nord
+US7561091049;REALTY INCOME CORP;O;Etats-Unis;AmÃ©rique du Nord
+US75734B1008;Reddit;RDDT;Etats-Unis;AmÃ©rique du Nord
+US75776W1036;Redwire;RDW;Etats-Unis;AmÃ©rique du Nord
+US7588491032;REGENCY CENTERS;REG;Etats-Unis;AmÃ©rique du Nord
+US75886F1075;REGENERON PHARMACEU;REGN;Etats-Unis;AmÃ©rique du Nord
+US7591EP1005;REGIONS FINANCIAL C;RF;Etats-Unis;AmÃ©rique du Nord
+US7607591002;REPUBLIC SERVICES I;RSG;Etats-Unis;AmÃ©rique du Nord
+US7611521078;RESMED INC;RMD;Etats-Unis;AmÃ©rique du Nord
+US76655K1034;Rigetti Computing;RGTI;Etats-Unis;AmÃ©rique du Nord
+US76680R2067;RingCentral;RNG;Etats-Unis;AmÃ©rique du Nord
+US7672921050;Riot Blockchain;RIOT;Etats-Unis;AmÃ©rique du Nord
+US76954A1034;Rivian Automotive Inc;RIVN;Etats-Unis;AmÃ©rique du Nord
+US7703231032;ROBERT HALF INTL IN;RHI;Etats-Unis;AmÃ©rique du Nord
+US7707001027;Robinhood Markets;HOOD;Etats-Unis;AmÃ©rique du Nord
+US7710491033;Roblox Corp;RBLX;Etats-Unis;AmÃ©rique du Nord
+US7731221062;Rocket Lab;RKLB;Etats-Unis;AmÃ©rique du Nord
+US7739031091;ROCKWELL AUTOMATION;ROK;Etats-Unis;AmÃ©rique du Nord
+US77543R1023;Roku Inc;ROKU;Etats-Unis;AmÃ©rique du Nord
+US7757111049;ROLLINS INC;ROL;Etats-Unis;AmÃ©rique du Nord
+US7766961061;ROPER INDUSTRIES IN;ROP;Etats-Unis;AmÃ©rique du Nord
+US7782961038;ROSS STORES INC;ROST;Etats-Unis;AmÃ©rique du Nord
+US7802593050;Shell PLS (ADR);SHEL;Etats-Unis;AmÃ©rique du Nord
+US7835132033;Ryanair Holdings plc-ADR;RYAAY;Etats-Unis;AmÃ©rique du Nord
+US7835491082;RYDER SYSTEM INC;R;Etats-Unis;AmÃ©rique du Nord
+US78388J1060;SBA COMMUNICATIONS;SBAC;Etats-Unis;AmÃ©rique du Nord
+US78409V1044;S&P GLOBAL;SPGI;Etats-Unis;AmÃ©rique du Nord
+US7843051043;SJW Corporation;SJW;Etats-Unis;AmÃ©rique du Nord
+US78440X1019;SL Green Realty Cor;SLG;Etats-Unis;AmÃ©rique du Nord
+US78442P1066;SLM CORP;SLM;Etats-Unis;AmÃ©rique du Nord
+US78462F1030;SPDR S&P 500 ETF;SPY;Etats-Unis;AmÃ©rique du Nord
+US78463V1070;SPDR Gold ETF;GLD;Etats-Unis;AmÃ©rique du Nord
+US78467X1090;SPDR Dow Jones Industrial Average ETF Trust;DIA;Etats-Unis;AmÃ©rique du Nord
+US78645L1008;SAFEHOLD INC;SAFE;Etats-Unis;AmÃ©rique du Nord
+US79466L3024;Salesforce Inc;CRM;Etats-Unis;AmÃ©rique du Nord
+US8030542042;SAP SE;SAP;Etats-Unis;AmÃ©rique du Nord
+US8036071004;Sarepta Therapeutics Inc;SRPT;Etats-Unis;AmÃ©rique du Nord
+US8064071025;Henry Schein, Inc.;HSIC;Etats-Unis;AmÃ©rique du Nord
+US8085131055;Charles Schwab Corp;SCHW;Etats-Unis;AmÃ©rique du Nord
+US81141R1005;Sea Ltd;SE;Etats-Unis;AmÃ©rique du Nord
+US81211K1007;SEALED AIR CORP;SEE;Etats-Unis;AmÃ©rique du Nord
+US81369Y5069;Energy Select Sector SPDR;XLE;Etats-Unis;AmÃ©rique du Nord
+US81369Y8600;Real Estate Select Sector SPDR Fund;XLRE;Etats-Unis;AmÃ©rique du Nord
+US81577F1093;Seelos Therapeutics;SEEL;Etats-Unis;AmÃ©rique du Nord
+US8168511090;SEMPRA ENERGY;SRE;Etats-Unis;AmÃ©rique du Nord
+US81762P1021;ServiceNow;NOW;Etats-Unis;AmÃ©rique du Nord
+US8243481061;Sherwin-Williams Co.;SHW;Etats-Unis;AmÃ©rique du Nord
+US82669G1040;Signature Bank;SBNY;Etats-Unis;AmÃ©rique du Nord
+US8288061091;SIMON PROPERTY GROU;SPG;Etats-Unis;AmÃ©rique du Nord
+US8292261091;Sinclair Broadcast Group;SBGI;Etats-Unis;AmÃ©rique du Nord
+US82967N1081;SIRIUS XM RADIO INC;SIRI;Etats-Unis;AmÃ©rique du Nord
+US83088M1027;SKYWORKS SOLUTIONS ;SWKS;Etats-Unis;AmÃ©rique du Nord
+US8317541063;American Outdoor Brands;SWBI;Etats-Unis;AmÃ©rique du Nord
+US8318652091;A.O. SMITH CORP;AOS;Etats-Unis;AmÃ©rique du Nord
+US8326964058;SMUCKER;SJM;Etats-Unis;AmÃ©rique du Nord
+US8330341012;SNAP ON INC;SNA;Etats-Unis;AmÃ©rique du Nord
+US83304A1060;SNAP INC;SNAP;Etats-Unis;AmÃ©rique du Nord
+US8334451098;Snowflake;SNOW;Etats-Unis;AmÃ©rique du Nord
+US83406F1021;Sofi Technologies;SOFI;Etats-Unis;AmÃ©rique du Nord
+US83417M1045;SOLAREDGE;SEDG;Etats-Unis;AmÃ©rique du Nord
+US83548F1012;Sonim Technologies;SONM;Etats-Unis;AmÃ©rique du Nord
+US8354951027;Sonoco Products Company;SON;Etats-Unis;AmÃ©rique du Nord
+US8361001071;SoundHound AI;SOUN;Etats-Unis;AmÃ©rique du Nord
+US8425871071;SOUTHERN CO;SO;Etats-Unis;AmÃ©rique du Nord
+US8447411088;SOUTHWEST AIRLINES ;LUV;Etats-Unis;AmÃ©rique du Nord
+US8454671095;SOUTHWESTERN ENERGY;SWN;Etats-Unis;AmÃ©rique du Nord
+US8475601097;SPECTRA ENERGY CORP;SE;Etats-Unis;AmÃ©rique du Nord
+US8485741099;SPIRIT AEROSYSTEMS HOLDING;SPR;Etats-Unis;AmÃ©rique du Nord
+US8520611000;SPRINT NEXTEL CORP;S;Etats-Unis;AmÃ©rique du Nord
+US8522341036;Block RG-A;SQ;Etats-Unis;AmÃ©rique du Nord
+US85254J1025;Stag Industrial;STAG;Etats-Unis;AmÃ©rique du Nord
+US8545021011;STANLEY BLACK & DEC;SWK;Etats-Unis;AmÃ©rique du Nord
+US8552441094;Starbucks Corporation;SBUX;Etats-Unis;AmÃ©rique du Nord
+US8574771031;STATE STREET CORP;STT;Etats-Unis;AmÃ©rique du Nord
+US8589121081;Stericycle;SRCL;Etats-Unis;AmÃ©rique du Nord
+US8636671013;STRYKER CORP;SYK;Etats-Unis;AmÃ©rique du Nord
+US86745K1043;Sunnova Energy International;NOVA;Etats-Unis;AmÃ©rique du Nord
+US86765K1097;Sunoco LP;SUN;Etats-Unis;AmÃ©rique du Nord
+US86800U1043;Super Micro Computer;SMCI;Etats-Unis;AmÃ©rique du Nord
+US8716071076;SYNOPSYS INC;SNPS;Etats-Unis;AmÃ©rique du Nord
+US87165B1035;SYNCHRONY FINANCIAL;SYF;Etats-Unis;AmÃ©rique du Nord
+US87168W2035;Syra Health;SYRA;Etats-Unis;AmÃ©rique du Nord
+US8718291078;SYSCO CORP;SYY;Etats-Unis;AmÃ©rique du Nord
+US8725401090;TJX COS INC;TJX;Etats-Unis;AmÃ©rique du Nord
+US8725901040;T-MOBILE US;TMUS;Etats-Unis;AmÃ©rique du Nord
+US87305R1095;TTM TECHNOLOGIES;TTMI;Etats-Unis;AmÃ©rique du Nord
+US8740391003;Taiwan Semiconductor;TSM;Etats-Unis;AmÃ©rique du Nord
+US8740541094;TAKE TWO INTERACTIVE;TTWO;Etats-Unis;AmÃ©rique du Nord
+US8760301072;TAPESTRY;TPR;Etats-Unis;AmÃ©rique du Nord
+US87612E1064;TARGET CORP;TGT;Etats-Unis;AmÃ©rique du Nord
+US87901J1051;TEGNA;TGNA;Etats-Unis;AmÃ©rique du Nord
+US87918A1051;Teladoc Health;TDOC;Etats-Unis;AmÃ©rique du Nord
+US8793601050;Teledyne Techonlogies;TDY;Etats-Unis;AmÃ©rique du Nord
+US8793691069;Teleflex Incorporated;TFX;Etats-Unis;AmÃ©rique du Nord
+US87936R1068;TELEFONICA BRASIL;VIV;Etats-Unis;AmÃ©rique du Nord
+US8794338298;Telephone and Data Systems Inc;TDS;Etats-Unis;AmÃ©rique du Nord
+US88032Q1094;Tencent Holding Ltd;TCEHY;Etats-Unis;AmÃ©rique du Nord
+US88033G1004;TENET HEALTHCARE;THC;Etats-Unis;AmÃ©rique du Nord
+US88034P1093;Tencent Music Enter.;TME;Etats-Unis;AmÃ©rique du Nord
+US88076W1036;TERADATA CORP;TDC;Etats-Unis;AmÃ©rique du Nord
+US8807701029;TERADYNE INC;TER;Etats-Unis;AmÃ©rique du Nord
+US88160R1014;TESLA MOTORS;TSLA;Etats-Unis;AmÃ©rique du Nord
+US8816242098;Teva Pharmaceutical Indus;TEVA;Etats-Unis;AmÃ©rique du Nord
+US8825081040;TEXAS INSTRUMENTS I;TXN;Etats-Unis;AmÃ©rique du Nord
+US8832031012;TEXTRON INC;TXT;Etats-Unis;AmÃ©rique du Nord
+US88339J1051;THE TRASE DESK A;TTD;Etats-Unis;AmÃ©rique du Nord
+US8835561023;THERMO FISHER SCIEN;TMO;Etats-Unis;AmÃ©rique du Nord
+US8851601018;THOR INDUSTRIES;THO;Etats-Unis;AmÃ©rique du Nord
+US88554D2053;3D Systems;DDD;Etats-Unis;AmÃ©rique du Nord
+US88579Y1010;3M Company;MMM;Etats-Unis;AmÃ©rique du Nord
+US88688T1007;Tilray Inc;TLRY;Etats-Unis;AmÃ©rique du Nord
+US89151E1091;TotalEnergies SE (US);TTE;Etats-Unis;AmÃ©rique du Nord
+US8923561067;TRACTOR SUPPLY CO;TSCO;Etats-Unis;AmÃ©rique du Nord
+US8936411003;TRANSDIGM GROUP;TDG;Etats-Unis;AmÃ©rique du Nord
+US89417E1091;The Travelers Companies;TRV;Etats-Unis;AmÃ©rique du Nord
+US8962391004;Trimble;TRMB;Etats-Unis;AmÃ©rique du Nord
+US8969452015;TRIPADVISOR INC.;TRIP;Etats-Unis;AmÃ©rique du Nord
+US89785L1070;TrueCar Inc;TRUE;Etats-Unis;AmÃ©rique du Nord
+US89832Q1094;Truist Financial Corporation;TFC;Etats-Unis;AmÃ©rique du Nord
+US8998961044;Tupperware Brands Corp;TUP;Etats-Unis;AmÃ©rique du Nord
+US90130A1016;21ST CENT FOX A CM;FOXA;Etats-Unis;AmÃ©rique du Nord
+US90130A2006;21ST CENTURY FOX B;FOX;Etats-Unis;AmÃ©rique du Nord
+US90138F1021;TWILIO-A;TWLO;Etats-Unis;AmÃ©rique du Nord
+US9022521051;Tyler Technologies Inc;TYL;Etats-Unis;AmÃ©rique du Nord
+US9024941034;TYSON FOODS INC A;TSN;Etats-Unis;AmÃ©rique du Nord
+US9026531049;UDR;UDR;Etats-Unis;AmÃ©rique du Nord
+US9026811052;UGI Corporation;UGI;Etats-Unis;AmÃ©rique du Nord
+US9029733048;US BANCORP;USB;Etats-Unis;AmÃ©rique du Nord
+US90353T1007;UBER TECH;UBER;Etats-Unis;AmÃ©rique du Nord
+US90364P1057;UIPATH RG-A;PATH;Etats-Unis;AmÃ©rique du Nord
+US9037311076;Ul Solutions;ULS;Etats-Unis;AmÃ©rique du Nord
+US90384S3031;ULTA SALON COSMETICS;ULTA;Etats-Unis;AmÃ©rique du Nord
+US9043111072;UNDER ARMOUR INC.;UA;Etats-Unis;AmÃ©rique du Nord
+US9078181081;UNION PACIFIC CORP;UNP;Etats-Unis;AmÃ©rique du Nord
+US9100471096;UNITED AIRLINES;UAL;Etats-Unis;AmÃ©rique du Nord
+US9113121068;UNITED PARCEL SERVI;UPS;Etats-Unis;AmÃ©rique du Nord
+US9113631090;UNITED RENTALS INC.;URI;Etats-Unis;AmÃ©rique du Nord
+US9129091081;UNITED STATES STEEL;X;Etats-Unis;AmÃ©rique du Nord
+US91324P1021;UnitedHealth Group;UNH;Etats-Unis;AmÃ©rique du Nord
+US91332U1016;Unity Software;U;Etats-Unis;AmÃ©rique du Nord
+US9139031002;UNIVERSAL HEALTH SE;UHS;Etats-Unis;AmÃ©rique du Nord
+US91529Y1064;UNUM GROUP;UNM;Etats-Unis;AmÃ©rique du Nord
+US91531W1062;UP Fintech Holding Limited;TIGR;Etats-Unis;AmÃ©rique du Nord
+US91680M1071;Upstart Holdings;UPST;Etats-Unis;AmÃ©rique du Nord
+US9168961038;Uranium Energy Corp;UEC;Etats-Unis;AmÃ©rique du Nord
+US9170471026;URBAN OUTFITTERS;URBN;Etats-Unis;AmÃ©rique du Nord
+US9182041080;VF CORP;VFC;Etats-Unis;AmÃ©rique du Nord
+US91912E1055;VALE SP;VALE;Etats-Unis;AmÃ©rique du Nord
+US91913Y1001;VALERO ENERGY CORP;VLO;Etats-Unis;AmÃ©rique du Nord
+US92189F6768;VanEck Vectors Semiconductor ETF;SMH;Etats-Unis;AmÃ©rique du Nord
+US92240M1080;Vector Group Ltd;VGR;Etats-Unis;AmÃ©rique du Nord
+US9224751084;VEEVA SYSTEMS;VEEV;Etats-Unis;AmÃ©rique du Nord
+US92276F1003;VENTAS INC;VTR;Etats-Unis;AmÃ©rique du Nord
+US9229085538;Vanguard Real Estate Index Fund ETF Shares;VNQ;Etats-Unis;AmÃ©rique du Nord
+US92343E1029;Verisign, Inc.;VRSN;Etats-Unis;AmÃ©rique du Nord
+US92343V1044;Verizon;VZ;Etats-Unis;AmÃ©rique du Nord
+US92345Y1064;VERISK ANALYTICS IN;VRSK;Etats-Unis;AmÃ©rique du Nord
+US92532F1003;Vertex Pharma;VRTX;Etats-Unis;AmÃ©rique du Nord
+US92537N1081;Vertiv Holdings A;VRT;Etats-Unis;AmÃ©rique du Nord
+US92556H2067;Paramount Global;PARA;Etats-Unis;AmÃ©rique du Nord
+US92556V1061;Viatris Inc;VTRS;Etats-Unis;AmÃ©rique du Nord
+US9256521090;VICI PROPERTIES;VICI;Etats-Unis;AmÃ©rique du Nord
+US9264001028;Victoria's Secret;VSCO;Etats-Unis;AmÃ©rique du Nord
+US92766K1060;VIRGIN GALACTIC HOLDINGS;SPCE;Etats-Unis;AmÃ©rique du Nord
+US92826C8394;Visa Inc;V;Etats-Unis;AmÃ©rique du Nord
+US92839U2069;VISTEON CORPORATION;VC;Etats-Unis;AmÃ©rique du Nord
+US92857W2098;VODAFONE GROUP PLC;VOD;Etats-Unis;AmÃ©rique du Nord
+US9290421091;VORNADO REALTY TRUS;VNO;Etats-Unis;AmÃ©rique du Nord
+US9291601097;VULCAN MATERIALS CO;VMC;Etats-Unis;AmÃ©rique du Nord
+US92936U1097;W.P. Carey Inc;WPC;Etats-Unis;AmÃ©rique du Nord
+US9297401088;Westinghouse Air Brake Technologies Corp;WAB;Etats-Unis;AmÃ©rique du Nord
+US9311421039;Walmart;WMT;Etats-Unis;AmÃ©rique du Nord
+US9314271084;WALGREENS BOOTS AL;WBA;Etats-Unis;AmÃ©rique du Nord
+US9344231041;Warner Bros Discovery Inc;WBD;Etats-Unis;AmÃ©rique du Nord
+US93627C1018;Warrior Met Coal Inc;HCC;Etats-Unis;AmÃ©rique du Nord
+US94106L1098;WASTE MANAGEMENT IN;WM;Etats-Unis;AmÃ©rique du Nord
+US9418481035;WATERS CORP;WAT;Etats-Unis;AmÃ©rique du Nord
+US94419L1017;Wayfair;W;Etats-Unis;AmÃ©rique du Nord
+US9497461015;WELLS FARGO & CO;WFC;Etats-Unis;AmÃ©rique du Nord
+US95040Q1040;Welltower Inc;WELL;Etats-Unis;AmÃ©rique du Nord
+US9553061055;West Pharmaceutical Services Inc;WST;Etats-Unis;AmÃ©rique du Nord
+US9570901036;Westamerica Bancorporation;WABC;Etats-Unis;AmÃ©rique du Nord
+US9576381092;WESTERN ALLIANCE;WAL;Etats-Unis;AmÃ©rique du Nord
+US9581021055;WESTERN DIGITAL COR;WDC;Etats-Unis;AmÃ©rique du Nord
+US9598021098;WESTERN UNION CO;WU;Etats-Unis;AmÃ©rique du Nord
+US96145D1054;WESTROCK;WRK;Etats-Unis;AmÃ©rique du Nord
+US9621661043;WEYERHAEUSER CO;WY;Etats-Unis;AmÃ©rique du Nord
+US9633201069;WHIRLPOOL CORP;WHR;Etats-Unis;AmÃ©rique du Nord
+US9694571004;WILLIAMS COS INC;WMB;Etats-Unis;AmÃ©rique du Nord
+US9766571064;WISCONSIN ENERGY CO;WEC;Etats-Unis;AmÃ©rique du Nord
+US98138H1014;WORKDAY;WDAY;Etats-Unis;AmÃ©rique du Nord
+US98262P1012;Weight Watcher;WW;Etats-Unis;AmÃ©rique du Nord
+US9831341071;Wynn resorts inc.;WYNN;Etats-Unis;AmÃ©rique du Nord
+US98389B1008;XCEL ENERGY INC;XEL;Etats-Unis;AmÃ©rique du Nord
+US9841211033;XEROX CORP;XRX;Etats-Unis;AmÃ©rique du Nord
+US98419M1009;XYLEM;XYL;Etats-Unis;AmÃ©rique du Nord
+US98422D1054;Xpeng;XPEV;Etats-Unis;AmÃ©rique du Nord
+US98426T1060;YY Inc;YY;Etats-Unis;AmÃ©rique du Nord
+US9858171054;YELP;YELP;Etats-Unis;AmÃ©rique du Nord
+US9884981013;YUM! BRANDS INC;YUM;Etats-Unis;AmÃ©rique du Nord
+US9892071054;Zebra Technologies Corporation;ZBRA;Etats-Unis;AmÃ©rique du Nord
+US98954M1018;ZILLOW GROUP;ZG;Etats-Unis;AmÃ©rique du Nord
+US98956P1021;ZIMMER HOLDINGS;ZBH;Etats-Unis;AmÃ©rique du Nord
+US9897011071;ZIONS BANCORP (UT);ZION;Etats-Unis;AmÃ©rique du Nord
+US98978V1035;ZOETIS;ZTS;Etats-Unis;AmÃ©rique du Nord
+US98980F1049;ZoomInfo Technologies;ZI;Etats-Unis;AmÃ©rique du Nord
+US98980G1022;Zscaler;ZS;Etats-Unis;AmÃ©rique du Nord
+US98980L1017;ZOOM VIDEO COMMUNICATIONS;ZM;Etats-Unis;AmÃ©rique du Nord
+USN070592100;ASML HOLDING;ASML;Etats-Unis;AmÃ©rique du Nord
+VGG456671053;Hollysys Automation Tech;HOLI;Etats-Unis;AmÃ©rique du Nord
 AU00000088E2;88 Energy Limited;88E.AX;Angleterre;Europe
 AU000000S320;South32 Ltd;S32.AX;Angleterre;Europe
 AU0000XINAJ0;Seeing Machines Limited;SEE.L;Angleterre;Europe
@@ -2333,7 +2333,7 @@ ES0105344016;Tier1 Technology S.A.;TR1;Espagne;Europe
 ES0105357000;Quid Pro Quo Alquiler Seguro Socimi;YQPQ;Espagne;Europe
 ES0105360004;Castellana Properties Socimi;YCPS;Espagne;Europe
 ES0105366001;Alquiber Quality SA;ALQ;Espagne;Europe
-ES0105367009;Excem Capital Partners Sociedad de InversiÃ³n Resid;YEXR;Espagne;Europe
+ES0105367009;Excem Capital Partners Sociedad de InversiÃƒÂ³n Resid;YEXR;Espagne;Europe
 ES0105372009;Mistral Patrimonio Inmobiliario SOCIMI SA;YMPI;Espagne;Europe
 ES0105375002;AmRest Holdings SE;EAT;Espagne;Europe
 ES0105376000;Arima Real Estate SOCIMI SA;ARM;Espagne;Europe
@@ -2343,13 +2343,13 @@ ES0105389003;Inversa Prime SOCIMI S.A.;YIPS;Espagne;Europe
 ES0105400008;Proeduca Altus S.A;PRO;Espagne;Europe
 ES0105405007;Adriano Care SOCIMI SAU;YADR;Espagne;Europe
 ES0105429007;Torimbia Socimi S.A.;YTRM;Espagne;Europe
-ES0105449005;IzertisÂ Sa;IZER;Espagne;Europe
+ES0105449005;IzertisÃ‚Â Sa;IZER;Espagne;Europe
 ES0105456026;Holaluz-Clidom S.A;HLZ;Espagne;Europe
 ES0105463006;Making Science Group S.A.;MAKS;Espagne;Europe
-ES0105495008;All Iron Re I SocimiÂ Sa;YAI1;Espagne;Europe
+ES0105495008;All Iron Re I SocimiÃ‚Â Sa;YAI1;Espagne;Europe
 ES0105507000;JSS Real Estate SOCIMI SA;YJSS;Espagne;Europe
 ES0105513008;Soltec Power Holdings SA;SOL;Espagne;Europe
-ES0105517009;EnergÃ­a InnovaciÃ³n y Desarrollo Fotovoltaico S.A.;EIDF;Espagne;Europe
+ES0105517009;EnergÃƒÂ­a InnovaciÃƒÂ³n y Desarrollo Fotovoltaico S.A.;EIDF;Espagne;Europe
 ES0105521001;Arteche Lantegi Elkartea SA;ART;Espagne;Europe
 ES0105546008;Linea Directa Aseguradora SA Compania de Seguros y;LDA;Espagne;Europe
 ES0105548004;Grupo Ecoener S.A.;ENER;Espagne;Europe
@@ -2404,7 +2404,7 @@ ES0130625512;Ence Energia y Celu;ENC;Espagne;Europe
 ES0130670112;Endesa SA;ELE;Espagne;Europe
 ES0130960018;Enagas SA;ENG;Espagne;Europe
 ES0131172001;Entre Cua Socimi;YENT;Espagne;Europe
-ES0131703003;Secuoya Grupo de ComunicaciÃ³n S.A;SEC;Espagne;Europe
+ES0131703003;Secuoya Grupo de ComunicaciÃƒÂ³n S.A;SEC;Espagne;Europe
 ES0132105018;Acerinox SA;ACX;Espagne;Europe
 ES0132945017;Tubacex SA;TUB;Espagne;Europe
 ES0132955008;Compania Espanola de Viviendas en Alquiler SA;CEV;Espagne;Europe
@@ -2804,7 +2804,7 @@ IT0005337495;Portobello S.p.A;POR;Italie;Europe
 IT0005337818;Intred S.p.A;ITD;Italie;Europe
 IT0005337958;Piovan SpA;PVN;Italie;Europe
 IT0005338493;Abitare In S.p.A;ABT;Italie;Europe
-IT0005338840;UnidataÂ Spa;UD;Italie;Europe
+IT0005338840;UnidataÃ‚Â Spa;UD;Italie;Europe
 IT0005339160;PLC SpA;PLC;Italie;Europe
 IT0005340051;Sciuker Frames SpA;SCK;Italie;Europe
 IT0005344996;Circle SpA;CIRC;Italie;Europe
@@ -2830,9 +2830,9 @@ IT0005385213;Newlat Food SpA;NWL;Italie;Europe
 IT0005388217;Fos SpA;FOS;Italie;Europe
 IT0005388266;Salcef Group S.p.A.;SCF;Italie;Europe
 IT0005395071;Vincenzo Zucchi SpA;ZUC;Italie;Europe
-IT0005403495;Fenix EntertainmentÂ Spa;FNX;Italie;Europe
+IT0005403495;Fenix EntertainmentÃ‚Â Spa;FNX;Italie;Europe
 IT0005411209;GVS SpA;GVS;Italie;Europe
-IT0005412504;Cy4gateÂ Spa;CY4;Italie;Europe
+IT0005412504;Cy4gateÃ‚Â Spa;CY4;Italie;Europe
 IT0005416281;Industrie Chimiche Forestali SpA;ICF;Italie;Europe
 IT0005418204;Reti SpA;RETI;Italie;Europe
 IT0005424830;Osai Automation System SpA;OSA;Italie;Europe
@@ -3050,7 +3050,7 @@ CH0038863350;Nestle SA;NESN;Suisse;Europe
 CH0039542854;MCH Group AG;MCHN;Suisse;Europe
 CH0039651184;Energiedienst Holdi;EDHN;Suisse;Europe
 CH0039821084;Metall Zug AG;METN;Suisse;Europe
-CH0042660313;SXI Real EstateÂ® Shrs Broad TR;REAL;Suisse;Europe
+CH0042660313;SXI Real EstateÃ‚Â® Shrs Broad TR;REAL;Suisse;Europe
 CH0043238366;Aryzta AG;ARYN;Suisse;Europe
 CH0045825517;Fundamenta Real Estate AG;FREN;Suisse;Europe
 CH0100191136;Relief Therapeutics Holding AG;RLF;Suisse;Europe
@@ -3074,7 +3074,7 @@ CH0189396655;Glarner Kantonalban;GLKBN;Suisse;Europe
 CH0190891181;Leonteq AG;LEON;Suisse;Europe
 CH0208062627;Meier Tobler Group AG;MTG;Suisse;Europe
 CH0210483332;Cie Fin Richemont;CFR;Suisse;Europe
-CH0212186248;Novavest Real EstateÂ Ag;NREN;Suisse;Europe
+CH0212186248;Novavest Real EstateÃ‚Â Ag;NREN;Suisse;Europe
 CH0212255803;Burkhalter Holding ;BRKN;Suisse;Europe
 CH0214706357;Bergbahnen Engelber;TIBN;Suisse;Europe
 CH0225173167;Cembra Money Bank A;CMBN;Suisse;Europe
@@ -3163,7 +3163,7 @@ CH1146882316;21Shares Algorand ETP;ALGO;ETF;
 CH1168929078;21S AFTM;AFTM;ETF;
 CH1184151731;Hashdex Nasdaq Crypto Index Europe ETP;HASH;ETF;
 CH1218734544;Hashdex Crypto Momentum Factor ETN;HAMO;ETF;
-DE0005933931;iShares Core DAXÂ® UCITS ETF (DE) EUR (Acc);EXS1;ETF;
+DE0005933931;iShares Core DAXÃ‚Â® UCITS ETF (DE) EUR (Acc);EXS1;ETF;
 DE000A0F5UH1;iShares STOXX Global Select Dividend 100 UCITS ETF (DE);ISPA;ETF;
 DE000A0H0728;iShares Diversified Commodity Swap UCITS ETF (DE);CMSE;ETF;
 DE000A0H08L5;iShares STOXX Europe 600 Media UCITS ETF (DE);EXH6;ETF;
