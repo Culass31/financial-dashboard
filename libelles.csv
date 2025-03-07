@@ -1,12 +1,12 @@
 ISIN;nom;ticker;Pays;Région
 FR0010557264;Ab Science;AB.PA;France;Europe
 FR0004040608;Abc Arbitrage;ABCA.PA;France;Europe
-FR0012616852;Abionyx Pharma;ABNX.PA.PA;France;Europe
+FR0012616852;Abionyx Pharma;ABNX.PA;France;Europe
 FR0012333284;Abivax;ABVX.PA;France;Europe
-FR0000120404;Accor Hotels;AC.PA.PA;France;Europe
+FR0000120404;Accor Hotels;AC.PA;France;Europe
 FR0000076861;Acteos;EOS.PA;France;Europe
-FR0011184241;Adocia;ADOC.PA.PA;France;Europe
-FR0010340141;Adp;ADP.PA.PA;France;Europe
+FR0011184241;Adocia;ADOC.PA;France;Europe
+FR0010340141;Adp;ADP.PA;France;Europe
 FR0012821890;Adux;ALDUX.PA;France;Europe
 FR001400J770;Air France - KLM;AF.PA;France;Europe
 FR0000120073;Air Liquide;AI.PA;France;Europe
@@ -18,7 +18,7 @@ FR0000071946;Alten;ATE.PA;France;Europe
 FR0004125920;Amundi;AMUN.PA;France;Europe
 LU0569974404;Aperam;APAM.PA;France;Europe
 FR0014003U94;Aramis Group;ARAMI.PA;France;Europe
-LU1598757687;Arcelor Mittal;MT.PA;France;Europe
+LU1598757687;Arcelor Mittal;MT.AS;France;Europe
 FR0010481960;Argan;ARG.PA;France;Europe
 FR0010313833;Arkema;AKE.PA;France;Europe
 FR0000074783;Artmarket.com;PRC.PA;France;Europe
@@ -1770,19 +1770,18 @@ US98980G1022;Zscaler;ZS;Etats-Unis;Amérique du Nord
 US98980L1017;ZOOM VIDEO COMMUNICATIONS;ZM;Etats-Unis;Amérique du Nord
 USN070592100;ASML HOLDING;ASML;Etats-Unis;Amérique du Nord
 VGG456671053;Hollysys Automation Tech;HOLI;Etats-Unis;Amérique du Nord
-AU00000088E2;88 Energy Limited;88E;Angleterre;Europe
-AU000000S320;South32 Ltd;S32;Angleterre;Europe
-AU0000XINAJ0;Seeing Machines Limited;SEE;Angleterre;Europe
-BMG4209G2077;Gulf Keystone Petroleum Ltd;GKP;Angleterre;Europe
-BMG4593F1389;Hiscox Ltd;HSX;Angleterre;Europe
-BMG5361W1047;Lancashire Holdings;LRE;Angleterre;Europe
-BMG702781094;Petra Diamonds Ltd;PDL;Angleterre;Europe
+AU00000088E2;88 Energy Limited;88E.AX;Angleterre;Europe
+AU000000S320;South32 Ltd;S32.AX;Angleterre;Europe
+AU0000XINAJ0;Seeing Machines Limited;SEE.L;Angleterre;Europe
+BMG4209G2077;Gulf Keystone Petroleum Ltd;GKP.L;Angleterre;Europe
+BMG4593F1389;Hiscox Ltd;HSX.L;Angleterre;Europe
+BMG5361W1047;Lancashire Holdings;LRE.L;Angleterre;Europe
+BMG702781094;Petra Diamonds Ltd;PDL.L;Angleterre;Europe
 BMG931151069;Utilico Emerging Ma;UEM;Angleterre;Europe
 CH0198251305;Coca-Cola HBC AG;CCH;Angleterre;Europe
 ES0113211835;Banco Bilbao Vizcaya Argentaria SA;BVA;Angleterre;Europe
 ES0113900J37;Banco Santander SA;BNC;Angleterre;Europe
 ES0177542018;International Conso;IAG;Angleterre;Europe
-FR0000125007;Cie de Saint-Gobain;COD;Angleterre;Europe
 FR001400T0D6;Canal+;CAN;Angleterre;Europe
 GB0000066554;Aberforth Smaller C;ASL;Angleterre;Europe
 GB0000163088;Speedy Hire PLC;SDY;Angleterre;Europe
