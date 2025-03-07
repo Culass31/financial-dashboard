@@ -1,18 +1,18 @@
 import streamlit as st
-import appdirs as ad
-ad.user_cache_dir = lambda *args: "/tmp"
 import yfinance as yf
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.linear_model import LinearRegression
-from datetime import datetime, timedelta
-
+from bs4 import BeautifulSoup
 import requests
+import time
+import re
+import os
 
 # Configuration de l'application Streamlit
-st.set_page_config(page_title="Analyse CAC40", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Analyse Marchés Mondiaux", page_icon="📈", layout="wide")
 
 # Fonction pour formater les grands nombres
 def format_number(num):
@@ -30,842 +30,1000 @@ def format_number(num):
         return f"{num/1_000:.2f}K"
     else:
         return f"{num:.2f}"
+    
+def display_price_with_trend(label, current_price, previous_price, format_func=None):
+    """
+    Affiche un prix avec son indicateur de tendance (flèche et pourcentage)
+    
+    :param label: Libellé à afficher (ex: "Prix actuel")
+    :param current_price: Prix actuel
+    :param previous_price: Prix de référence pour calculer la tendance
+    :param format_func: Fonction optionnelle pour formater le prix (par défaut None)
+    :return: None, affiche directement avec st.markdown
+    """
+    if current_price is not None and previous_price is not None:
+        # Calculer le pourcentage de variation
+        change_pct = ((current_price - previous_price) / previous_price) * 100
+        
+        # Déterminer la flèche et la couleur en fonction de la tendance
+        if change_pct > 0:
+            arrow = "↑"
+            color = "green"
+        elif change_pct < 0:
+            arrow = "↓"
+            color = "red"
+        else:
+            arrow = "→"
+            color = "gray"
+        
+        # Formater la valeur si une fonction de formatage est fournie
+        formatted_price = format_func(current_price) if format_func else f"{current_price:.2f}"
+        
+        # Afficher avec le style approprié
+        st.markdown(
+            f"**{label}:** {formatted_price} "
+            f"<span style='color:{color}'>{arrow} {abs(change_pct):.2f}%</span>", 
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(f"**{label}:** N/A")
 
-# Liste des actions du CAC40 avec leurs codes ISIN
-CAC40_STOCKS = {
-    'Air Liquide': {'ticker': 'AI.PA', 'isin': 'FR0000120073'},
-    'Airbus': {'ticker': 'AIR.PA', 'isin': 'NL0000235190'},
-    'Alstom': {'ticker': 'ALO.PA', 'isin': 'FR0010220475'},
-    'ArcelorMittal': {'ticker': 'MT.AS', 'isin': 'LU1598757687'},
-    'AXA': {'ticker': 'CS.PA', 'isin': 'FR0000120628'},
-    'BNP Paribas': {'ticker': 'BNP.PA', 'isin': 'FR0000131104'},
-    'Bouygues': {'ticker': 'EN.PA', 'isin': 'FR0000120503'},
-    'Capgemini': {'ticker': 'CAP.PA', 'isin': 'FR0000125338'},
-    'Carrefour': {'ticker': 'CA.PA', 'isin': 'FR0000120172'},
-    'Crédit Agricole': {'ticker': 'ACA.PA', 'isin': 'FR0000045072'},
-    'Danone': {'ticker': 'BN.PA', 'isin': 'FR0000120644'},
-    'Dassault Systèmes': {'ticker': 'DSY.PA', 'isin': 'FR0014003TT8'},
-    'Engie': {'ticker': 'ENGI.PA', 'isin': 'FR0010208488'},
-    'EssilorLuxottica': {'ticker': 'EL.PA', 'isin': 'FR0000121667'},
-    'Hermès': {'ticker': 'RMS.PA', 'isin': 'FR0000052292'},
-    'Kering': {'ticker': 'KER.PA', 'isin': 'FR0000121485'},
-    'Legrand': {'ticker': 'LR.PA', 'isin': 'FR0010307819'},
-    'L\'Oréal': {'ticker': 'OR.PA', 'isin': 'FR0000120321'},
-    'LVMH': {'ticker': 'MC.PA', 'isin': 'FR0000121014'},
-    'Michelin': {'ticker': 'ML.PA', 'isin': 'FR001400AJ45'},
-    'Orange': {'ticker': 'ORA.PA', 'isin': 'FR0000133308'},
-    'Pernod Ricard': {'ticker': 'RI.PA', 'isin': 'FR0000120693'},
-    'Publicis': {'ticker': 'PUB.PA', 'isin': 'FR0000130577'},
-    'Renault': {'ticker': 'RNO.PA', 'isin': 'FR0000131906'},
-    'Safran': {'ticker': 'SAF.PA', 'isin': 'FR0000073272'},
-    'Saint-Gobain': {'ticker': 'SGO.PA', 'isin': 'FR0000125007'},
-    'Sanofi': {'ticker': 'SAN.PA', 'isin': 'FR0000120578'},
-    'Schneider Electric': {'ticker': 'SU.PA', 'isin': 'FR0000121972'},
-    'Société Générale': {'ticker': 'GLE.PA', 'isin': 'FR0000130809'},
-    'Stellantis': {'ticker': 'STLA.PA', 'isin': 'NL00150001Q9'},
-    'STMicroelectronics': {'ticker': 'STM.PA', 'isin': 'NL0000226223'},
-    'Teleperformance': {'ticker': 'TEP.PA', 'isin': 'FR0000051807'},
-    'Thales': {'ticker': 'HO.PA', 'isin': 'FR0000121329'},
-    'TotalEnergies': {'ticker': 'TTE.PA', 'isin': 'FR0000120271'},
-    'Unibail-Rodamco-Westfield': {'ticker': 'URW.AS', 'isin': 'FR0013326246'},
-    'Veolia': {'ticker': 'VIE.PA', 'isin': 'FR0000124141'},
-    'Vinci': {'ticker': 'DG.PA', 'isin': 'FR0000125486'},
-    'Vivendi': {'ticker': 'VIV.PA', 'isin': 'FR0000127771'},
-    'Worldline': {'ticker': 'WLN.PA', 'isin': 'FR0011981968'}
-}
-
-# Fonction pour récupérer les actualités via Alpha Vantage
-@st.cache_data(ttl=3600)  # Mise en cache des données pour une heure
-def get_news(ticker, api_key, items_limit=5):
+# Structure de marché hiérarchique organisée par région et pays
+@st.cache_data(ttl=86400)  # Mise en cache pour 24 heures
+def get_market_structure():
+    # Lire le fichier CSV avec l'encodage approprié
     try:
-        company_name = ticker.split('.')[0]  # Extraction du symbole sans l'extension de marché
-        url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={company_name}&apikey={api_key}&limit={items_limit}"
-        response = requests.get(url)
-        data = response.json()
+        # Essayer différents encodages courants
+        encodings = ['latin1', 'ISO-8859-1', 'windows-1252', 'utf-8-sig']
+        df = None
         
-        news_items = []
-        if "feed" in data:
-            for item in data["feed"][:items_limit]:
-                news_items.append({
-                    "title": item.get("title", ""),
-                    "summary": item.get("summary", ""),
-                    "url": item.get("url", ""),
-                    "time_published": item.get("time_published", ""),
-                    "source": item.get("source", ""),
-                    "overall_sentiment_score": item.get("overall_sentiment_score", 0),
-                    "overall_sentiment_label": item.get("overall_sentiment_label", "")
-                })
+        for encoding in encodings:
+            try:
+                df = pd.read_csv("https://raw.githubusercontent.com/Culass31/financial-dashboard/main/libelles.csv", sep=";", encoding=encoding)
+                print(f"Fichier lu avec succès avec l'encodage {encoding}:")
+                break
+            except UnicodeDecodeError:
+                continue
         
-        return news_items
+        if df is None:
+            raise Exception("Impossible de déterminer l'encodage correct du fichier")
+        
+        print(f"Nombre d'entrées: {len(df)}")
+        print(f"Colonnes: {df.columns.tolist()}")
+        print("\nAperçu des données:")
+        print(df.head())
     except Exception as e:
-        st.error(f"Erreur lors de la récupération des actualités: {str(e)}")
-        return []
+        st.error(f"Erreur lors de la lecture du fichier: {e}")
+        return {}
+    
+    # Créer une structure hiérarchique par région et pays
+    market_structure = {}
+    
+    # Parcourir chaque ligne du DataFrame
+    for _, row in df.iterrows():
+        region = row['Région']
+        pays = row['Pays']
+        isin = row['ISIN']
+        nom = row['nom']
+        ticker = row['ticker']
+        
+        # Ignorer les lignes avec des valeurs manquantes
+        if pd.isna(region) or pd.isna(pays) or pd.isna(ticker) or pd.isna(nom):
+            continue
+            
+        # Initialiser la région si elle n'existe pas
+        if region not in market_structure:
+            market_structure[region] = {}
+            
+        # Initialiser le pays s'il n'existe pas
+        if pays not in market_structure[region]:
+            market_structure[region][pays] = {}
+            
+        # Ajouter l'action
+        market_structure[region][pays][nom] = {
+            'ticker': ticker,
+            'isin': isin
+        }
+    
+    return market_structure
 
-# Fonction pour récupérer les données fondamentales
-@st.cache_data(ttl=3600)  # Mise en cache des données pour une heure
+# Fonction pour obtenir le code ISIN
+def get_isin_for_ticker(ticker_symbol):
+    try:
+        ticker_data = yf.Ticker(ticker_symbol)
+        isin = ticker_data.isin
+        return isin if isin else "Non disponible"
+    except Exception as e:
+        print(f"Erreur lors de la récupération de l'ISIN pour {ticker_symbol}: {e}")
+        return "Non disponible"
+
+@st.cache_data(ttl=3600)
+def get_historical_financials(ticker, period='max'):
+    """
+    Récupère et prépare les données financières historiques pour une action.
+    
+    :param ticker: Symbol de l'action
+    :return: Tuple de DataFrames (income_statement, balance_sheet, cash_flow)
+    """
+    try:
+        stock = yf.Ticker(ticker)
+        
+        # Utiliser les attributs corrects de l'objet Ticker
+        # Ces attributs renvoient directement des DataFrames pandas
+        income_stmt = stock.income_stmt
+        balance_sheet = stock.balance_sheet
+        cashflow = stock.cashflow
+        
+        # Vérification des données
+        if income_stmt is None or income_stmt.empty:
+            income_stmt = pd.DataFrame()
+            
+        if balance_sheet is None or balance_sheet.empty:
+            balance_sheet = pd.DataFrame()
+            
+        if cashflow is None or cashflow.empty:
+            cashflow = pd.DataFrame()
+        
+        return income_stmt, balance_sheet, cashflow
+        
+    except Exception as e:
+        st.error(f"Erreur lors de la récupération des données financières pour {ticker}: {str(e)}")
+        # Renvoyer des DataFrames vides en cas d'erreur
+        return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+
+# Fonction pour obtenir l'historique des cours d'une action
+@st.cache_data(ttl=3600)
+def get_stock_history(ticker, period='5y'):
+    """
+    Récupère l'historique des cours d'une action.
+    
+    :param ticker: Symbol de l'action
+    :param period: Période d'historique à récupérer
+    :return: DataFrame avec l'historique des cours
+    """
+    try:
+        stock_data = yf.Ticker(ticker)
+        df = stock_data.history(period=period)
+        
+        if df.empty:
+            st.warning(f"Pas de données disponibles pour {ticker}")
+            return pd.DataFrame()
+        
+        # Ajouter une colonne pour la date au format string (pour l'affichage)
+        df['date_str'] = df.index.strftime('%Y-%m-%d')
+        
+        return df
+    except Exception as e:
+        st.error(f"Erreur lors de la récupération de l'historique pour {ticker}: {str(e)}")
+        return pd.DataFrame()
+
+# Fonction pour calculer la régression linéaire et les indicateurs techniques
+def calculate_regression(df):
+    """
+    Calcule la régression linéaire sur les prix et divers indicateurs techniques.
+    
+    :param df: DataFrame avec l'historique des cours
+    :return: DataFrame avec régression, dict d'indicateurs
+    """
+    if df.empty:
+        return df, {}
+    
+    # Copie du DataFrame
+    df_reg = df.copy()
+    
+    # Créer un index numérique pour la régression
+    df_reg['index'] = range(len(df_reg))
+    
+    # Ajuster un modèle de régression linéaire
+    X = df_reg['index'].values.reshape(-1, 1)
+    y = df_reg['Close'].values
+    
+    model = LinearRegression()
+    model.fit(X, y)
+    
+    # Calculer les valeurs prédites
+    df_reg['Regression'] = model.predict(X)
+    
+    # Calculer l'écart par rapport à la régression
+    df_reg['Deviation'] = df_reg['Close'] - df_reg['Regression']
+    
+    # Calculer l'écart type
+    std_dev = df_reg['Deviation'].std()
+    
+    # Calculer le nombre d'écarts types
+    if std_dev > 0:
+        df_reg['DeviationScore'] = df_reg['Deviation'] / std_dev
+    else:
+        df_reg['DeviationScore'] = 0
+    
+    # Calculer la progression sur différentes périodes
+    current_price = df_reg['Close'].iloc[-1]
+    
+    # Progression sur 1 an (252 jours de trading)
+    days_1y = min(252, len(df_reg) - 1)
+    price_1y_ago = df_reg['Close'].iloc[-days_1y-1] if days_1y > 0 else current_price
+    prog_1y = ((current_price / price_1y_ago) - 1) * 100 if price_1y_ago > 0 else 0
+    
+    # Progression sur 5 ans (1260 jours de trading)
+    days_5y = min(1260, len(df_reg) - 1)
+    price_5y_ago = df_reg['Close'].iloc[-days_5y-1] if days_5y > 0 else current_price
+    prog_5y = ((current_price / price_5y_ago) - 1) * 100 if price_5y_ago > 0 else 0
+    
+    # Calculer la croissance du modèle (annualisée)
+    if len(df_reg) > 252:  # Au moins un an de données
+        initial_regression = df_reg['Regression'].iloc[0]
+        final_regression = df_reg['Regression'].iloc[-1]
+        years = len(df_reg) / 252  # Approximation du nombre d'années
+        
+        if initial_regression > 0:
+            model_growth = (((final_regression / initial_regression) ** (1/years)) - 1) * 100
+        else:
+            model_growth = 0
+    else:
+        model_growth = 0
+    
+    # Calculer la corrélation
+    correlation = np.corrcoef(df_reg['index'], df_reg['Close'])[0, 1]
+    
+    # Écart actuel par rapport à la regression
+    current_deviation = df_reg['DeviationScore'].iloc[-1]
+    
+    # Résultats
+    indicators = {
+        'model_growth': model_growth,
+        'correlation': correlation,
+        'deviation': current_deviation,
+        'prog_1y': prog_1y,
+        'prog_5y': prog_5y
+    }
+    
+    return df_reg, indicators
+
+# Fonction pour obtenir les données fondamentales d'une action
+@st.cache_data(ttl=3600)
 def get_fundamental_data(ticker):
+    """
+    Récupère les données fondamentales d'une action.
+    
+    :param ticker: Symbol de l'action
+    :return: Dictionnaire avec les données fondamentales
+    """
     try:
         stock = yf.Ticker(ticker)
         info = stock.info
         
-        # Création d'un dictionnaire structuré avec les données fondamentales
-        fundamental_data = {
-            "Informations générales": {
-                "Nom": info.get('longName', 'N/A'),
-                "Secteur": info.get('sector', 'N/A'),
-                "Industrie": info.get('industry', 'N/A'),
-                "Site web": info.get('website', 'N/A')
-            },
-            "Données de marché": {
-                "Prix actuel": info.get('currentPrice', 'N/A'),
-                "Précédente clôture": info.get('previousClose', 'N/A'),
-                "Ouverture": info.get('open', 'N/A'),
-                "Plage du jour": f"{info.get('dayLow', 'N/A')} - {info.get('dayHigh', 'N/A')}",
-                "Plage sur 52 semaines": f"{info.get('fiftyTwoWeekLow', 'N/A')} - {info.get('fiftyTwoWeekHigh', 'N/A')}",
-                "Volume": info.get('volume', 'N/A'),
-                "Volume moyen (3m)": info.get('averageVolume', 'N/A'),
-                "Capitalisation boursière": info.get('marketCap', 'N/A'),
-                "Variation sur 1 an": f"{info.get('52WeekChange', 0)*100:.2f}%" if info.get('52WeekChange') else 'N/A'
-            },
-            "Ratios financiers": {
-                "P/E Ratio": info.get('trailingPE', 'N/A'),
-                "EPS": info.get('trailingEPS', 'N/A'),
-                "Prévision croissance EPS": info.get('earningsGrowth', 'N/A'),
-                "Rendement du dividende": f"{info.get('dividendYield', 0):.2f}%" if info.get('dividendYield') else 'N/A',
-                "Prix/Valeur comptable": info.get('priceToBook', 'N/A'),
-                "ROA": f"{info.get('returnOnAssets', 0)*100:.2f}%" if info.get('returnOnAssets') else 'N/A',
-                "ROE": f"{info.get('returnOnEquity', 0)*100:.2f}%" if info.get('returnOnEquity') else 'N/A',
-                "Marge bénéficiaire brute": f"{info.get('grossMargins', 0)*100:.2f}%" if info.get('grossMargins') else 'N/A',
-                "EBITDA": info.get('ebitda', 'N/A'),
-                "EV/EBITDA": info.get('enterpriseToEbitda', 'N/A'),
-                "Beta": info.get('beta', 'N/A')
-            }
+        if not info:
+            return None
+        
+        # Récupérer les données financières
+        income_stmt, balance_sheet, cashflow = get_historical_financials(ticker)
+        
+        # Données de marché
+        market_data = {
+            "Prix actuel": info.get('currentPrice', info.get('regularMarketPrice', None)),
+            "Précédente clôture": info.get('previousClose', None),
+            "Volume": info.get('volume', None),
+            "Volume moyen": info.get('averageVolume', None),
+            "Capitalisation boursière": info.get('marketCap', None),
+            "Beta": info.get('beta', None),
+            "Rendement du dividende (%)": info.get('dividendYield', 0) * 100 if info.get('dividendYield') else None
         }
         
-        return fundamental_data
+        # Données fondamentales
+        fundamental_data = {
+            "PER": info.get('trailingPE', None),
+            "PEG": info.get('pegRatio', None),
+            "Cours/Valeur Comptable": info.get('priceToBook', None),
+            "Marge bénéficiaire (%)": info.get('profitMargins', 0) * 100 if info.get('profitMargins') else None,
+            "ROE (%)": info.get('returnOnEquity', 0) * 100 if info.get('returnOnEquity') else None,
+            "ROA (%)": info.get('returnOnAssets', 0) * 100 if info.get('returnOnAssets') else None,
+            "Ratio d'endettement": info.get('debtToEquity', None),
+            "Croissance du BPA (%)": info.get('earningsGrowth', 0) * 100 if info.get('earningsGrowth') else None,
+            "Croissance du CA (%)": info.get('revenueGrowth', 0) * 100 if info.get('revenueGrowth') else None
+        }
+        
+        # Données financières
+        financial_data = {}
+        
+        # Ajouter les dernières données financières si disponibles
+        if not income_stmt.empty and len(income_stmt.columns) > 0:
+            last_year = income_stmt.columns[0]
+            financial_data.update({
+                "Chiffre d'affaires": income_stmt.loc['Total Revenue', last_year] if 'Total Revenue' in income_stmt.index else None,
+                "Résultat net": income_stmt.loc['Net Income', last_year] if 'Net Income' in income_stmt.index else None,
+                "EBITDA": income_stmt.loc['EBITDA', last_year] if 'EBITDA' in income_stmt.index else None
+            })
+        
+        if not balance_sheet.empty and len(balance_sheet.columns) > 0:
+            last_period = balance_sheet.columns[0]
+            financial_data.update({
+                "Total Actif": balance_sheet.loc['Total Assets', last_period] if 'Total Assets' in balance_sheet.index else None,
+                "Total Dette": balance_sheet.loc['Total Debt', last_period] if 'Total Debt' in balance_sheet.index else None,
+                "Fonds propres": balance_sheet.loc['Total Equity', last_period] if 'Total Equity' in balance_sheet.index else None
+            })
+        
+        if not cashflow.empty and len(cashflow.columns) > 0:
+            last_period = cashflow.columns[0]
+            financial_data.update({
+                "Free Cash Flow": cashflow.loc['Free Cash Flow', last_period] if 'Free Cash Flow' in cashflow.index else None
+            })
+        
+        return {
+            "Données de marché": market_data,
+            "Données fondamentales": fundamental_data,
+            "Données financières": financial_data
+        }
+    
     except Exception as e:
-        st.error(f"Erreur lors de la récupération des données fondamentales: {str(e)}")
+        st.error(f"Erreur lors de la récupération des données fondamentales pour {ticker}: {str(e)}")
         return None
 
-# Fonction pour calculer la droite de régression et les bandes sigma
-@st.cache_data(ttl=3600)  # Mise en cache des données pour une heure
-def calculate_regression(df, column='Close'):
-    try:
-        df = df.copy()
-        # Création d'un index numérique pour la régression
-        df['index'] = np.arange(len(df))
-        
-        # Préparation des données pour la régression
-        X = df['index'].values.reshape(-1, 1)
-        y = df[column].values
-        
-        # Calcul de la régression linéaire
-        model = LinearRegression()
-        model.fit(X, y)
-        
-        # Prédiction avec le modèle
-        df['regression'] = model.predict(X)
-        
-        # Calcul des écarts
-        df['residuals'] = df[column] - df['regression']
-        std_dev = df['residuals'].std()
-        
-        # Calcul des bandes sigma
-        df['upper_1sigma'] = df['regression'] + std_dev
-        df['lower_1sigma'] = df['regression'] - std_dev
-        df['upper_2sigma'] = df['regression'] + 2 * std_dev
-        df['lower_2sigma'] = df['regression'] - 2 * std_dev
-        
-        # Calcul des indicateurs clés
-        coef = model.coef_[0]
-        last_price = df[column].iloc[-1]
-        regression_value = df['regression'].iloc[-1]
-        
-        # Calcul de l'écart en pourcentage
-        #deviation = (last_price - regression_value) / regression_value * 100
-        
-        # Calculer le nombre d'écarts types de l'écart actuel
-        current_deviation = (last_price - regression_value) / std_dev
+def analyze_consistency(series, min_length=5, min_growth=None, min_value=None, max_value=None, within_percentage=None):
+    if len(series) < min_length:
+        return False, "Données historiques insuffisantes"
 
-        # Calcul de la progression sur 1 an et 5 ans (approximative)
-        days_in_year = 252  # Nombre approximatif de jours de trading dans une année
-        prog_1y = None
-        prog_5y = None
-        
-        if len(df) > days_in_year:
-            price_1y_ago = df[column].iloc[-min(days_in_year, len(df))]
-            prog_1y = (last_price / price_1y_ago - 1) * 100
-        
-        if len(df) > 5 * days_in_year:
-            price_5y_ago = df[column].iloc[-min(5 * days_in_year, len(df))]
-            prog_5y = (last_price / price_5y_ago - 1) * 100
-        
-        indicators = {
-            'coefficient': coef,
-            'model_growth': coef / regression_value * 100 * 252,  # Croissance annualisée
-            'correlation': np.corrcoef(df['index'], df[column])[0, 1],
-            'deviation': current_deviation,
-            'prog_1y': prog_1y,
-            'prog_5y': prog_5y
-        }
-        
-        return df, indicators
-    except Exception as e:
-        st.error(f"Erreur lors du calcul de la régression: {str(e)}")
-        return df, {}
+    if min_value is not None and any(series < min_value):
+        return False, f"Valeur inférieure au minimum ({min_value})"
 
-# Fonction pour obtenir et traiter l'historique des cours
-@st.cache_data(ttl=3600)  # Mise en cache des données pour une heure
-def get_stock_history(ticker, period='max'):
-    try:
-        stock = yf.Ticker(ticker)
-        history = stock.history(period=period)
-        
-        # Calcul des moyennes mobiles
-        history['MA20'] = history['Close'].rolling(window=20).mean()
-        history['MA50'] = history['Close'].rolling(window=50).mean()
-        history['MA100'] = history['Close'].rolling(window=100).mean()
-        history['MA200'] = history['Close'].rolling(window=200).mean()
-        
-        # Réinitialiser l'index pour avoir la date comme colonne
-        history = history.reset_index()
-        
-        return history
-    except Exception as e:
-        st.error(f"Erreur lors de la récupération de l'historique: {str(e)}")
-        return pd.DataFrame()
+    if max_value is not None and any(series > max_value):
+        return False, f"Valeur supérieure au maximum ({max_value})"
 
-# Fonction pour créer une jauge d'indicateur
-def create_gauge(value, title, min_val, max_val, format_str="{:.2f}"):
-    if value is None:
-        value_str = "N/A"
-        normalized_value = 0.5
-        color = "gray"
+    if min_growth is not None and len(series) > 1:
+        growth_rates = series.pct_change().dropna() * 100
+        if any(growth_rates < min_growth):
+            return False, f"Croissance inférieure au minimum ({min_growth:.2f}%)"
+
+    if within_percentage is not None and len(series) > 1:
+        first_value = series.iloc[0]
+        lower_bound = first_value * (1 - within_percentage / 100)
+        upper_bound = first_value * (1 + within_percentage / 100)
+        if any((series < lower_bound) | (series > upper_bound)):
+            return False, f"Variation supérieure à {within_percentage:.2f}% par rapport à la première valeur"
+
+    return True, "Consistant"
+
+def buffett_stock_screener(stocks_dict,
+                           min_revenue_growth=5,
+                           min_net_profit_margin=10,
+                           min_roe=15,
+                           max_debt_to_equity=1,
+                           min_free_cashflow=0,
+                           min_gross_margin_consistency=40,
+                           max_rd_sales_ratio=0.05,
+                           max_interest_ebit_ratio=0.20,
+                           min_net_income_growth_consistency=8):
+    """
+    Screener d'actions basé sur les principes de Warren Buffett avec critères de cohérence.
+
+    :param stocks_dict: Dictionnaire des actions à analyser
+    :param min_revenue_growth: Croissance des revenus minimale (ponctuelle)
+    :param min_net_profit_margin: Marge nette minimale (ponctuelle)
+    :param min_roe: Rendement des capitaux propres minimal (ponctuel)
+    :param max_debt_to_equity: Ratio dette/fonds propres maximal (ponctuel)
+    :param min_free_cashflow: Free cash flow minimal (ponctuel)
+    :param min_gross_margin_consistency: Marge brute minimale et cohérente sur 5 ans (%)
+    :param max_rd_sales_ratio: Ratio maximal des dépenses R&D sur le chiffre d'affaires (ponctuel)
+    :param max_interest_ebit_ratio: Ratio maximal des charges d'intérêts sur le résultat avant intérêts et impôts (EBIT) (ponctuel)
+    :param min_net_income_growth_consistency: Croissance annuelle minimale et cohérente du résultat net sur 5 ans (%)
+    :return: DataFrame des actions éligibles
+    """
+    eligible_stocks = []
+    for stock_name, stock_info in stocks_dict.items():
+        ticker = stock_info['ticker']
+        try:
+            stock_data = yf.Ticker(ticker)
+            info = stock_data.info
+
+            # Critères ponctuels
+            revenue_growth = info.get('earningsGrowth', 0) * 100
+            net_profit_margin = info.get('profitMargins', 0) * 100
+            roe = info.get('returnOnEquity', 0) * 100
+            total_equity = info.get('totalEquity', 1)
+            total_debt = info.get('totalDebt', 0)
+            debt_to_equity = total_debt / total_equity if total_equity != 0 else float('inf')
+            free_cashflow = info.get('freeCashflow', 0)
+            rd_expenses = info.get('researchDevelopment', 0)
+            total_revenue = info.get('totalRevenue', 1)
+            rd_sales_ratio = rd_expenses / total_revenue if total_revenue != 0 else 0
+            ebit = info.get('ebit', 1)
+            interest_expense = info.get('interestExpense', 0)
+            interest_ebit_ratio = interest_expense / ebit if ebit != 0 else 0
+
+            # Récupérer l'historique des données financières
+            income_history, balance_history, cashflow_history = get_historical_financials(ticker, period='max')
+
+            consistent_gross_margin, gross_margin_reason = False, "N/A"
+            consistent_net_income_growth, net_income_growth_reason = False, "N/A"
+
+            if not income_history.empty:
+                if 'Gross Profit' in income_history.index and 'Total Revenue' in income_history.index:
+                    gross_margins_history = ((income_history.loc['Gross Profit'] / income_history.loc['Total Revenue']) * 100).dropna()
+                    if not gross_margins_history.empty:
+                        consistent_gross_margin, gross_margin_reason = analyze_consistency(gross_margins_history, min_value=min_gross_margin_consistency)
+
+                if 'Net Income' in income_history.index:
+                    net_incomes_history = income_history.loc['Net Income'].dropna()
+                    if len(net_incomes_history) > 1:
+                        net_income_growth_rates = net_incomes_history.pct_change().dropna() * 100
+                        consistent_net_income_growth, net_income_growth_reason = analyze_consistency(net_income_growth_rates, min_growth=min_net_income_growth_consistency, min_length=4) # Analyse sur les 4 dernières années pour 5 points de données
+
+            # Vérifier tous les critères
+            if (revenue_growth >= min_revenue_growth and
+                    net_profit_margin >= min_net_profit_margin and
+                    roe >= min_roe and
+                    debt_to_equity <= max_debt_to_equity and
+                    free_cashflow >= min_free_cashflow and
+                    rd_sales_ratio <= max_rd_sales_ratio and
+                    interest_ebit_ratio <= max_interest_ebit_ratio and
+                    consistent_gross_margin and
+                    consistent_net_income_growth):
+                
+                # Ajout du pays et de la région
+                region = "N/A"
+                country = "N/A"
+                
+                # Trouver la région et le pays de l'action
+                if hasattr(stock_info, 'region') and hasattr(stock_info, 'country'):
+                    region = stock_info.region
+                    country = stock_info.country
+                
+                # Récupération de l'ISIN
+                isin = get_isin_for_ticker(ticker)
+                
+                stock_details = {
+                    'Nom': stock_name,
+                    'Ticker': ticker,
+                    'ISIN': isin,
+                    'Région': region,
+                    'Pays': country,
+                    'Croissance des revenus (%)': f"{revenue_growth:.2f}",
+                    'Marge nette (%)': f"{net_profit_margin:.2f}",
+                    'ROE (%)': f"{roe:.2f}",
+                    'Dette/Fonds propres': f"{debt_to_equity:.2f}",
+                    'Free Cash Flow': format_number(free_cashflow),
+                    'R&D/Ventes (%)': f"{rd_sales_ratio * 100:.2f}",
+                    'Intérêts/EBIT (%)': f"{interest_ebit_ratio * 100:.2f}",
+                    'Marge Brute Consistante': gross_margin_reason,
+                    'Croissance RN Consistante': net_income_growth_reason
+                }
+                eligible_stocks.append(stock_details)
+
+        except Exception as e:
+            st.warning(f"Erreur pour {stock_name}: {e}")
+
+    return pd.DataFrame(eligible_stocks)
+
+# Fonction pour adapter un dictionnaire d'actions à partir de la structure de marché
+def flatten_market_structure(market_structure, selected_region=None, selected_country=None):
+    """
+    Convertit la structure hiérarchique en dictionnaire plat d'actions
+    
+    :param market_structure: Structure hiérarchique des marchés
+    :param selected_region: Région spécifique (optionnel)
+    :param selected_country: Pays spécifique (optionnel)
+    :return: Dictionnaire plat d'actions
+    """
+    flattened_stocks = {}
+    
+    # Si une région et un pays sont spécifiés, ne prendre que ces actions
+    if selected_region and selected_country:
+        if selected_region in market_structure and selected_country in market_structure[selected_region]:
+            for stock_name, stock_info in market_structure[selected_region][selected_country].items():
+                stock_info_with_location = stock_info.copy()
+                stock_info_with_location['region'] = selected_region
+                stock_info_with_location['country'] = selected_country
+                flattened_stocks[stock_name] = stock_info_with_location
+            return flattened_stocks
+        else:
+            return {}
+    
+    # Si seulement la région est spécifiée, prendre toutes les actions de cette région
+    elif selected_region:
+        if selected_region in market_structure:
+            for country, stocks in market_structure[selected_region].items():
+                for stock_name, stock_info in stocks.items():
+                    # Ajouter des informations sur la région et le pays
+                    stock_info_with_location = stock_info.copy()
+                    stock_info_with_location['region'] = selected_region
+                    stock_info_with_location['country'] = country
+                    flattened_stocks[stock_name] = stock_info_with_location
+        return flattened_stocks
+    
+    # Sinon, prendre toutes les actions de toutes les régions
     else:
-        value = round(value, 2)
-        value_str = format_str.format(value)
-        
-        # Correction ici pour éviter division par zéro
-        if max_val == min_val:
-            normalized_value = 0.5
-        else:
-            normalized_value = (value - min_val) / (max_val - min_val)
-            
-        normalized_value = max(0, min(1, normalized_value))
-       
-        # Déterminer la couleur en fonction de la valeur normalisée
-        if normalized_value < 0.3:
-            color = "red"
-        elif normalized_value < 0.7:
-            color = "orange"
-        else:
-            color = "green"
-   
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=value if value is not None else 50,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': title, 'font': {'size': 14}, 'align': 'center'},
-        gauge={
-            'axis': {
-                'range': [min_val, max_val], 
-                'tickwidth': 1, 
-                'tickmode': 'linear',
-                'tick0': min_val,
-                'dtick': (max_val - min_val) / 5
-            },
-            'bar': {'color': color},
-            'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "gray",
-            'steps': [
-                {'range': [min_val, min_val + (max_val - min_val) * 0.3], 'color': 'rgba(255, 0, 0, 0.2)'},
-                {'range': [min_val + (max_val - min_val) * 0.3, min_val + (max_val - min_val) * 0.7], 'color': 'rgba(255, 165, 0, 0.2)'},
-                {'range': [min_val + (max_val - min_val) * 0.7, max_val], 'color': 'rgba(0, 128, 0, 0.2)'}
-            ]
-        },
-        number={
-            'suffix': "%" if "%" in format_str else "",
-            'font': {'size': 16},
-            'valueformat': format_str.replace("{:", "").replace("}", "")
-        }
-    ))
-   
-    fig.update_layout(
-        height=150,
-        margin=dict(l=10, r=10, t=50, b=10),
-        paper_bgcolor="white",
-        # Ajout des paramètres de mise en page
-        showlegend=False,
-        autosize=True,
-        # Centrage de l'indicateur
-        xaxis={'autorange': True, 'showgrid': False, 'zeroline': False, 'showticklabels': False},
-        yaxis={'autorange': True, 'showgrid': False, 'zeroline': False, 'showticklabels': False}
-    )
-   
-    return fig
-
-# Fonction pour calculer les projections de prix
-def calculate_price_projections(price, growth_rate, years=7):
-    """
-    Calcule les projections de prix pour un nombre d'années donné
-    en fonction d'un taux de croissance annuel.
+        for region, countries in market_structure.items():
+            for country, stocks in countries.items():
+                for stock_name, stock_info in stocks.items():
+                    # Ajouter des informations sur la région et le pays
+                    stock_info_with_location = stock_info.copy()
+                    stock_info_with_location['region'] = region
+                    stock_info_with_location['country'] = country
+                    flattened_stocks[stock_name] = stock_info_with_location
     
-    Args:
-        price (float): Prix actuel
-        growth_rate (float): Taux de croissance annuel en pourcentage
-        years (int): Nombre d'années à projeter
-        
-    Returns:
-        dict: Dictionnaire contenant les projections pour chaque année
-    """
-    projections = {}
-    monthly_growth = growth_rate / 100 / 12  # Conversion en taux mensuel
-    
-    current_year = datetime.now().year
-    for year in range(current_year, current_year + years + 1):
-        # Calculer les projections pour chaque mois dans l'année
-        months_dict = {}
-        
-        for i in range(1, 13):
-            # Calculer le nombre de mois depuis le début
-            months_from_start = (year - current_year) * 12 + i
-            # Calculer le prix projeté
-            projected_price = price * (1 + monthly_growth) ** months_from_start
-            
-            # Stocker dans le dictionnaire des mois
-            months_dict[i] = projected_price
-            
-        # Stocker dans le dictionnaire des années
-        projections[year] = months_dict
-    
-    return projections
-
-# Fonction pour calculer les projections sigma
-def calculate_sigma_projections(regression_model, std_dev, current_date, years=7):
-    """
-    Calcule les projections de -1 sigma pour les années à venir
-    
-    Args:
-        regression_model: Modèle de régression linéaire
-        std_dev (float): Écart-type des résidus
-        current_date: Date actuelle
-        years (int): Nombre d'années à projeter
-        
-    Returns:
-        dict: Dictionnaire contenant les projections sigma
-    """
-    sigma_projections = {}
-    current_year = datetime.now().year
-    
-    # Pour chaque année
-    for year in range(current_year, current_year + years + 1):
-        # Pour différentes périodes en mois
-        months_periods = [12, 24, 36, 48, 60, 72, 84]
-        sigma_values = {}
-        
-        for months in months_periods:
-            # Calculer la date future
-            future_date = current_date + pd.DateOffset(months=months)
-            # Projection pour cette date
-            future_index = (future_date - current_date).days / 30  # Approximation en mois
-            projected_value = regression_model[0] * future_index + regression_model[1]
-            
-            # Calculer la valeur -1 sigma
-            neg_sigma_value = projected_value - std_dev
-            
-            # Stocker la valeur dans le dictionnaire
-            period_key = f"{months} mois"
-            sigma_values[period_key] = neg_sigma_value
-        
-        sigma_projections[year] = sigma_values
-    
-    return sigma_projections
+    return flattened_stocks
 
 # Interface utilisateur Streamlit
 def main():
-    st.title("📊 Dashboard d'analyse des actions du CAC40")
+    # Configuration du style
+    st.markdown("""
+    <style>
+    .big-font {
+        font-size:24px !important;
+        font-weight: bold;
+    }
+    .medium-font {
+        font-size:18px !important;
+        font-weight: bold;
+    }
+    .custom-metric {
+        background-color: #f0f2f6;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px 0;
+    }
+    .positive {
+        color: green;
+        font-weight: bold;
+    }
+    .negative {
+        color: red;
+        font-weight: bold;
+    }
+    .neutral {
+        color: gray;
+        font-weight: bold;
+    }
+    .warning {
+        color: orange;
+        font-weight: bold;
+    }
+    .block-container {
+        padding-top: 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
-    # Clé API Alpha Vantage
-    alpha_vantage_api_key = "K7DJB2K5A15PSX63"
+    # En-tête de l'application
+    st.title("📈 Dashboard d'Analyse des Marchés Financiers")
+    st.markdown("#### Analyse technique, fondamentale et screening d'actions selon les critères de Warren Buffett")
     
-    # Sélection de l'action
-    stock_name = st.selectbox(
-        "Sélectionnez une action du CAC40",
-        options=list(CAC40_STOCKS.keys()),
-        index=0
-    )
+    # Sidebar pour les paramètres
+    st.sidebar.title("🔍 Sélection du Marché")
     
-    ticker = CAC40_STOCKS[stock_name]['ticker']
-    isin = CAC40_STOCKS[stock_name]['isin']
+    # Récupération de la structure du marché
+    with st.spinner("Chargement des marchés...", show_time=True):
+        market_structure = get_market_structure()
     
-    st.write(f"Vous avez sélectionné: **{stock_name}** ({ticker}) | ISIN: {isin}")
+    # Gestion des onglets
+    tab1, tab2, tab3 = st.tabs(["📊 Analyse Technique", "📑 Analyse Fondamentale", "🔍 Screener"])
     
-    # Création d'onglets pour organiser l'interface
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📈 Analyse technique", "🧮 Données fondamentales", "📊 Graphique avec volumes", "📰 News", "🔮 Projection"])
+    # Sélection de la région et du pays
+    regions = list(market_structure.keys())
+    selected_region = st.sidebar.selectbox("Région", regions)
     
-    with tab1:
-        # Sélection de la période pour l'analyse technique
-        period = st.radio(
-            "Période d'analyse",
-            options=["1 An", "3 Ans", "5 Ans", "Maximum"],
-            horizontal=True,
-            index=2
-        )
+    if selected_region:
+        countries = list(market_structure[selected_region].keys())
+        selected_country = st.sidebar.selectbox("Pays", countries)
         
-        period_map = {
-            "1 An": "1y",
-            "3 Ans": "3y",
-            "5 Ans": "5y",
-            "Maximum": "max"
-        }
-        
-        # Récupération des données historiques
-        df = get_stock_history(ticker, period=period_map[period])
-        
-        if not df.empty:
-            # Récupération des données fondamentales pour le prix actuel
-            fund_data = get_fundamental_data(ticker)
-            current_price = "N/A"
-            prev_close = "N/A"
-            price_change = "N/A"
-            price_change_pct = "N/A"
+        if selected_country:
+            stocks = market_structure[selected_region][selected_country]
+            stock_names = list(stocks.keys())
             
-            if fund_data and "Données de marché" in fund_data:
-                current_price = fund_data["Données de marché"].get("Prix actuel", "N/A")
-                prev_close = fund_data["Données de marché"].get("Précédente clôture", "N/A")
-                
-                if current_price != "N/A" and prev_close != "N/A":
-                    price_change = current_price - prev_close
-                    price_change_pct = (price_change / prev_close) * 100
-                    
-                    # Formater les valeurs
-                    current_price = f"{current_price:.2f} €"
-                    price_change_str = f"{price_change:.2f} €"
-                    price_change_pct_str = f"{price_change_pct:.2f}%"
-                    
-                    # Ajouter une couleur en fonction de la direction
-                    color = "green" if price_change >= 0 else "red"
-                    change_symbol = "+" if price_change >= 0 else ""
-                    price_info = f"{current_price} <span style='color:{color}'>{change_symbol}{price_change_str} ({change_symbol}{price_change_pct_str})</span>"
-            
-            # Calcul de la régression et des indicateurs
-            df_with_regression, indicators = calculate_regression(df)
-            
-            # Affichage des indicateurs clés avec le prix actuel
-            if current_price != "N/A" and price_change != "N/A":
-                st.markdown(f"### Indicateurs clés | Prix actuel: {price_info}", unsafe_allow_html=True)
-            else:
-                st.subheader("Indicateurs clés")
-            
-            # Configuration des jauges
-            gauge_config = [
-                {"name": "Croiss. modèle", "value": indicators.get('model_growth', 0), "min": -10, "max": 20, "format": "{:.2f}%", "show": True},
-                {"name": "Coeff. correl", "value": indicators.get('correlation', 0), "min": -1, "max": 1, "format": "{:.2f}", "show": True},
-                {"name": "Prog. 1 an", "value": indicators.get('prog_1y', 0), "min": -30, "max": 50, "format": "{:.2f}%", "show": True},
-                # Ne montrer "Prog. 5 ans" que si la période est >= 5 ans
-                {"name": "Prog. 5 ans", "value": indicators.get('prog_5y', 0), "min": -50, "max": 200, "format": "{:.2f}%", 
-                 "show": period in ["5 Ans", "Maximum"]},
-                # Ne pas montrer "Écart type" pour la période Maximum "show": period != "Maximum"
-                {"name": "Nb Écart type", "value": indicators.get('deviation', 0), "min": -3, "max": 3, "format": "{:.2f}", "show": True}
-            ]
-            
-            # Filtrer les jauges à afficher
-            visible_gauges = [g for g in gauge_config if g["show"]]
-            num_gauges = len(visible_gauges)
-            
-            # Créer les colonnes en fonction du nombre de jauges à afficher
-            cols = st.columns(num_gauges)
-            
-            # Afficher les jauges
-            for i, gauge in enumerate(visible_gauges):
-                with cols[i]:
-                    st.plotly_chart(create_gauge(
-                        gauge["value"], 
-                        gauge["name"], 
-                        gauge["min"], 
-                        gauge["max"], 
-                        gauge["format"]
-                    ), use_container_width=True)
-            
-            # Graphique d'analyse technique avec Plotly
-            st.subheader("Analyse technique avec régression linéaire")
-            
-            fig = go.Figure()
-            
-            # Tracer le prix de clôture
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['Close'],
-                mode='lines',
-                name='Prix',
-                line=dict(color='blue', width=1)
-            ))
-            
-            # Tracer la ligne de régression
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['regression'],
-                mode='lines',
-                name='Régression',
-                line=dict(color='red', width=2)
-            ))
-            
-            # Tracer les bandes sigma
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['upper_1sigma'],
-                mode='lines',
-                name='+1 Sigma',
-                line=dict(color='green', width=1, dash='dash')
-            ))
-            
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['lower_1sigma'],
-                mode='lines',
-                name='-1 Sigma',
-                line=dict(color='green', width=1, dash='dash')
-            ))
-            
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['upper_2sigma'],
-                mode='lines',
-                name='+2 Sigma',
-                line=dict(color='orange', width=1, dash='dash')
-            ))
-            
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'],
-                y=df_with_regression['lower_2sigma'],
-                mode='lines',
-                name='-2 Sigma',
-                line=dict(color='orange', width=1, dash='dash')
-            ))
-            
-            # Tracer la zone entre les bandes (facultatif car peut rendre le graphique trop chargé)
-            fig.add_trace(go.Scatter(
-                x=df_with_regression['Date'].tolist() + df_with_regression['Date'].tolist()[::-1],
-                y=df_with_regression['upper_1sigma'].tolist() + df_with_regression['lower_1sigma'].tolist()[::-1],
-                fill='toself',
-                fillcolor='rgba(0,255,0,0.1)',
-                line=dict(color='rgba(255,255,255,0)'),
-                name='±1 Sigma Zone',
-                showlegend=False
-            ))
-            
-            # Mise en page du graphique
-            fig.update_layout(
-                title=f"Évolution du cours de {stock_name} avec régression linéaire",
-                xaxis_title="Date",
-                yaxis_title="Prix (€)",
-                yaxis_type="log",  # Échelle logarithmique
-                height=600,
-                hovermode="x unified",
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-            )
-            
-            # Afficher le graphique
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.error(f"Impossible de récupérer les données pour {stock_name}")
-    
-    with tab2:
-        # Récupération et affichage des données fondamentales
-        fundamental_data = get_fundamental_data(ticker)
-        
-        if fundamental_data:
-            st.subheader("Données fondamentales")
-            
-            for section_name, section_data in fundamental_data.items():
-                st.markdown(f"### {section_name}")
-                
-                # Créer un dataframe pour afficher les données de manière propre
-                data_list = []
-                for key, value in section_data.items():
-                    # Formater les grands nombres
-                    if isinstance(value, (int, float)) and not isinstance(value, bool) and not isinstance(value, str):
-                        if key not in ['P/E Ratio', 'EPS', 'Beta']:
-                            formatted_value = format_number(value)
-                        else:
-                            formatted_value = value
-                    else:
-                        formatted_value = value
-                    
-                    data_list.append({"Indicateur": key, "Valeur": formatted_value})
-                
-                # Afficher les données dans un DataFrame stylé
-                df_section = pd.DataFrame(data_list)
-                st.dataframe(df_section, use_container_width=True, hide_index=True)
-        else:
-            st.error(f"Impossible de récupérer les données fondamentales pour {stock_name}")
-    
-    with tab3:
-        # Sélection de la période pour le graphique avec volumes
-        chart_period = st.radio(
-            "Période",
-            options=["1 Mois", "6 Mois", "1 An", "5 Ans", "Maximum"],
-            horizontal=True,
-            index=2
-        )
-        
-        chart_period_map = {
-            "1 Mois": "1mo",
-            "6 Mois": "6mo",
-            "1 An": "1y",
-            "5 Ans": "5y",
-            "Maximum": "max"
-        }
-        
-        # Récupération des données historiques
-        chart_df = get_stock_history(ticker, period=chart_period_map[chart_period])
-        
-        if not chart_df.empty:
-            # Graphique des prix et volumes avec Plotly
-            st.subheader(f"Évolution du cours et des volumes pour {stock_name}")
-            
-            # Création d'un graphique à deux axes avec plotly
-            fig = make_subplots(rows=2, cols=1, shared_xaxes=True, 
-                               vertical_spacing=0.05, 
-                               subplot_titles=(f"Cours de {stock_name}", "Volume"),
-                               row_heights=[0.7, 0.3])
-            
-            # Tracer le prix de clôture
-            fig.add_trace(
-                go.Scatter(x=chart_df['Date'], y=chart_df['Close'], name='Prix',
-                          line=dict(color='blue', width=1.5)),
-                row=1, col=1
-            )
-            
-            # Tracer les moyennes mobiles
-            fig.add_trace(
-                go.Scatter(x=chart_df['Date'], y=chart_df['MA20'], name='MM20',
-                          line=dict(color='red', width=1)),
-                row=1, col=1
-            )
-            
-            fig.add_trace(
-                go.Scatter(x=chart_df['Date'], y=chart_df['MA50'], name='MM50',
-                          line=dict(color='green', width=1)),
-                row=1, col=1
-            )
-            
-            fig.add_trace(
-                go.Scatter(x=chart_df['Date'], y=chart_df['MA100'], name='MM100',
-                          line=dict(color='purple', width=1)),
-                row=1, col=1
-            )
-            
-            fig.add_trace(
-                go.Scatter(x=chart_df['Date'], y=chart_df['MA200'], name='MM200',
-                          line=dict(color='orange', width=1)),
-                row=1, col=1
-            )
-            
-            # Tracer les volumes
-            fig.add_trace(
-                go.Bar(x=chart_df['Date'], y=chart_df['Volume'], name='Volume',
-                      marker=dict(color='rgba(0, 0, 255, 0.5)')),
-                row=2, col=1
-            )
-            
-            # Mise en page du graphique
-            fig.update_layout(
-                height=700,
-                showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                hovermode="x unified"
-            )
-            
-            # Mise à jour des axes Y
-            fig.update_yaxes(title_text="Prix (€)", row=1, col=1)
-            fig.update_yaxes(title_text="Volume", row=2, col=1)
-            
-            # Afficher le graphique
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.error(f"Impossible de récupérer les données pour {stock_name}")
-
-    with tab5:
-            st.subheader("Projection du cours sur 7 ans")
-            
-            # Récupérer le PRU (Prix de Revient Unitaire)
-            col1, col2 = st.columns([1, 2])
-            with col1:
-                user_pru = st.number_input("Entrez votre PRU (€)", min_value=0.01, step=0.01, value=100.0)
-            
-            # Récupérer les données historiques et calculer la régression
-            proj_df = get_stock_history(ticker, period="5y")
-            
-            if not proj_df.empty:
-                # Calculer la régression
-                _, indicators = calculate_regression(proj_df)
-                
-                # Récupérer le taux de croissance du modèle
-                model_growth = indicators.get('model_growth', 0)
-                
-                # Créer un message d'information
-                with col2:
-                    st.info(f"Croissance annuelle du modèle basée sur les 5 dernières années: {model_growth:.2f}% | Mise à jour: {datetime.now().strftime('%B %Y')}")
-                
-                # Calculer le coefficient de corrélation pour le modèle
-                correlation = indicators.get('correlation', 0)
-                
-                # Calculer la date actuelle
-                current_date = datetime.now()
-                current_year = current_date.year
-                
-                # Récupérer le prix actuel
-                fund_data = get_fundamental_data(ticker)
-                current_price = None
-                if fund_data and "Données de marché" in fund_data:
-                    current_price = fund_data["Données de marché"].get("Prix actuel")
-                
-                if current_price is not None:
-                    # Calculer l'écart-type pour les projections sigma
-                    # Simplification: utiliser la dernière valeur de l'écart-type calculé pour la régression
-                    std_dev = indicators.get('deviation', 0) * current_price / 100
-                    
-                    # Coefficient de la régression linéaire
-                    coef = indicators.get('coefficient', 0)
-                    
-                    # Valeur d'intercept (approximative)
-                    intercept = proj_df['Close'].iloc[-1] - coef * len(proj_df)
-                    
-                    # Créer un tableau de projections
-                    st.subheader("Tableau de projection")
-                    
-                    # Préparer les données pour le tableau
-                    table_data = []
-                    
-                    # En-têtes
-                    headers = ["TICKER", "COURS", "Krach", "PRU", "-1 SIGMA", 
-                            "Croissance\ndu modèle", "coef\ncorr.",
-                            "-1 sigma\ndans 12 mois", "-1 sigma\ndans 24 mois",
-                            "-1 sigma\ndans 36 mois", "-1 sigma\ndans 48 mois",
-                            "-1 sigma\ndans 60 mois", "-1 sigma\ndans 72 mois",
-                            "-1 sigma\ndans 84 mois"]
-                    
-                    # Calculer la valeur du krach (approximation)
-                    krach_value = current_price * 0.85  # 15% de baisse
-                    
-                    # Calculer la valeur -1 sigma actuelle
-                    current_neg_sigma = current_price - std_dev
-                    
-                    # Calculer les projections -1 sigma
-                    years_to_project = 7
-                    neg_sigma_values = []
-                    
-                    for i in range(1, years_to_project + 1):
-                        # Calculer pour une période en années
-                        months = i * 12
-                        # Projection du prix
-                        projected_price = current_price * (1 + model_growth/100) ** i
-                        # Projection -1 sigma
-                        neg_sigma = projected_price - std_dev * (1 + model_growth/200) ** i
-                        neg_sigma_values.append(f"{neg_sigma:.0f} €")
-                    
-                    # Créer la ligne de données
-                    row = [
-                        ticker,
-                        f"{current_price:.2f}",
-                        f"{krach_value:.0f}",
-                        f"{user_pru:.0f}",
-                        f"{current_neg_sigma:.0f}",
-                        f"{model_growth:.1f}%",
-                        f"{correlation:.2f}",
-                    ]
-                    
-                    # Ajouter les valeurs -1 sigma
-                    row.extend(neg_sigma_values)
-                    
-                    # Ajouter la ligne au tableau
-                    table_data.append(row)
-                    
-                    # Créer un DataFrame
-                    df_projection = pd.DataFrame([row], columns=headers)
-                    
-                    # Appliquer un style conditionnel au tableau
-                    def highlight_pru(val):
-                        try:
-                            val_num = float(val.replace(' €', ''))
-                            if val_num < user_pru:
-                                return 'background-color: #ffcccc'  # Rouge clair
-                            else:
-                                return 'background-color: #ccffcc'  # Vert clair
-                        except:
-                            return ''
-                    
-                    # Créer le tableau stylisé
-                    styled_df = df_projection.style.applymap(
-                        highlight_pru, 
-                        subset=pd.IndexSlice[:, df_projection.columns[7:]]
-                    )
-                    
-                    # Afficher le tableau
-                    st.dataframe(styled_df, use_container_width=True, hide_index=True)
-                    
-                    # Explication
-                    st.info("""
-                    **Comment utiliser ce tableau :**
-                    - Les cellules en vert indiquent que la projection est supérieure à votre PRU
-                    - Les cellules en rouge indiquent que la projection est inférieure à votre PRU
-                    - La ligne "-1 sigma" représente le scénario pessimiste (16% des cas)
-                    - La valeur "Krach" représente une baisse de 15% du prix actuel
-                    """)
-                    
-                    # Afficher un graphique de projection
-                    st.subheader("Graphique de projection")
-                    
-                    # Préparer les données pour le graphique
-                    years = list(range(current_year, current_year + years_to_project + 1))
-                    projection_values = [current_price]
-                    
-                    # Calculer les valeurs projetées pour chaque année
-                    for i in range(1, years_to_project + 1):
-                        projected = current_price * (1 + model_growth/100) ** i
-                        projection_values.append(projected)
-                    
-                    # Créer des données pour la ligne représentant le PRU
-                    pru_values = [user_pru] * (years_to_project + 1)
-                    
-                    # Créer le graphique
-                    fig = go.Figure()
-                    
-                    # Ajouter la ligne de projection
-                    fig.add_trace(go.Scatter(
-                        x=years,
-                        y=projection_values,
-                        mode='lines+markers',
-                        name='Projection',
-                        line=dict(color='blue', width=2)
-                    ))
-                    
-                    # Ajouter la ligne du PRU
-                    fig.add_trace(go.Scatter(
-                        x=years,
-                        y=pru_values,
-                        mode='lines',
-                        name='Votre PRU',
-                        line=dict(color='red', width=1, dash='dash')
-                    ))
-                    
-                    # Mise en page du graphique
-                    fig.update_layout(
-                        title=f"Projection du cours de {stock_name} sur 7 ans",
-                        xaxis_title="Année",
-                        yaxis_title="Prix (€)",
-                        height=500,
-                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-                    )
-                    
-                    # Afficher le graphique
-                    st.plotly_chart(fig, use_container_width=True)
+            # Ajouter une option de recherche/filtre pour les actions
+            search_query = st.sidebar.text_input("Rechercher une action", "")
+            if search_query:
+                filtered_stock_names = [name for name in stock_names if search_query.lower() in name.lower()]
+                if filtered_stock_names:
+                    stock_names = filtered_stock_names
                 else:
-                    st.error("Impossible de récupérer le prix actuel pour calculer les projections")
-            else:
-                st.error(f"Impossible de récupérer les données pour {stock_name}")
+                    st.sidebar.warning(f"Aucune action trouvée pour '{search_query}'")
+            
+            if stock_names:
+                selected_stock = st.sidebar.selectbox("Action", stock_names)
+                
+                if selected_stock:
+                    ticker = stocks[selected_stock]['ticker']
+                    
+                    # Afficher l'ISIN
+                    with st.sidebar.expander("Informations supplémentaires"):
+                        isin = get_isin_for_ticker(ticker)
+                        st.write(f"**Ticker:** {ticker}")
+                        st.write(f"**ISIN:** {isin}")
+                    
+                    # Onglet 1: Analyse Technique
+                    with tab1:
+                        st.subheader(f"Analyse Technique de {selected_stock} ({ticker})")
+                        
+                        col1, col2 = st.columns([3, 1])
+                        
+                        with col1:
+                            # Sélection de la période
+                            periods = {"1 mois": "1mo", "3 mois": "3mo", "6 mois": "6mo", "1 an": "1y", "2 ans": "2y", "5 ans": "5y", "Max": "max"}
+                            selected_period_name = st.selectbox("Période", list(periods.keys()))
+                            selected_period = periods[selected_period_name]
+                            
+                            # Récupération et préparation des données
+                            with st.spinner("Chargement des données historiques..."):
+                                df = get_stock_history(ticker, period=selected_period)
+                                
+                                if not df.empty:
+                                    # Calcul de la régression et des indicateurs
+                                    df_reg, indicators = calculate_regression(df)
+                                    
+                                    # Création du graphique avec Plotly
+                                    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, 
+                                                        vertical_spacing=0.1, 
+                                                        row_heights=[0.7, 0.3])
+                                    
+                                    # Tracé du prix
+                                    fig.add_trace(
+                                        go.Candlestick(x=df_reg.index,
+                                                        open=df_reg['Open'],
+                                                        high=df_reg['High'],
+                                                        low=df_reg['Low'],
+                                                        close=df_reg['Close'],
+                                                        name="Prix"),
+                                        row=1, col=1
+                                    )
+                                    
+                                    # Tracé de la régression
+                                    fig.add_trace(
+                                        go.Scatter(x=df_reg.index, y=df_reg['Regression'],
+                                                    mode='lines', name='Tendance',
+                                                    line=dict(color='orange', width=2)),
+                                        row=1, col=1
+                                    )
+                                    
+                                    # Calcul et tracé des bandes de Bollinger (2 écarts types)
+                                    std_dev = df_reg['Deviation'].std()
+                                    fig.add_trace(
+                                        go.Scatter(x=df_reg.index, y=df_reg['Regression'] + 2*std_dev,
+                                                    mode='lines', name='+2σ',
+                                                    line=dict(color='red', width=1, dash='dash')),
+                                        row=1, col=1
+                                    )
+                                    
+                                    fig.add_trace(
+                                        go.Scatter(x=df_reg.index, y=df_reg['Regression'] - 2*std_dev,
+                                                    mode='lines', name='-2σ',
+                                                    line=dict(color='green', width=1, dash='dash')),
+                                        row=1, col=1
+                                    )
+                                    
+                                    # Tracé du volume
+                                    colors = ['red' if row['Open'] > row['Close'] else 'green' for i, row in df_reg.iterrows()]
+                                    fig.add_trace(
+                                        go.Bar(x=df_reg.index, y=df_reg['Volume'],
+                                                name='Volume', marker_color=colors,
+                                                marker_line_width=0),
+                                        row=2, col=1
+                                    )
+                                    
+                                    # Mise en forme du graphique
+                                    fig.update_layout(
+                                        title=f"{selected_stock} - Analyse de Tendance",
+                                        height=600,
+                                        xaxis_rangeslider_visible=False,
+                                        legend=dict(
+                                            orientation="h",
+                                            yanchor="bottom",
+                                            y=1.02,
+                                            xanchor="right",
+                                            x=1
+                                        )
+                                    )
+                                    
+                                    # Affichage du graphique
+                                    st.plotly_chart(fig, use_container_width=True)
+                                    
+                                else:
+                                    st.error(f"Aucune donnée historique disponible pour {ticker}")
+                        
+                        with col2:
+                            # Affichage des indicateurs techniques
+                            if 'indicators' in locals() and indicators:
+                                st.markdown("<p class='medium-font'>Indicateurs Techniques</p>", unsafe_allow_html=True)
+                                
+                                # Prix actuel
+                                st.markdown("<div class='custom-metric'>", unsafe_allow_html=True)
+                                current_price = df['Close'].iloc[-1] if not df.empty else None
+                                previous_price = df['Close'].iloc[-2] if not df.empty and len(df) > 1 else None
+                                
+                                if current_price:
+                                    # Utiliser la fonction commune pour afficher le prix avec tendance
+                                    display_price_with_trend("Prix actuel", current_price, previous_price)
+                                st.markdown("</div>", unsafe_allow_html=True)
+                                
+                                # Tendance
+                                st.markdown("<div class='custom-metric'>", unsafe_allow_html=True)
+                                correlation = indicators['correlation']
+                                corr_text = f"{correlation:.2f}"
+                                corr_class = "positive" if correlation > 0.7 else "negative" if correlation < -0.7 else "neutral"
+                                st.markdown(f"**Corrélation:** <span class='{corr_class}'>{corr_text}</span>", unsafe_allow_html=True)
+                                
+                                trend_class = "positive" if correlation > 0.7 else "negative" if correlation < -0.7 else "neutral"
+                                trend_text = "Haussière" if correlation > 0.7 else "Baissière" if correlation < -0.7 else "Neutre"
+                                st.markdown(f"**Tendance:** <span class='{trend_class}'>{trend_text}</span>", unsafe_allow_html=True)
+                                st.markdown("</div>", unsafe_allow_html=True)
+                                
+                                # Croissance du modèle
+                                st.markdown("<div class='custom-metric'>", unsafe_allow_html=True)
+                                model_growth = indicators['model_growth']
+                                growth_text = f"{model_growth:.2f}% par an"
+                                growth_class = "positive" if model_growth > 5 else "negative" if model_growth < 0 else "neutral"
+                                st.markdown(f"**Croissance du modèle:** <span class='{growth_class}'>{growth_text}</span>", unsafe_allow_html=True)
+                                st.markdown("</div>", unsafe_allow_html=True)
+                                
+                                # Écart par rapport à la régression
+                                st.markdown("<div class='custom-metric'>", unsafe_allow_html=True)
+                                deviation = indicators['deviation']
+                                dev_text = f"{deviation:.2f}σ"
+                                dev_class = "negative" if deviation > 1.5 else "positive" if deviation < -1.5 else "neutral"
+                                st.markdown(f"**Écart actuel:** <span class='{dev_class}'>{dev_text}</span>", unsafe_allow_html=True)
+                                
+                                signal_text = ""
+                                if deviation > 1.5:
+                                    signal_text = "Survente potentielle"
+                                    signal_class = "negative"
+                                elif deviation < -1.5:
+                                    signal_text = "Surachat potentiel"
+                                    signal_class = "positive"
+                                else:
+                                    signal_text = "Zone neutre"
+                                    signal_class = "neutral"
+                                
+                                st.markdown(f"**Signal:** <span class='{signal_class}'>{signal_text}</span>", unsafe_allow_html=True)
+                                st.markdown("</div>", unsafe_allow_html=True)
+                                
+                                # Performances
+                                st.markdown("<div class='custom-metric'>", unsafe_allow_html=True)
+                                prog_1y = indicators['prog_1y']
+                                prog_5y = indicators['prog_5y']
+                                
+                                prog1y_class = "positive" if prog_1y > 0 else "negative"
+                                prog5y_class = "positive" if prog_5y > 0 else "negative"
+                                
+                                st.markdown(f"**Perf 1 an:** <span class='{prog1y_class}'>{prog_1y:.2f}%</span>", unsafe_allow_html=True)
+                                st.markdown(f"**Perf 5 ans:** <span class='{prog5y_class}'>{prog_5y:.2f}%</span>", unsafe_allow_html=True)
+                                st.markdown("</div>", unsafe_allow_html=True)
+                    
+                    # Onglet 2: Analyse Fondamentale
+                    with tab2:
+                        st.subheader(f"Analyse Fondamentale de {selected_stock} ({ticker})")
+                        
+                        with st.spinner("Chargement des données fondamentales..."):
+                            fundamental_data = get_fundamental_data(ticker)
+                            
+                            if fundamental_data:
+                                col1, col2 = st.columns(2)
+                                
+                                with col1:
+                                    # Données de marché
+                                    st.markdown("<p class='medium-font'>Données de Marché</p>", unsafe_allow_html=True)
+                                    
+                                    # Afficher prix actuel avec tendance
+                                    display_price_with_trend(
+                                        "Prix actuel",
+                                        fundamental_data["Données de marché"]["Prix actuel"],
+                                        fundamental_data["Données de marché"]["Précédente clôture"],
+                                        format_func=format_number
+                                    )
+    
+                                    # Continuer avec les autres données de marché
+                                    for key, value in fundamental_data["Données de marché"].items():
+                                        if key not in ["Prix actuel"]:  # Ignorer les éléments déjà affichés
+                                            if value is not None:
+                                                formatted_value = format_number(value)
+                                                st.markdown(f"**{key}:** {formatted_value}")
+                                            else:
+                                                st.markdown(f"**{key}:** N/A")
+                                    
+                                    # Continuer avec les autres données de marché
+                                    for key, value in fundamental_data["Données de marché"].items():
+                                        if key not in ["Prix actuel", "Précédente clôture"]:  # Skip already displayed items
+                                            if value is not None:
+                                                formatted_value = format_number(value)
+                                                st.markdown(f"**{key}:** {formatted_value}")
+                                            else:
+                                                st.markdown(f"**{key}:** N/A") 
 
+                                with col2:
+                                    # Données fondamentales
+                                    st.markdown("<p class='medium-font'>Ratios Fondamentaux</p>", unsafe_allow_html=True)
+                                    for key, value in fundamental_data["Données fondamentales"].items():
+                                        if value is not None:
+                                            formatted_value = f"{value:.2f}" if isinstance(value, (int, float)) else value
+                                            st.markdown(f"**{key}:** {formatted_value}")
+                                        else:
+                                            st.markdown(f"**{key}:** N/A")
+                                
+                                # Données financières
+                                st.markdown("<p class='medium-font'>Données Financières</p>", unsafe_allow_html=True)
+                                col1, col2 = st.columns(2)
+                                i = 0
+                                for key, value in fundamental_data["Données financières"].items():
+                                    with col1 if i % 2 == 0 else col2:
+                                        if value is not None:
+                                            formatted_value = format_number(value)
+                                            st.markdown(f"**{key}:** {formatted_value}")
+                                        else:
+                                            st.markdown(f"**{key}:** N/A")
+                                    i += 1
+                                
+                                # Historique financier
+                                st.markdown("<p class='medium-font'>Historique Financier</p>", unsafe_allow_html=True)
+                                
+                                income_stmt, balance_sheet, cashflow = get_historical_financials(ticker)
+                                
+                                if not income_stmt.empty:
+                                    with st.expander("Compte de Résultat"):
+                                        # Sélection des lignes les plus importantes
+                                        important_rows = ['Total Revenue', 'Gross Profit', 'Operating Income', 'EBITDA', 'Net Income']
+                                        filtered_df = income_stmt.loc[income_stmt.index.isin(important_rows)]
+                                        
+                                        # Amélioration de l'affichage
+                                        formatted_df = filtered_df.applymap(format_number)
+                                        
+                                        # Renommage des indices pour une meilleure lisibilité
+                                        row_mapping = {
+                                            'Total Revenue': "Chiffre d'affaires",
+                                            'Gross Profit': 'Marge Brute',
+                                            'Operating Income': "Résultat d'exploitation",
+                                            'EBITDA': 'EBITDA',
+                                            'Net Income': 'Résultat Net'
+                                        }
+                                        
+                                        formatted_df.index = [row_mapping.get(idx, idx) for idx in formatted_df.index]
+                                        
+                                        st.dataframe(formatted_df)
+                                else:
+                                    st.info("Aucune donnée de compte de résultat disponible")
+                                
+                                if not balance_sheet.empty:
+                                    with st.expander("Bilan"):
+                                        # Sélection des lignes les plus importantes
+                                        important_rows = ['Total Assets', 'Total Liabilities', 'Total Equity', 'Total Debt', 'Cash And Cash Equivalents']
+                                        filtered_df = balance_sheet.loc[balance_sheet.index.isin(important_rows)]
+                                        
+                                        # Amélioration de l'affichage
+                                        formatted_df = filtered_df.applymap(format_number)
+                                        
+                                        # Renommage des indices pour une meilleure lisibilité
+                                        row_mapping = {
+                                            'Total Assets': 'Total Actif',
+                                            'Total Liabilities': 'Total Passif',
+                                            'Total Equity': 'Fonds Propres',
+                                            'Total Debt': 'Dette Totale',
+                                            'Cash And Cash Equivalents': 'Trésorerie'
+                                        }
+                                        
+                                        formatted_df.index = [row_mapping.get(idx, idx) for idx in formatted_df.index]
+                                        
+                                        st.dataframe(formatted_df)
+                                else:
+                                    st.info("Aucune donnée de bilan disponible")
+                                
+                                if not cashflow.empty:
+                                    with st.expander("Flux de Trésorerie"):
+                                        # Sélection des lignes les plus importantes
+                                        important_rows = ['Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'Free Cash Flow']
+                                        filtered_df = cashflow.loc[cashflow.index.isin(important_rows)]
+                                        
+                                        # Amélioration de l'affichage
+                                        formatted_df = filtered_df.applymap(format_number)
+                                        
+                                        # Renommage des indices pour une meilleure lisibilité
+                                        row_mapping = {
+                                            'Operating Cash Flow': "Flux d'exploitation",
+                                            'Investing Cash Flow': "Flux d'investissement",
+                                            'Financing Cash Flow': 'Flux de financement',
+                                            'Free Cash Flow': 'Free Cash Flow'
+                                        }
+                                        
+                                        formatted_df.index = [row_mapping.get(idx, idx) for idx in formatted_df.index]
+                                        
+                                        st.dataframe(formatted_df)
+                                else:
+                                    st.info("Aucune donnée de flux de trésorerie disponible")
+                            
+                            else:
+                                st.error(f"Aucune donnée fondamentale disponible pour {ticker}")
+                    
+                    # Onglet 3: Screener de Buffett
+                    with tab3:
+                        st.subheader("Screener d'Actions selon les Critères de Warren Buffett")
+                        
+                        # Génération de deux colonnes
+                        col1, col2 = st.columns([2, 1])
+                        
+                        with col1:
+                            st.markdown("""
+                            Ce screener identifie les actions répondant aux critères de Warren Buffett :
+                            
+                            1. **Entreprises compréhensibles** avec historique cohérent
+                            2. **Avantage compétitif durable** (marge brute stable/élevée)
+                            3. **Direction de qualité** (faible R&D/Ventes et forte croissance du résultat net)
+                            4. **Retour sur capitaux propres élevé** (ROE > 15%)
+                            5. **Faible endettement** (Dette/Fonds propres < 1)
+                            6. **Forte rentabilité** (Marge nette > 10%)
+                            7. **Génération de cash** (Free Cash Flow positif)
+                            """)
+                        
+                        with col2:
+                            st.markdown("<p class='medium-font'>Paramètres de Filtrage</p>", unsafe_allow_html=True)
+                            
+                            # Paramètres ajustables
+                            min_revenue_growth = st.slider("Croissance minimale des revenus (%)", 0, 50, 5)
+                            min_net_profit_margin = st.slider("Marge nette minimale (%)", 5, 40, 10)
+                            min_roe = st.slider("ROE minimal (%)", 5, 30, 15)
+                            max_debt_to_equity = st.slider("Ratio Dette/Fonds propres maximal", 0.0, 2.0, 1.0, 0.1)
+                            min_gross_margin_consistency = st.slider("Marge brute minimale consistante (%)", 20, 80, 40)
+                            min_net_income_growth = st.slider("Croissance minimale du résultat net (%)", 2, 20, 8)
+                        
+                        # Sélection de la région pour le screening
+                        screen_regions = ["Toutes les régions"] + list(market_structure.keys())
+                        selected_screen_region = st.selectbox("Région pour le screening", screen_regions, key="screen_region")
+                        
+                        screen_countries = []
+                        selected_screen_country = None
+                        
+                        if selected_screen_region != "Toutes les régions":
+                            screen_countries = ["Tous les pays"] + list(market_structure[selected_screen_region].keys())
+                            selected_screen_country = st.selectbox("Pays pour le screening", screen_countries, key="screen_country")
+                        
+                        # Construction du dictionnaire d'actions pour le screening
+                        if st.button("Lancer le screening"):
+                            with st.spinner("Analyse en cours..."):
+                                if selected_screen_region == "Toutes les régions":
+                                    stocks_to_screen = flatten_market_structure(market_structure)
+                                elif selected_screen_country == "Tous les pays":
+                                    stocks_to_screen = flatten_market_structure(market_structure, selected_region=selected_screen_region)
+                                else:
+                                    stocks_to_screen = flatten_market_structure(market_structure, 
+                                                                               selected_region=selected_screen_region, 
+                                                                               selected_country=selected_screen_country)
+                                
+                                # Limiter le nombre d'actions pour des raisons de performance
+                                max_stocks = 500
+                                if len(stocks_to_screen) > max_stocks:
+                                    st.warning(f"Le nombre d'actions à analyser ({len(stocks_to_screen)}) est limité à {max_stocks} pour des raisons de performance.")
+                                    import random
+                                    keys = list(stocks_to_screen.keys())
+                                    random_keys = random.sample(keys, max_stocks)
+                                    limited_stocks = {k: stocks_to_screen[k] for k in random_keys}
+                                    stocks_to_screen = limited_stocks
+                                
+                                # Appliquer le screener
+                                results = buffett_stock_screener(stocks_to_screen,
+                                                               min_revenue_growth=min_revenue_growth,
+                                                               min_net_profit_margin=min_net_profit_margin,
+                                                               min_roe=min_roe,
+                                                               max_debt_to_equity=max_debt_to_equity,
+                                                               min_gross_margin_consistency=min_gross_margin_consistency,
+                                                               min_net_income_growth_consistency=min_net_income_growth)
+                                
+                                if not results.empty:
+                                    st.markdown(f"<p class='medium-font'>Résultats ({len(results)} actions)</p>", unsafe_allow_html=True)
+                                    st.dataframe(results)
+                                    
+                                    # Bouton pour télécharger les résultats
+                                    csv = results.to_csv(index=False).encode('utf-8')
+                                    st.download_button(
+                                        label="Télécharger les résultats (CSV)",
+                                        data=csv,
+                                        file_name="buffett_screener_results.csv",
+                                        mime="text/csv",
+                                    )
+                                else:
+                                    st.warning("Aucune action ne correspond aux critères sélectionnés.")
+                            
+            else:
+                st.warning(f"Aucune action disponible pour {selected_country}")
+    
+    # Footer
+    st.markdown("---")
+    st.markdown("📊 Dashboard développé pour l'analyse des marchés financiers. Les données sont fournies par Yahoo Finance. Ce dashboard est proposé à titre informatif uniquement et ne constitue pas un conseil en investissement.")
+
+# Lancement de l'application
 if __name__ == "__main__":
     main()
