@@ -184,7 +184,7 @@ def get_market_structure():
         
         for encoding in encodings:
             try:
-                df = pd.read_csv(r"C:\Users\culas\OneDrive\Documents\Finances\actions.csv", sep=";", encoding='utf-8-sig')
+                df = pd.read_csv("https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/actions.csv", sep=";", encoding='utf-8-sig')
                 print(f"Fichier lu avec succès avec l'encodage {encoding}:")
                 break
             except UnicodeDecodeError:
