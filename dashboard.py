@@ -937,7 +937,7 @@ def main():
                 
                 # Si aucun bouton n'est cliqué, utiliser la période par défaut
                 if selected_period is None:
-                    selected_period = "Max"  # Par défaut: 1 an
+                    selected_period = "max"
                 
                 # Récupération et préparation des données
                 with st.spinner("Chargement des données historiques..."):
