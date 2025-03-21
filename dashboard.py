@@ -5122,7 +5122,7 @@ def main():
             )
             
             # Nombre approximatif d'actions à acheter/vendre
-            optimized_df['Qté à ajuster'] = (optimized_df['Montant à ajuster'] / optimized_df['Prix actuel']).round().astype(int)
+            optimized_df['Qté à ajuster'] = (optimized_df['Montant à ajuster'] / optimized_df['Prix actuel']).round().fillna(0).astype(int)
             
             return optimized_df[['Ticker', 'Poids actuel (%)', 'Poids cible (%)', 'Ajustement (%)', 
                                 'Montant à ajuster', 'Action', 'Qté à ajuster', 'Recommandation']]
