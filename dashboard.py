@@ -590,7 +590,7 @@ def get_dividend_policy_analysis(ticker):
         }
 
 # Structure de marché hiérarchique organisée par région, pays, secteur, industrie et marché
-@st.cache_data(ttl=86400)  # Mise en cache pour 24 heures
+@st.cache_data(ttl=86400*365)  # Mise en cache pour 24 heures
 def get_market_structure():
     # Lire le fichier CSV avec l'encodage approprié
     try:
