@@ -5,5 +5,5 @@ pandas
 numpy
 plotly
 scikit-learn
-requests
 datetime
+math
