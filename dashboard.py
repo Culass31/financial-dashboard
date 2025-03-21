@@ -3859,8 +3859,8 @@ def main():
 			    # Filtrer les valeurs NaN
 			    mask = ~np.isnan(fcf_df['FCF (millions)'].values)
 			    if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
-				x = np.arange(len(fcf_df))[mask]
-				y = fcf_df['FCF (millions)'].values[mask]
+			        x = np.arange(len(fcf_df))[mask]
+			        y = fcf_df['FCF (millions)'].values[mask]
 
 			    # Régression linéaire simple
 			    model = LinearRegression().fit(x.reshape(-1, 1), y)
