@@ -3519,17 +3519,18 @@ def main():
                                     
                                     # Ajout d'une ligne de tendance
                                     if len(fcf_df) > 1:
-					# Filtrer les valeurs NaN
+                                        # Filtrer les valeurs NaN
                                         mask = ~np.isnan(fcf_df['FCF (millions)'].values)
                                         if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
                                             x = np.arange(len(fcf_df))[mask]
                                             y = fcf_df['FCF (millions)'].values[mask]
-					
+
                                         # Régression linéaire simple
-                                        x = np.arange(len(fcf_df))
-                                        y = fcf_df['FCF (millions)'].values
                                         model = LinearRegression().fit(x.reshape(-1, 1), y)
-                                        line_y = model.predict(x.reshape(-1, 1))
+                                        
+                                        # Pour la ligne de tendance, utiliser les indices originaux
+                                        x_full = np.arange(len(fcf_df))
+                                        line_y = model.predict(x_full.reshape(-1, 1))
                                         
                                         fig.add_trace(go.Scatter(
                                             x=fcf_df['Année'],
