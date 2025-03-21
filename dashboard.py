@@ -12,8 +12,6 @@ import requests
 from datetime import datetime
 import time
 import html
-import math
-import pytz
 
 pd.set_option('future.no_silent_downcasting', True) #Configuration globale pour adopter le comportement futur de pandas
 
@@ -1125,19 +1123,19 @@ def calculate_intrinsic_value(ticker, fundamental_data, historical_financials=No
                 asset_weight = 0.1
         
         # Ajouter les valeurs disponibles avec leur poids respectif
-        if per_based_value is not None and not (isinstance(per_based_value, float) and math.isnan(per_based_value)):
+        if per_based_value is not None and not (isinstance(per_based_value, float) and np.isnan(per_based_value)):
             available_values.append(per_based_value)
             weights.append(per_weight)
         
-        if graham_value is not None and not (isinstance(graham_value, float) and math.isnan(graham_value)):
+        if graham_value is not None and not (isinstance(graham_value, float) and np.isnan(graham_value)):
             available_values.append(graham_value)
             weights.append(graham_weight)
         
-        if dcf_value is not None and not (isinstance(dcf_value, float) and math.isnan(dcf_value)):
+        if dcf_value is not None and not (isinstance(dcf_value, float) and np.isnan(dcf_value)):
             available_values.append(dcf_value)
             weights.append(dcf_weight)
         
-        if asset_based_value is not None and not (isinstance(asset_based_value, float) and math.isnan(asset_based_value)):
+        if asset_based_value is not None and not (isinstance(asset_based_value, float) and np.isnan(asset_based_value)):
             available_values.append(asset_based_value)
             weights.append(asset_weight)
         
