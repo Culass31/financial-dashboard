@@ -3521,6 +3521,12 @@ def main():
                                     
                                     # Ajout d'une ligne de tendance
                                     if len(fcf_df) > 1:
+					# Filtrer les valeurs NaN
+                                        mask = ~np.isnan(fcf_df['FCF (millions)'].values)
+                                        if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
+                                            x = np.arange(len(fcf_df))[mask]
+                                            y = fcf_df['FCF (millions)'].values[mask]
+					
                                         # Régression linéaire simple
                                         x = np.arange(len(fcf_df))
                                         y = fcf_df['FCF (millions)'].values
