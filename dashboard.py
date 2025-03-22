@@ -8,7 +8,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.linear_model import LinearRegression
 from sklearn.impute import SimpleImputer
-import requests
 from datetime import datetime
 import time
 import html
@@ -3856,26 +3855,26 @@ def main():
                         
                         # Ajout d'une ligne de tendance
                         if len(fcf_df) > 1:
-				# Filtrer les valeurs NaN
-				mask = ~np.isnan(fcf_df['FCF (millions)'].values)
-				if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
-					x = np.arange(len(fcf_df))[mask]
-					y = fcf_df['FCF (millions)'].values[mask]
-				
-				# Régression linéaire simple
-				model = LinearRegression().fit(x.reshape(-1, 1), y)
-				
-				# Pour la ligne de tendance, utiliser les indices originaux
-				x_full = np.arange(len(fcf_df))
-				line_y = model.predict(x_full.reshape(-1, 1))
+                        # Filtrer les valeurs NaN
+                            mask = ~np.isnan(fcf_df['FCF (millions)'].values)
+                            if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
+                                x = np.arange(len(fcf_df))[mask]
+                                y = fcf_df['FCF (millions)'].values[mask]
+                        
+                        # Régression linéaire simple
+                        model = LinearRegression().fit(x.reshape(-1, 1), y)
+                        
+                        # Pour la ligne de tendance, utiliser les indices originaux
+                        x_full = np.arange(len(fcf_df))
+                        line_y = model.predict(x_full.reshape(-1, 1))
                             
-                            fig.add_trace(go.Scatter(
-                                x=fcf_df['Année'],
-                                y=line_y,
-                                mode='lines',
-                                line=dict(color='blue', width=2, dash='dash'),
-                                name='Tendance'
-                            ))
+                        fig.add_trace(go.Scatter(
+                            x=fcf_df['Année'],
+                            y=line_y,
+                            mode='lines',
+                            line=dict(color='blue', width=2, dash='dash'),
+                            name='Tendance'
+                        ))
                         
                         # Configuration du graphique
                         fig.update_layout(
