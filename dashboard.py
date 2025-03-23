@@ -618,7 +618,7 @@ def get_market_structure():
     
     # Créer une structure hiérarchique multi-niveaux
     market_structure = {
-        'regions': {},
+        'region': {},
         'secteurs': {},
         'industries': {},
         'marches': {},
@@ -650,13 +650,13 @@ def get_market_structure():
         market_structure['all_stocks'][nom] = stock_info
         
         # Structure par région et pays
-        if region not in market_structure['regions']:
-            market_structure['regions'][region] = {}
+        if region not in market_structure['region']:
+            market_structure['region'][region] = {}
         
-        if pays not in market_structure['regions'][region]:
-            market_structure['regions'][region][pays] = {}
+        if pays not in market_structure['region'][region]:
+            market_structure['region'][region][pays] = {}
         
-        market_structure['regions'][region][pays][nom] = stock_info
+        market_structure['region'][region][pays][nom] = stock_info
         
         # Structure par secteur et industrie
         if secteur not in market_structure['secteurs']:
@@ -1747,13 +1747,13 @@ def flatten_market_structure(market_structure, filter_type=None, level1=None, le
     
     # Filtrage par région et pays
     if filter_type == 'region':
-        if level1 in market_structure['regions']:
+        if level1 in market_structure['region']:
             # Si un pays est spécifié
-            if level2 and level2 in market_structure['regions'][level1]:
-                return market_structure['regions'][level1][level2]
+            if level2 and level2 in market_structure['region'][level1]:
+                return market_structure['region'][level1][level2]
             # Sinon, retourner toutes les actions de la région
             else:
-                for pays, stocks in market_structure['regions'][level1].items():
+                for pays, stocks in market_structure['region'][level1].items():
                     flattened_stocks.update(stocks)
                 return flattened_stocks
     
@@ -2578,18 +2578,18 @@ def main():
         # Approche géographique
         if filter_method == "Géographique":
             # Recherche des noms exacts pour Europe et France dans la structure de données
-            regions = list(market_structure['regions'].keys())
+            region = list(market_structure['region'].keys())
             
             # Sélection de la région
             selected_region = st.sidebar.selectbox(
                 "Région", 
-                regions, 
-                index=regions.index("Europe") if "Europe" in regions else 0, # Sélection de la région Europe par défaut
+                region, 
+                index=region.index("Europe") if "Europe" in region else 0, # Sélection de la région Europe par défaut
                 key="selected_region"
             )
             
             if selected_region:
-                pays_list = list(market_structure['regions'][selected_region].keys())
+                pays_list = list(market_structure['region'][selected_region].keys())
                 
                 # Sélection du pays
                 selected_pays = st.sidebar.selectbox(
@@ -4510,12 +4510,12 @@ def main():
             if filter_type == "Par région":
                 # Récupérer la structure de marché
                 market_structure = get_market_structure()
-                regions = list(market_structure['regions'].keys())
-                selected_region = st.selectbox("Sélectionner une région", regions)
+                region = list(market_structure['region'].keys())
+                selected_region = st.selectbox("Sélectionner une région", region)
                 
                 # Si une région est sélectionnée, proposer les pays de cette région
                 if selected_region:
-                    pays_options = ["Tous les pays"] + list(market_structure['regions'][selected_region].keys())
+                    pays_options = ["Tous les pays"] + list(market_structure['region'][selected_region].keys())
                     selected_pays = st.selectbox("Sélectionner un pays", pays_options)
                     if selected_pays == "Tous les pays":
                         selected_pays = None
