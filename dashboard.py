@@ -2823,7 +2823,7 @@ def main():
                         
                         # Mise en forme du graphique
                         fig.update_layout(
-                            title=None,  # Le titre est déjà en haut de la page
+                            title="Tendance",
                             height=500,
                             xaxis_rangeslider_visible=False,
                             legend=dict(
