@@ -1,6 +1,4 @@
 import streamlit as st
-import appdirs as ad
-ad.user_cache_dir = lambda *args: "/tmp"
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -8,9 +6,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.linear_model import LinearRegression
 from sklearn.impute import SimpleImputer
+import requests
 from datetime import datetime
 import time
 import html
+import math
+import pytz
 
 pd.set_option('future.no_silent_downcasting', True) #Configuration globale pour adopter le comportement futur de pandas
 
@@ -589,7 +590,7 @@ def get_dividend_policy_analysis(ticker):
         }
 
 # Structure de marché hiérarchique organisée par région, pays, secteur, industrie et marché
-@st.cache_data(ttl=86400*365)  # Mise en cache pour 24 heures
+@st.cache_data(ttl=86400)  # Mise en cache pour 24 heures
 def get_market_structure():
     # Lire le fichier CSV avec l'encodage approprié
     try:
@@ -599,7 +600,7 @@ def get_market_structure():
         
         for encoding in encodings:
             try:
-                df = pd.read_csv(r"https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/actions.csv", sep=";", encoding='utf-8-sig')
+                df = pd.read_csv(r"C:\Users\culas\OneDrive\Documents\Finances\actions.csv", sep=";", encoding='utf-8-sig')
                 print(f"Fichier lu avec succès avec l'encodage {encoding}:")
                 break
             except UnicodeDecodeError:
@@ -618,7 +619,7 @@ def get_market_structure():
     
     # Créer une structure hiérarchique multi-niveaux
     market_structure = {
-        'region': {},
+        'regions': {},
         'secteurs': {},
         'industries': {},
         'marches': {},
@@ -650,13 +651,13 @@ def get_market_structure():
         market_structure['all_stocks'][nom] = stock_info
         
         # Structure par région et pays
-        if region not in market_structure['region']:
-            market_structure['region'][region] = {}
+        if region not in market_structure['regions']:
+            market_structure['regions'][region] = {}
         
-        if pays not in market_structure['region'][region]:
-            market_structure['region'][region][pays] = {}
+        if pays not in market_structure['regions'][region]:
+            market_structure['regions'][region][pays] = {}
         
-        market_structure['region'][region][pays][nom] = stock_info
+        market_structure['regions'][region][pays][nom] = stock_info
         
         # Structure par secteur et industrie
         if secteur not in market_structure['secteurs']:
@@ -1194,19 +1195,19 @@ def calculate_intrinsic_value(ticker, fundamental_data, historical_financials=No
             if current_price < intrinsic_value_with_mos * 0.8:
                 recommendation = "ACHAT FORT"
             else:
-                recommendation = "ACHAT"
+                recommendation = "ACHETER"
         elif current_price <= intrinsic_value:
             # Légère sous-valorisation
-            recommendation = "ACCUMULATION"
+            recommendation = "RENFORCER"
         elif current_price <= intrinsic_value * 1.1:
             # Juste valorisation
             recommendation = "CONSERVER"
         elif current_price <= intrinsic_value * 1.3:
             # Légère survalorisation
-            recommendation = "ALLÈGEMENT"
+            recommendation = "ALLEGER"
         else:
             # Forte survalorisation
-            recommendation = "VENTE"
+            recommendation = "VENDRE"
         
         # Construire et retourner le résultat
         result = {
@@ -1747,13 +1748,13 @@ def flatten_market_structure(market_structure, filter_type=None, level1=None, le
     
     # Filtrage par région et pays
     if filter_type == 'region':
-        if level1 in market_structure['region']:
+        if level1 in market_structure['regions']:
             # Si un pays est spécifié
-            if level2 and level2 in market_structure['region'][level1]:
-                return market_structure['region'][level1][level2]
+            if level2 and level2 in market_structure['regions'][level1]:
+                return market_structure['regions'][level1][level2]
             # Sinon, retourner toutes les actions de la région
             else:
-                for pays, stocks in market_structure['region'][level1].items():
+                for pays, stocks in market_structure['regions'][level1].items():
                     flattened_stocks.update(stocks)
                 return flattened_stocks
     
@@ -2578,18 +2579,18 @@ def main():
         # Approche géographique
         if filter_method == "Géographique":
             # Recherche des noms exacts pour Europe et France dans la structure de données
-            region = list(market_structure['region'].keys())
+            regions = list(market_structure['regions'].keys())
             
             # Sélection de la région
             selected_region = st.sidebar.selectbox(
                 "Région", 
-                region, 
-                index=region.index("Europe") if "Europe" in region else 0, # Sélection de la région Europe par défaut
+                regions, 
+                index=regions.index("Europe") if "Europe" in regions else 0, # Sélection de la région Europe par défaut
                 key="selected_region"
             )
             
             if selected_region:
-                pays_list = list(market_structure['region'][selected_region].keys())
+                pays_list = list(market_structure['regions'][selected_region].keys())
                 
                 # Sélection du pays
                 selected_pays = st.sidebar.selectbox(
@@ -2823,7 +2824,7 @@ def main():
                         
                         # Mise en forme du graphique
                         fig.update_layout(
-                            title="Tendance",
+                            title="Tendance",  # Le titre est déjà en haut de la page
                             height=500,
                             xaxis_rangeslider_visible=False,
                             legend=dict(
@@ -2860,14 +2861,14 @@ def main():
                         with st.expander("Analyse détaillée de la tendance", expanded=True):
                             trend_cols = st.columns(3)
                             with trend_cols[0]:
-                                # Analyser la direction de la tendance récente (30 derniers jours)
+                                # Analyser la direction de la tendance des 30 derniers jours)
                                 recent_prices = df_reg['Close'].iloc[-30:] if len(df_reg) >= 30 else df_reg['Close']
                                 recent_slope = np.polyfit(range(len(recent_prices)), recent_prices, 1)[0]
                                 recent_direction = "Haussière" if recent_slope > 0 else "Baissière"
                                 recent_color = "green" if recent_slope > 0 else "red"
                                 
                                 st.markdown(f"""
-                                #### Tendance récente (30 derniers jours)
+                                #### Tendance des 30 derniers jours
                                 <span style='color:{recent_color}; font-weight:bold'>{recent_direction}</span>
                                 """, unsafe_allow_html=True)
                                 
@@ -2884,11 +2885,9 @@ def main():
                                     recent_low = df_reg['Low'].iloc[-30:].min()
                                     current = df_reg['Close'].iloc[-1]
                                     
-                                    st.markdown(f"""
-                                    #### Supports/Résistances
-                                    **Résistance récente:** {recent_high:.2f}
-                                    **Support récent:** {recent_low:.2f}
-                                    """)
+                                    st.markdown(f"#### Supports/Résistances")
+                                    st.markdown(f"**Résistance récente:** {recent_high:.2f}")
+                                    st.markdown(f"**Support récent:** {recent_low:.2f}")
                                 
                                     # Calculer la distance aux support/résistance
                                     dist_to_resistance = ((recent_high / current) - 1) * 100
@@ -2910,213 +2909,208 @@ def main():
                                     benchmark_1y = 8.0
                                     benchmark_5y = 8.0 * 5
                                     
-                                    st.markdown(f"""
-                                    **1 an:** {prog_1y:.2f}% ({prog_1y - benchmark_1y:+.2f}% vs marché)
-                                    **5 ans:** {prog_5y:.2f}% ({prog_5y - benchmark_5y:+.2f}% vs marché)
-                                    """)
-                    else:
-                        st.error(f"Aucune donnée historique disponible pour {ticker}")
-            
-            with col_indicators:
-                # Affichage indicateurs techniques
-                st.markdown("<div style='background-color: #f8f9fa; padding: 0px; border-radius: 10px; margin-bottom: 20px;'><h3 style='text-align: center; margin-bottom: 15px;'>Indicateurs Techniques</h3></div>", unsafe_allow_html=True)
-                
-                # Prix actuel avec tendance
-                current_price = df['Close'].iloc[-1] if not df.empty else None
-                previous_price = df['Close'].iloc[-2] if not df.empty and len(df) > 1 else None
-                
-                # Utiliser la fonction améliorée pour afficher le prix actuel
-                display_price_with_trend(
-                    "Prix actuel",
-                    current_price,
-                    previous_price,
-                    format_func=lambda x: f"{x:.2f} €",
-                    background=True,
-                    size="large"
-                )
-                
-                # Jauges pour les indicateurs clés
-                if 'indicators' in locals() and indicators:
-                    # Jauge pour la tendance (correlation)
-                    correlation = indicators['correlation']
-                    fig_trend = create_gauge(
-                        value=correlation,
-                        title="Tendance",
-                        min_val=-1,
-                        max_val=1,
-                        threshold_values=[-0.7, 0.7],
-                        threshold_labels=["Baissière", "Neutre", "Haussière"]
-                    )
-                    st.plotly_chart(fig_trend, use_container_width=True)
-                    
-                    # Jauge pour la croissance du modèle
-                    model_growth = indicators['model_growth']
-                    fig_growth = create_gauge(
-                        value=model_growth,
-                        title="Croissance Annuelle (%)",
-                        min_val=-20,
-                        max_val=20,
-                        threshold_values=[0, 5],
-                        threshold_labels=["Négative", "Faible", "Forte"]
-                    )
-                    st.plotly_chart(fig_growth, use_container_width=True)
-                    
-                    # Jauge pour l'écart par rapport à la régression
-                    deviation = indicators['deviation']
-                    fig_deviation = create_gauge(
-                        value=deviation,
-                        title="Écart (σ)",
-                        min_val=-3,
-                        max_val=3,
-                        threshold_values=[-1.5, 1.5],
-                        threshold_labels=["Surachat", "Zone neutre", "Survente"]
-                    )
-                    st.plotly_chart(fig_deviation, use_container_width=True)
-                
-                # Ajouter un indicateur de force du momentum
-                if not df.empty and len(df) > 10:
-                    momentum = (df['Close'].iloc[-1] / df['Close'].iloc[-10] - 1) * 100
-                    
-                    st.markdown("<h4>Force du Momentum</h4>", unsafe_allow_html=True)
-                    
-                    # Définir la couleur en fonction de la valeur
-                    momentum_color = "green" if momentum > 3 else "red" if momentum < -3 else "orange"
-                    momentum_strength = "Fort" if abs(momentum) > 5 else "Modéré" if abs(momentum) > 2 else "Faible"
-                    
-                    # Créer un bargraph horizontal pour le momentum
-                    momentum_chart = go.Figure(go.Indicator(
-                        mode = "gauge+number",
-                        value = momentum,
-                        number = {'suffix': "%", 'font': {'size': 20}},
-                        gauge = {
-                            'axis': {'range': [-10, 10], 'tickwidth': 1},
-                            'bar': {'color': momentum_color},
-                            'steps': [
-                                {'range': [-10, -3], 'color': 'rgba(255, 0, 0, 0.2)'},
-                                {'range': [-3, 3], 'color': 'rgba(255, 165, 0, 0.2)'},
-                                {'range': [3, 10], 'color': 'rgba(0, 128, 0, 0.2)'}
-                            ]
-                        },
-                        title = {'text': f"{momentum_strength}"}
-                    ))
-                    
-                    momentum_chart.update_layout(
-                        height=150,
-                        margin=dict(l=10, r=10, t=20, b=10)
-                    )
-                    
-                    st.plotly_chart(momentum_chart, use_container_width=True)
-                
-                # Ajouter un résumé technique
-                st.markdown("<h4>Résumé Technique</h4>", unsafe_allow_html=True)
-                
-                if 'indicators' in locals() and indicators:
-                    # Générer un résumé technique basé sur les indicateurs
-                    if indicators['correlation'] > 0.7 and indicators['model_growth'] > 5:
-                        signal = "Achat"
-                        signal_color = "green"
-                    elif indicators['correlation'] < -0.7 and indicators['model_growth'] < -5:
-                        signal = "Vente"
-                        signal_color = "red"
-                    else:
-                        signal = "Neutre"
-                        signal_color = "orange"
-                    
-                    st.markdown(f"""
-                    <div style='background-color: rgba({', '.join(['0, 128, 0, 0.2' if signal_color == 'green' else '255, 0, 0, 0.2' if signal_color == 'red' else '255, 165, 0, 0.2'])}); padding: 10px; border-radius: 5px; text-align: center; margin: 10px 0;'>
-                        <h3 style='color: {signal_color}; margin: 0;'>{signal}</h3>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Liste des signaux clés
-                    signals = []
-                    
-                    if indicators['correlation'] > 0.5:
-                        signals.append("✅ Tendance haussière solide")
-                    elif indicators['correlation'] < -0.5:
-                        signals.append("❌ Tendance baissière solide")
-                    
-                    if indicators['deviation'] > 1.5:
-                        signals.append("⚠️ Surachat potentiel")
-                    elif indicators['deviation'] < -1.5:
-                        signals.append("⚠️ Survente potentielle")
-                    
-                    # Vérifier le croisement des moyennes mobiles si disponibles
-                    if 'ma_periods' in locals() and show_ma and len(df_reg) > max(ma_periods):
-                        short_ma = 50
-                        long_ma = 200
-                        if f'MA_{short_ma}' in df_reg.columns and f'MA_{long_ma}' in df_reg.columns:
-                            # Vérifier s'il y a un croisement récent (dans les 5 derniers jours)
-                            last_days = min(5, len(df_reg) - 1)
-                            for i in range(1, last_days + 1):
-                                current_short = df_reg[f'MA_{short_ma}'].iloc[-i]
-                                current_long = df_reg[f'MA_{long_ma}'].iloc[-i]
-                                prev_short = df_reg[f'MA_{short_ma}'].iloc[-(i+1)] if i < len(df_reg) - 1 else None
-                                prev_long = df_reg[f'MA_{long_ma}'].iloc[-(i+1)] if i < len(df_reg) - 1 else None
-                                
-                                if prev_short and prev_long:
-                                    # Croisement doré (court au-dessus du long)
-                                    if prev_short <= prev_long and current_short > current_long:
-                                        signals.append("✅ Croisement doré récent (signal d'achat)")
-                                        break
-                                    # Croisement de la mort (court en-dessous du long)
-                                    elif prev_short >= prev_long and current_short < current_long:
-                                        signals.append("❌ Croisement de la mort récent (signal de vente)")
-                                        break
-                    
-                    # Vérifier le momentum
-                    if 'momentum' in locals():
-                        if momentum > 5:
-                            signals.append("✅ Momentum fortement positif")
-                        elif momentum < -5:
-                            signals.append("❌ Momentum fortement négatif")
-                    
-                    # Vérifier la volatilité
-                    if 'volatility' in locals():
-                        market_avg_volatility = 1.5  # Volatilité moyenne du marché (exemple)
-                        if volatility > market_avg_volatility * 2:
-                            signals.append("⚠️ Volatilité très élevée")
-                        elif volatility < market_avg_volatility * 0.5:
-                            signals.append("ℹ️ Volatilité très faible")
-                    
-                    # Affichage des signaux
-                    if signals:
-                        for signal_text in signals:
-                            st.markdown(f"<div style='margin: 5px 0;'>{signal_text}</div>", unsafe_allow_html=True)
-                    else:
-                        st.markdown("Aucun signal technique significatif")
-                    
-                    # Ajouter un résumé textuel
-                    if indicators['correlation'] > 0.7:
-                        if indicators['deviation'] > 1.5:
-                            summary = "L'action est en tendance haussière forte mais potentiellement surachetée. Une correction technique pourrait survenir à court terme."
-                        elif indicators['deviation'] < -1.5:
-                            summary = "L'action est en tendance haussière forte et actuellement sous-évaluée. Bon point d'entrée potentiel."
-                        else:
-                            summary = "L'action est en tendance haussière forte et évolue dans sa zone de valeur normale."
-                    elif indicators['correlation'] < -0.7:
-                        if indicators['deviation'] > 1.5:
-                            summary = "L'action est en tendance baissière forte mais temporairement surachetée. La tendance baissière pourrait reprendre après ce rebond technique."
-                        elif indicators['deviation'] < -1.5:
-                            summary = "L'action est en tendance baissière forte et actuellement survendue. Un rebond technique pourrait survenir à court terme."
-                        else:
-                            summary = "L'action est en tendance baissière forte et évolue dans sa zone de valeur normale."
-                    else:
-                        if indicators['deviation'] > 1.5:
-                            summary = "L'action est en phase de consolidation avec un potentiel de correction à la baisse."
-                        elif indicators['deviation'] < -1.5:
-                            summary = "L'action est en phase de consolidation avec un potentiel de rebond à la hausse."
-                        else:
-                            summary = "L'action évolue sans tendance claire dans sa zone de valeur normale."
-                    
-                    st.markdown(f"""
-                    <div style='background-color: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 15px;'>
-                        <p style='margin: 0;'><em>{summary}</em></p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.warning("Données insuffisantes pour l'analyse technique")
+                                    st.markdown(f"**1 an:** {prog_1y:.2f}% ({prog_1y - benchmark_1y:+.2f}% vs marché)")
+                                    st.markdown(f"**5 ans:** {prog_5y:.2f}% ({prog_5y - benchmark_5y:+.2f}% vs marché)")
 
+                            # Ajouter un résumé technique
+                            st.markdown("<h4>Recommandation</h4>", unsafe_allow_html=True)
+                            
+                            if 'indicators' in locals() and indicators:
+                                # Générer un résumé technique basé sur les indicateurs
+                                if indicators['correlation'] > 0.7 and indicators['model_growth'] > 5:
+                                    signal = "Achat"
+                                    signal_color = "green"
+                                elif indicators['correlation'] < -0.7 and indicators['model_growth'] < -5:
+                                    signal = "Vente"
+                                    signal_color = "red"
+                                else:
+                                    signal = "Neutre"
+                                    signal_color = "orange"
+                                
+                                st.markdown(f"""
+                                <div style='background-color: rgba({', '.join(['0, 128, 0, 0.2' if signal_color == 'green' else '255, 0, 0, 0.2' if signal_color == 'red' else '255, 165, 0, 0.2'])}); padding: 10px; border-radius: 5px; text-align: center; margin: 10px 0;'>
+                                    <h3 style='color: {signal_color}; margin: 0;'>{signal}</h3>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                
+                                # Liste des signaux clés
+                                signals = []
+                                
+                                if indicators['correlation'] > 0.5:
+                                    signals.append("✅ Tendance haussière solide")
+                                elif indicators['correlation'] < -0.5:
+                                    signals.append("❌ Tendance baissière solide")
+                                
+                                if indicators['deviation'] > 1.5:
+                                    signals.append("⚠️ Surachat potentiel")
+                                elif indicators['deviation'] < -1.5:
+                                    signals.append("⚠️ Survente potentielle")
+                                
+                                # Vérifier le croisement des moyennes mobiles si disponibles
+                                if 'ma_periods' in locals() and show_ma and len(df_reg) > max(ma_periods):
+                                    short_ma = 50
+                                    long_ma = 200
+                                    if f'MA_{short_ma}' in df_reg.columns and f'MA_{long_ma}' in df_reg.columns:
+                                        # Vérifier s'il y a un croisement récent (dans les 5 derniers jours)
+                                        last_days = min(5, len(df_reg) - 1)
+                                        for i in range(1, last_days + 1):
+                                            current_short = df_reg[f'MA_{short_ma}'].iloc[-i]
+                                            current_long = df_reg[f'MA_{long_ma}'].iloc[-i]
+                                            prev_short = df_reg[f'MA_{short_ma}'].iloc[-(i+1)] if i < len(df_reg) - 1 else None
+                                            prev_long = df_reg[f'MA_{long_ma}'].iloc[-(i+1)] if i < len(df_reg) - 1 else None
+                                            
+                                            if prev_short and prev_long:
+                                                # Croisement doré (court au-dessus du long)
+                                                if prev_short <= prev_long and current_short > current_long:
+                                                    signals.append("✅ Croisement doré récent (signal d'achat)")
+                                                    break
+                                                # Croisement de la mort (court en-dessous du long)
+                                                elif prev_short >= prev_long and current_short < current_long:
+                                                    signals.append("❌ Croisement de la mort récent (signal de vente)")
+                                                    break
+                                
+                                # Vérifier le momentum
+                                if 'momentum' in locals():
+                                    if momentum > 5:
+                                        signals.append("✅ Momentum fortement positif")
+                                    elif momentum < -5:
+                                        signals.append("❌ Momentum fortement négatif")
+                                
+                                # Vérifier la volatilité
+                                if 'volatility' in locals():
+                                    market_avg_volatility = 1.5  # Volatilité moyenne du marché (exemple)
+                                    if volatility > market_avg_volatility * 2:
+                                        signals.append("⚠️ Volatilité très élevée")
+                                    elif volatility < market_avg_volatility * 0.5:
+                                        signals.append("ℹ️ Volatilité très faible")
+                                
+                                # Affichage des signaux
+                                if signals:
+                                    for signal_text in signals:
+                                        st.markdown(f"<div style='margin: 5px 0;'>{signal_text}</div>", unsafe_allow_html=True)
+                                else:
+                                    st.markdown("Aucun signal technique significatif")
+                                
+                                # Ajouter un résumé textuel
+                                if indicators['correlation'] > 0.7:
+                                    if indicators['deviation'] > 1.5:
+                                        summary = "L'action est en tendance haussière forte mais potentiellement surachetée. Une correction technique pourrait survenir à court terme."
+                                    elif indicators['deviation'] < -1.5:
+                                        summary = "L'action est en tendance haussière forte et actuellement sous-évaluée. Bon point d'entrée potentiel."
+                                    else:
+                                        summary = "L'action est en tendance haussière forte et évolue dans sa zone de valeur normale."
+                                elif indicators['correlation'] < -0.7:
+                                    if indicators['deviation'] > 1.5:
+                                        summary = "L'action est en tendance baissière forte mais temporairement surachetée. La tendance baissière pourrait reprendre après ce rebond technique."
+                                    elif indicators['deviation'] < -1.5:
+                                        summary = "L'action est en tendance baissière forte et actuellement survendue. Un rebond technique pourrait survenir à court terme."
+                                    else:
+                                        summary = "L'action est en tendance baissière forte et évolue dans sa zone de valeur normale."
+                                else:
+                                    if indicators['deviation'] > 1.5:
+                                        summary = "L'action est en phase de consolidation avec un potentiel de correction à la baisse."
+                                    elif indicators['deviation'] < -1.5:
+                                        summary = "L'action est en phase de consolidation avec un potentiel de rebond à la hausse."
+                                    else:
+                                        summary = "L'action évolue sans tendance claire dans sa zone de valeur normale."
+                                
+                                st.markdown(f"""
+                                <div style='background-color: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 15px;'>
+                                    <p style='margin: 0;'><em>{summary}</em></p>
+                                </div>
+                                """, unsafe_allow_html=True)
+                            else:
+                                st.warning("Données insuffisantes pour l'analyse technique")
+                        
+                        with col_indicators:
+                            # Prix actuel avec tendance
+                            current_price = df['Close'].iloc[-1] if not df.empty else None
+                            previous_price = df['Close'].iloc[-2] if not df.empty and len(df) > 1 else None
+                            
+                            # Utiliser la fonction améliorée pour afficher le prix actuel
+                            display_price_with_trend(
+                                "Prix actuel",
+                                current_price,
+                                previous_price,
+                                format_func=lambda x: f"{x:.2f} €",
+                                background=True,
+                                size="large"
+                            )
+                            
+                            # Jauges pour les indicateurs clés
+                            if 'indicators' in locals() and indicators:
+                                # Jauge pour la tendance (correlation)
+                                correlation = indicators['correlation']
+                                fig_trend = create_gauge(
+                                    value=correlation,
+                                    title="Tendance",
+                                    min_val=-1,
+                                    max_val=1,
+                                    threshold_values=[-0.7, 0.7],
+                                    threshold_labels=["Baissière", "Neutre", "Haussière"]
+                                )
+                                st.plotly_chart(fig_trend, use_container_width=True)
+                                
+                                # Jauge pour la croissance du modèle
+                                model_growth = indicators['model_growth']
+                                fig_growth = create_gauge(
+                                    value=model_growth,
+                                    title="Croissance Annuelle (%)",
+                                    min_val=-20,
+                                    max_val=20,
+                                    threshold_values=[0, 5],
+                                    threshold_labels=["Négative", "Faible", "Forte"]
+                                )
+                                st.plotly_chart(fig_growth, use_container_width=True)
+                                
+                                # Jauge pour l'écart par rapport à la régression
+                                deviation = indicators['deviation']
+                                fig_deviation = create_gauge(
+                                    value=deviation,
+                                    title="Écart (σ)",
+                                    min_val=-3,
+                                    max_val=3,
+                                    threshold_values=[-1.5, 1.5],
+                                    threshold_labels=["Surachat", "Zone neutre", "Survente"]
+                                )
+                                st.plotly_chart(fig_deviation, use_container_width=True)
+                            
+                            # Ajouter un indicateur de force du momentum
+                            if not df.empty and len(df) > 10:
+                                momentum = (df['Close'].iloc[-1] / df['Close'].iloc[-10] - 1) * 100
+                                
+                                st.markdown("<h4>Force du Momentum</h4>", unsafe_allow_html=True)
+                                
+                                # Définir la couleur en fonction de la valeur
+                                momentum_color = "green" if momentum > 3 else "red" if momentum < -3 else "orange"
+                                momentum_strength = "Fort" if abs(momentum) > 5 else "Modéré" if abs(momentum) > 2 else "Faible"
+                                
+                                # Créer un bargraph horizontal pour le momentum
+                                momentum_chart = go.Figure(go.Indicator(
+                                    mode = "gauge+number",
+                                    value = momentum,
+                                    number = {'suffix': "%", 'font': {'size': 20}},
+                                    gauge = {
+                                        'axis': {'range': [-10, 10], 'tickwidth': 1},
+                                        'bar': {'color': momentum_color},
+                                        'steps': [
+                                            {'range': [-10, -3], 'color': 'rgba(255, 0, 0, 0.2)'},
+                                            {'range': [-3, 3], 'color': 'rgba(255, 165, 0, 0.2)'},
+                                            {'range': [3, 10], 'color': 'rgba(0, 128, 0, 0.2)'}
+                                        ]
+                                    },
+                                    title = {'text': f"{momentum_strength}"}
+                                ))
+                                
+                                momentum_chart.update_layout(
+                                    height=150,
+                                    margin=dict(l=10, r=10, t=20, b=10)
+                                )
+                                
+                                st.plotly_chart(momentum_chart, use_container_width=True)
+        else:
+            st.error(f"Aucune donnée historique disponible pour {ticker}")
+                
     # Onglet 2: Analyse Fondamentale avec Projection et Recommandation
     with tab2:
         if st.session_state['selected_stock'] is not None:
@@ -3267,175 +3261,519 @@ def main():
             with fundamental_tab2:
 
                 # Créer des onglets pour différentes analyses
-                valuation_tabs = st.tabs(["Valorisation intrinsèque", "Méthodes de valorisation", "Avantage compétitif", "Dividendes"])
+                valuation_tabs = st.tabs(["Evaluations", "Méthodes de valorisation", "Avantage compétitif", "Dividendes"])
                 
                 # Onglet 1: Valorisation intrinsèque
                 with valuation_tabs[0]:
-                    st.write("#### Calcul de la valeur intrinsèque")
                     
-                    # Calculer la valeur intrinsèque
-                    intrinsic_value_result = calculate_intrinsic_value(
-                        ticker, 
-                        fundamental_data, 
-                        (income_stmt, balance_sheet, cashflow)
-                    )
+                    # Créer deux colonnes pour les métriques principales
+                    main_col1, main_col2 = st.columns(2)
                     
-                    if intrinsic_value_result and intrinsic_value_result.get('success', False):
-                        # Afficher les résultats principaux
-                        iv_col1, iv_col2, iv_col3 = st.columns(3)
+                    with main_col1:
+                        # Sous-section pour la valorisation calculée
+                        st.write("#### Valorisation intrinsèque calculée")
                         
-                        with iv_col1:
-                            intrinsic_value = intrinsic_value_result.get('intrinsic_value', None)
-                            if intrinsic_value:
-                                value_color = "green" if intrinsic_value > current_price else "red"
-                                st.markdown(f"**Valeur intrinsèque:** <span style='color:{value_color};'>{intrinsic_value:.2f} €</span>", unsafe_allow_html=True)
-                        
-                        with iv_col2:
-                            mos_value = intrinsic_value_result.get('intrinsic_value_with_mos', None)
-                            if mos_value:
-                                mos_color = "green" if mos_value > current_price else "orange"
-                                st.markdown(f"**Avec marge de sécurité:** <span style='color:{mos_color};'>{mos_value:.2f} €</span>", unsafe_allow_html=True)
-                        
-                        with iv_col3:
-                            deviation = intrinsic_value_result.get('deviation', None)
-                            if deviation is not None:
-                                dev_color = "green" if deviation < 0 else "red"
-                                st.markdown(f"**Écart de valorisation:** <span style='color:{dev_color};'>{deviation:.1f}%</span>", unsafe_allow_html=True)
-                        
-                        # Afficher la recommandation
-                        recommendation = intrinsic_value_result.get('recommendation', '')
-                        rec_colors = {
-                            "ACHAT FORT": "darkgreen",
-                            "ACHAT": "green",
-                            "ACCUMULATION": "lightgreen",
-                            "CONSERVER": "orange",
-                            "ALLÈGEMENT": "pink",
-                            "VENTE": "red"
-                        }
-                        
-                        st.markdown(f"**Recommandation:** <span style='color:{rec_colors.get(recommendation, 'gray')};font-weight:bold;'>{recommendation}</span>", unsafe_allow_html=True)
-                        
-                        # Visualisation comparative
-                        fig = go.Figure()
-                        
-                        # Barres pour le prix actuel et les valeurs intrinsèques
-                        fig.add_trace(go.Bar(
-                            x=['Prix actuel'],
-                            y=[current_price],
-                            name='Prix actuel',
-                            marker_color='blue'
-                        ))
-                        
-                        fig.add_trace(go.Bar(
-                            x=['Valeur intrinsèque'],
-                            y=[intrinsic_value],
-                            name='Valeur intrinsèque',
-                            marker_color='green' if intrinsic_value > current_price else 'red'
-                        ))
-                        
-                        fig.add_trace(go.Bar(
-                            x=['Valeur avec MOS'],
-                            y=[mos_value],
-                            name='Valeur avec marge de sécurité',
-                            marker_color='green' if mos_value > current_price else 'orange'
-                        ))
-                        
-                        fig.update_layout(
-                            title='Comparaison des valorisations',
-                            xaxis_title='Type de valorisation',
-                            yaxis_title='Valeur (€)',
-                            legend=dict(
-                                orientation="h",
-                                yanchor="bottom",
-                                y=1.02,
-                                xanchor="right",
-                                x=1
-                            )
+                        # Calculer la valeur intrinsèque
+                        intrinsic_value_result = calculate_intrinsic_value(
+                            ticker, 
+                            fundamental_data, 
+                            (income_stmt, balance_sheet, cashflow)
                         )
                         
-                        st.plotly_chart(fig, use_container_width=True)
-                        
-                        # Afficher les méthodes utilisées
-                        st.write("##### Détail des méthodes de valorisation")
-                        methods = intrinsic_value_result.get('methods', {})
-                        
-                        method_df = pd.DataFrame({
-                            'Méthode': ['DCF','Graham', 'PER', 'Patrimoniale'],
-                            'Valeur estimée': [
-                                format_number(methods.get('dcf', {}).get('value', None)),
-                                format_number(methods.get('graham', {}).get('value', None)),
-                                format_number(methods.get('per_based', {}).get('value', None)),
-                                format_number(methods.get('asset_based', {}).get('value', None))
-                            ],
-                            'Potentiel': [
-                                format_number(((methods.get('dcf', {}).get('value', None) / current_price) - 1) * 100),
-                                format_number(((methods.get('graham', {}).get('value', None)/ current_price) - 1) * 100),
-                                format_number(((methods.get('per_based', {}).get('value', None)/ current_price) - 1) * 100),
-                                format_number(((methods.get('asset_based', {}).get('value', None)/ current_price) - 1)*100)
-                            ],
-                            'Poids': [
-                                methods.get('dcf', {}).get('weight', 0),
-                                methods.get('graham', {}).get('weight', 0),
-                                methods.get('per_based', {}).get('weight', 0),
-                                methods.get('asset_based', {}).get('weight', 0)
-                            ]
-                        })
-                        
-                        # Filtrer les méthodes avec des valeurs non nulles
-                        method_df = method_df[method_df['Valeur estimée'].notna()]
+                        if intrinsic_value_result and intrinsic_value_result.get('success', False):
+                            # Afficher les résultats principaux
+                            iv_col1, iv_col2, iv_col3 = st.columns(3)
+                            
+                            with iv_col1:
+                                intrinsic_value = intrinsic_value_result.get('intrinsic_value', None)
+                                if intrinsic_value:
+                                    value_color = "green" if intrinsic_value > current_price else "red"
+                                    st.markdown(f"**Valeur intrinsèque:** <span style='color:{value_color};'>{intrinsic_value:.2f} €</span>", unsafe_allow_html=True)
+                            
+                            with iv_col2:
+                                mos_value = intrinsic_value_result.get('intrinsic_value_with_mos', None)
+                                if mos_value:
+                                    mos_color = "green" if mos_value > current_price else "orange"
+                                    st.markdown(f"**Avec marge de sécurité:** <span style='color:{mos_color};'>{mos_value:.2f} €</span>", unsafe_allow_html=True)
+                            
+                            with iv_col3:
+                                deviation = intrinsic_value_result.get('deviation', None)
+                                if deviation is not None:
+                                    dev_color = "green" if deviation < 0 else "red"
+                                    st.markdown(f"**Écart de valorisation:** <span style='color:{dev_color};'>{deviation:.1f}%</span>", unsafe_allow_html=True)
+                            
+                            # Afficher la recommandation
+                            recommendation = intrinsic_value_result.get('recommendation', '')
+                            rec_colors = {
+                                "ACHAT FORT": "darkgreen",
+                                "ACHETER": "green",
+                                "RENFORCER": "lightgreen",
+                                "CONSERVER": "gold",
+                                "ALLEGER": "orange",
+                                "VENDRE": "red"
+                            }
+                            
+                            st.markdown(f"**Recommandation:** <span style='color:{rec_colors.get(recommendation, 'gray')};font-weight:bold;'>{recommendation}</span>", unsafe_allow_html=True)
+                        else:
+                            st.error(f"Impossible de calculer la valeur intrinsèque pour {ticker}")
+                            if intrinsic_value_result:
+                                st.write(intrinsic_value_result.get('message', ''))
 
-                        # Formater les colonnes
-                        method_df['Valeur estimée'] = method_df['Valeur estimée'].apply(lambda x: f"{x} €")
-                        method_df['Potentiel'] = method_df['Potentiel'].apply(lambda x: f"{x}%")
-                        method_df['Poids'] = method_df['Poids'].apply(lambda x: f"{x:.1%}")
-                        
-                        # Fonction pour coloriser les potentiels
-                        def color_potential(val):
-                            if "%" not in val:
-                                return ""
-                            val_num = float(val.strip('%'))
-                            return f'color: {"green" if val_num > 0 else "red"}'
-                        
-                        # Appliquer la coloration et afficher
-                        styled_methods_df = method_df.style.map(color_potential)
-                        st.dataframe(styled_methods_df, use_container_width=True)
-                        
-                        # Afficher les facteurs qualitatifs
-                        quality_factors = intrinsic_value_result.get('quality_factors', {})
-                        if quality_factors:
-                            st.write("##### Facteurs qualitatifs")
-                            
-                            qf_col1, qf_col2 = st.columns(2)
-                            
-                            with qf_col1:
-                                moat = quality_factors.get('moat', 'Indéterminé')
-                                moat_color = {
-                                    'Fort': 'green',
-                                    'Moyen': 'orange',
-                                    'Faible': 'red',
-                                    'Indéterminé': 'gray'
-                                }.get(moat, 'gray')
+                        # Section pour la visualisation comparative
+                        if intrinsic_value_result and intrinsic_value_result.get('success', False):
                                 
-                                st.markdown(f"**Avantage compétitif:** <span style='color:{moat_color};'>{moat}</span>", unsafe_allow_html=True)
-                            
-                            with qf_col2:
-                                management = quality_factors.get('management', 'Indéterminé')
-                                mgmt_color = {
-                                    'Excellent': 'green',
-                                    'Bon': 'lightgreen',
-                                    'Moyen': 'orange',
-                                    'Médiocre': 'red',
-                                    'Indéterminé': 'gray'
-                                }.get(management, 'gray')
+                                # Préparer les données pour le graphique comparatif
+                                price_data = []
                                 
-                                st.markdown(f"**Qualité du management:** <span style='color:{mgmt_color};'>{management}</span>", unsafe_allow_html=True)
+                                # Prix actuel
+                                #price_data.append({
+                                #    'type': 'Prix actuel',
+                                #    'valeur': current_price,
+                                #    'couleur': 'blue'
+                                #})
+                                
+                                # Valorisation intrinsèque
+                                price_data.append({
+                                    'type': 'Valeur intrinsèque',
+                                    'valeur': intrinsic_value,
+                                    'couleur': 'green' if intrinsic_value > current_price else 'red'
+                                })
+                                
+                                # Valorisation avec marge de sécurité
+                                price_data.append({
+                                    'type': 'Valeur avec MOS',
+                                    'valeur': mos_value,
+                                    'couleur': 'green' if mos_value > current_price else 'orange'
+                                })
+                                
+                                # Ajouter l'objectif moyen des analystes s'il est disponible
+                                if hasattr(ticker, 'analyst_price_target') and ticker.analyst_price_target:
+                                    target_data = ticker.analyst_price_target
+                                    mean_target = target_data.get('mean', None)
+                                    if mean_target:
+                                        price_data.append({
+                                            'type': 'Objectif analystes',
+                                            'valeur': mean_target,
+                                            'couleur': 'purple' if mean_target > current_price else 'pink'
+                                        })
+                                
+                                # Créer le graphique comparatif
+                                fig = go.Figure()
+                                
+                                for item in price_data:
+                                    fig.add_trace(go.Bar(
+                                        x=[item['type']],
+                                        y=[item['valeur']],
+                                        name=item['type'],
+                                        marker_color=item['couleur']
+                                    ))
+                                
+                                fig.update_layout(
+                                    title='Comparaison des différentes valorisations',
+                                    xaxis_title='Source de valorisation',
+                                    yaxis_title='Valeur (€)',
+                                    legend=dict(
+                                        orientation="h",
+                                        yanchor="bottom",
+                                        y=1.02,
+                                        xanchor="right",
+                                        x=1
+                                    ),
+                                    height=400
+                                )
+                                
+                                # Ajouter une ligne pour le prix actuel
+                                fig.add_shape(
+                                    type="line",
+                                    x0=-0.5,
+                                    y0=current_price,
+                                    x1=len(price_data)-0.5,
+                                    y1=current_price,
+                                    line=dict(
+                                        color="blue",
+                                        width=2,
+                                        dash="dash",
+                                    )
+                                )
+                                
+                                fig.add_annotation(
+                                    x=len(price_data)-0.5,
+                                    y=current_price,
+                                    text=f"Prix actuel: {current_price:.2f} €",
+                                    showarrow=False,
+                                    yshift=10,
+                                    bgcolor="rgba(255, 255, 255, 0.8)"
+                                )
+                                
+                                st.plotly_chart(fig, use_container_width=True)
                             
-                            adjustment = quality_factors.get('adjustment', 1.0)
-                            st.write(f"**Ajustement qualitatif appliqué:** {adjustment:.1%}")
-                    else:
-                        st.error(f"Impossible de calculer la valeur intrinsèque pour {ticker}")
-                        if intrinsic_value_result:
-                            st.write(intrinsic_value_result.get('message', ''))
+                                # Afficher les méthodes utilisées
+                                st.write("#### Détail des méthodes de valorisation")
+                                methods = intrinsic_value_result.get('methods', {})
+                                
+                                method_df = pd.DataFrame({
+                                    'Méthode': ['DCF', 'Graham', 'PER', 'Patrimoniale'],
+                                    'Valeur estimée': [
+                                        format_number(methods.get('dcf', {}).get('value', None)),
+                                        format_number(methods.get('graham', {}).get('value', None)),
+                                        format_number(methods.get('per_based', {}).get('value', None)),
+                                        format_number(methods.get('asset_based', {}).get('value', None))
+                                    ],
+                                    'Potentiel': [
+                                        format_number(((methods.get('dcf', {}).get('value', None) / current_price) - 1) * 100),
+                                        format_number(((methods.get('graham', {}).get('value', None)/ current_price) - 1) * 100),
+                                        format_number(((methods.get('per_based', {}).get('value', None)/ current_price) - 1) * 100),
+                                        format_number(((methods.get('asset_based', {}).get('value', None)/ current_price) - 1)*100)
+                                    ],
+                                    'Poids': [
+                                        methods.get('dcf', {}).get('weight', 0),
+                                        methods.get('graham', {}).get('weight', 0),
+                                        methods.get('per_based', {}).get('weight', 0),
+                                        methods.get('asset_based', {}).get('weight', 0)
+                                    ]
+                                })
+                                
+                                # Filtrer les méthodes avec des valeurs non nulles
+                                method_df = method_df[method_df['Valeur estimée'].notna()]
+
+                                # Formater les colonnes
+                                method_df['Valeur estimée'] = method_df['Valeur estimée'].apply(lambda x: f"{x} €")
+                                method_df['Potentiel'] = method_df['Potentiel'].apply(lambda x: f"{x}%")
+                                method_df['Poids'] = method_df['Poids'].apply(lambda x: f"{x:.1%}")
+                                
+                                # Fonction pour coloriser les potentiels
+                                def color_potential(val):
+                                    if "%" not in val:
+                                        return ""
+                                    val_num = float(val.strip('%'))
+                                    return f'color: {"green" if val_num > 0 else "red"}'
+                                
+                                # Appliquer la coloration et afficher
+                                styled_methods_df = method_df.style.map(color_potential)
+                                st.dataframe(styled_methods_df, use_container_width=True)
+                        
+                        # Section pour les facteurs qualitatifs
+                        if intrinsic_value_result and intrinsic_value_result.get('success', False):
+                            quality_factors = intrinsic_value_result.get('quality_factors', {})
+                            if quality_factors:
+                                st.write("### Facteurs qualitatifs")
+                                
+                                qf_col1, qf_col2, qf_col3 = st.columns(3)
+                                
+                                with qf_col1:
+                                    moat = quality_factors.get('moat', 'Indéterminé')
+                                    moat_color = {
+                                        'Fort': 'green',
+                                        'Moyen': 'orange',
+                                        'Faible': 'red',
+                                        'Indéterminé': 'gray'
+                                    }.get(moat, 'gray')
+                                    
+                                    st.markdown(f"**Avantage compétitif:** <span style='color:{moat_color};'>{moat}</span>", unsafe_allow_html=True)
+                                
+                                with qf_col2:
+                                    management = quality_factors.get('management', 'Indéterminé')
+                                    mgmt_color = {
+                                        'Excellent': 'green',
+                                        'Bon': 'lightgreen',
+                                        'Moyen': 'orange',
+                                        'Médiocre': 'red',
+                                        'Indéterminé': 'gray'
+                                    }.get(management, 'gray')
+                                    
+                                    st.markdown(f"**Qualité du management:** <span style='color:{mgmt_color};'>{management}</span>", unsafe_allow_html=True)
+                                
+                                with qf_col3:
+                                    adjustment = quality_factors.get('adjustment', 1.0)
+                                    adj_color = "green" if adjustment > 1 else "red" if adjustment < 1 else "gray"
+                                    st.markdown(f"**Ajustement qualitatif:** <span style='color:{adj_color};'>{adjustment:.1%}</span>", unsafe_allow_html=True)
+
+                    with main_col2:
+                        # Sous-section pour les avis des analystes
+                        st.write("#### Consensus des analystes")
+                        
+                        # Afficher les objectifs de cours
+                        ticker = yf.Ticker(ticker)
+                        if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
+                            target_data = ticker.analyst_price_targets
+                            
+                            # Créer des colonnes pour les objectifs de cours
+                            pt_col1, pt_col2, pt_col3 = st.columns(3)
+                            
+                            with pt_col1:
+                                mean_target = target_data.get('mean', None)
+                                if mean_target:
+                                    mean_color = "green" if mean_target > current_price else "red"
+                                    st.markdown(f"**Objectif moyen:** <span style='color:{mean_color};'>{mean_target:.2f} €</span>", unsafe_allow_html=True)
+                                    potential = ((mean_target / current_price) - 1) * 100
+                                    st.markdown(f"**Potentiel:** <span style='color:{mean_color};'>{potential:.1f}%</span>", unsafe_allow_html=True)
+                            
+                            with pt_col2:
+                                high_target = target_data.get('high', None)
+                                low_target = target_data.get('low', None)
+                                if high_target and low_target:
+                                    st.markdown(f"**Plus haut:** <span style='color:green;'>{high_target:.2f} €</span>", unsafe_allow_html=True)
+                                    st.markdown(f"**Plus bas:** <span style='color:gray;'>{low_target:.2f} €</span>", unsafe_allow_html=True)
+                            
+                            with pt_col3:
+                                # Évaluer la dispersion des objectifs
+                                if high_target and low_target and mean_target:
+                                    dispersion = (high_target - low_target) / mean_target * 100
+                                    disp_color = "green" if dispersion < 20 else "orange" if dispersion < 40 else "red"
+                                    st.markdown(f"**Dispersion:** <span style='color:{disp_color};'>{dispersion:.1f}%</span>", unsafe_allow_html=True)
+                                    
+                                    # Interprétation de la dispersion
+                                    disp_text = "Faible" if dispersion < 20 else "Moyenne" if dispersion < 40 else "Élevée"
+                                    st.markdown(f"**Consensus:** <span style='color:{disp_color};'>{disp_text}</span>", unsafe_allow_html=True)
+                        else:
+                            st.info("Aucune donnée d'objectif de cours disponible")
+                        
+                        # Afficher les recommandations des analystes
+                        if hasattr(ticker, 'recommendations_summary') and not ticker.recommendations_summary.empty:
+                            # Récupérer les données les plus récentes
+                            latest_rec = ticker.recommendations_summary.iloc[0]
+                            
+                            # Créer une visualisation des recommandations
+                            rec_fig = go.Figure()
+                            
+                            # Données pour le graphique empilé
+                            categories = ['Achat fort', 'Achat', 'Conserver', 'Vendre', 'Vente forte']
+                            values = [latest_rec['strongBuy'], latest_rec['buy'], latest_rec['hold'], 
+                                    latest_rec['sell'], latest_rec['strongSell']]
+                            colors = ['darkgreen', 'green', 'gold', 'orange', 'red']
+                            
+                            # Calcul du total pour les pourcentages
+                            total_recs = sum(values)
+                            
+                            # Ajouter les barres empilées
+                            for i, (cat, val, color) in enumerate(zip(categories, values, colors)):
+                                rec_fig.add_trace(go.Bar(
+                                    y=[f"Mois {latest_rec['period']}"],
+                                    x=[val],
+                                    name=cat,
+                                    orientation='h',
+                                    marker=dict(color=color),
+                                    text=f"{val} ({val/total_recs*100:.0f}%)" if val > 0 else "",
+                                    textposition="inside",
+                                    hoverinfo="text",
+                                    hovertext=f"{cat}: {val} ({val/total_recs*100:.1f}%)"
+                                ))
+                            
+                            rec_fig.update_layout(
+                                title='Répartition des recommandations',
+                                barmode='stack',
+                                height=120,
+                                margin=dict(l=10, r=10, t=30, b=10),
+                                showlegend=False,
+                                xaxis=dict(title="Nombre d'analystes"),
+                                yaxis=dict(showticklabels=False)
+                            )
+                            
+                            st.plotly_chart(rec_fig, use_container_width=True)
+                            
+                            # Calculer la force du consensus (score pondéré)
+                            consensus_score = (latest_rec['strongBuy'] * 2 + latest_rec['buy'] * 1 + 
+                                            latest_rec['hold'] * 0 + latest_rec['sell'] * -1 + 
+                                            latest_rec['strongSell'] * -2) / total_recs
+                            
+                            # Déterminer la couleur et le texte en fonction du score
+                            if consensus_score > 1:
+                                cons_color = "darkgreen"
+                                cons_text = "FORT ACHAT"
+                            elif consensus_score > 0.5:
+                                cons_color = "green"
+                                cons_text = "ACHAT"
+                            elif consensus_score > -0.5:
+                                cons_color = "gold"
+                                cons_text = "NEUTRE"
+                            elif consensus_score > -1:
+                                cons_color = "orange"
+                                cons_text = "VENTE"
+                            else:
+                                cons_color = "red"
+                                cons_text = "FORT VENTE"
+                            
+                            st.markdown(f"**Consensus des analystes:** <span style='color:{cons_color};font-weight:bold;'>{cons_text}</span> (Score: {consensus_score:.2f})", unsafe_allow_html=True)
+                        else:
+                            st.info("Aucune recommandation d'analyste disponible")
+                    
+                        # Historique des recommandations d'analystes
+                        if hasattr(ticker, 'recommendations_summary') and not ticker.recommendations_summary.empty:
+                            
+                            # Créer un graphique d'évolution des recommandations
+                            rec_history_fig = go.Figure()
+                            
+                            # Récupérer les données historiques (limitées aux 4 derniers mois comme dans l'image)
+                            rec_history = ticker.recommendations_summary.iloc[:4].copy()
+
+                            # Obtenir le mois actuel au format abrégé en français
+                            import datetime
+                            current_month = datetime.datetime.now().strftime("%b").capitalize()
+                            # Conversion des abréviations anglaises en françaises si nécessaire
+                            month_translation = {
+                                "Jan": "Jan", "Feb": "Fév", "Mar": "Mar", "Apr": "Avr", 
+                                "May": "Mai", "Jun": "Juin", "Jul": "Juil", "Aug": "Août", 
+                                "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Déc"
+                            }
+                            current_month = month_translation.get(current_month, current_month)
+
+                            # Créer une fonction pour convertir les périodes en noms de mois
+                            def get_month_name(period_str):
+                                # Définir l'ordre des mois (en français)
+                                months = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]
+                                
+                                # Obtenir le mois actuel et son index
+                                now = datetime.datetime.now()
+                                current_index = now.month - 1  # 0-based index
+                                
+                                # Pour le mois actuel
+                                if period_str == "0m":
+                                    return months[current_index]
+                                
+                                # Pour les mois précédents
+                                if period_str.startswith("-") and period_str.endswith("m"):
+                                    months_back = int(period_str[1:-1])
+                                    # Calculer l'index en tenant compte du passage à l'année précédente
+                                    target_index = (current_index - months_back) % 12
+                                    return months[target_index]
+                                
+                                return period_str  # Fallback
+
+                            # Préparer les données pour le graphique empilé avec les vrais noms de mois
+                            periods = [get_month_name(p) for p in rec_history['period']]
+                            
+                            # Ajouter les barres pour chaque type de recommandation
+                            rec_history_fig.add_trace(go.Bar(
+                                x=periods,
+                                y=rec_history['strongBuy'],
+                                name='Achat fort',
+                                marker_color='darkgreen',
+                                text=rec_history['strongBuy'],
+                                textposition='auto'
+                            ))
+                            
+                            rec_history_fig.add_trace(go.Bar(
+                                x=periods,
+                                y=rec_history['buy'],
+                                name='Renforcer',
+                                marker_color='green',
+                                text=rec_history['buy'],
+                                textposition='auto'
+                            ))
+                            
+                            rec_history_fig.add_trace(go.Bar(
+                                x=periods,
+                                y=rec_history['hold'],
+                                name='Conserver',
+                                marker_color='gold',
+                                text=rec_history['hold'],
+                                textposition='auto'
+                            ))
+                            
+                            rec_history_fig.add_trace(go.Bar(
+                                x=periods,
+                                y=rec_history['sell'],
+                                name='Alléger',
+                                marker_color='orange',
+                                text=rec_history['sell'],
+                                textposition='auto'
+                            ))
+                            
+                            rec_history_fig.add_trace(go.Bar(
+                                x=periods,
+                                y=rec_history['strongSell'],
+                                name='Vendre',
+                                marker_color='red',
+                                text=rec_history['strongSell'],
+                                textposition='auto'
+                            ))
+                            
+                            rec_history_fig.update_layout(
+                                title='Évolution des recommandations des analystes',
+                                xaxis_title='Période',
+                                yaxis_title='Nombre d\'analystes',
+                                legend=dict(
+                                    orientation="h",
+                                    yanchor="bottom",
+                                    y=1.02,
+                                    xanchor="right",
+                                    x=1
+                                ),
+                                barmode='stack',
+                                height=400
+                            )
+                            
+                            st.plotly_chart(rec_history_fig, use_container_width=True)
+                        
+                        # Afficher le graphique des objectifs de cours
+                        if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
+                            st.write("### Objectifs de cours des analystes")
+                            
+                            target_data = ticker.analyst_price_targets
+                            
+                            # Créer un gauge chart pour visualiser l'objectif moyen par rapport au prix actuel
+                            gauge_fig = go.Figure()
+                            
+                            # Récupérer les valeurs d'objectifs
+                            current_val = target_data.get('current', current_price)
+                            mean_val = target_data.get('mean', current_price * 1.2)  # Valeur par défaut si non disponible
+                            low_val = target_data.get('low', current_price * 0.8)    # Valeur par défaut si non disponible
+                            high_val = target_data.get('high', current_price * 1.4)  # Valeur par défaut si non disponible
+                            
+                            # Calculer les écarts pour la visualisation
+                            # Déterminer la plage à afficher (avec un peu de marge)
+                            min_display = min(low_val, current_val) * 0.95
+                            max_display = max(high_val, current_val) * 1.05
+                            
+                            # Ajouter une trace pour le curseur actuel
+                            gauge_fig.add_trace(go.Indicator(
+                                mode = "number+gauge",
+                                value = current_val,
+                                title = {'text': "Prix actuel"},
+                                gauge = {
+                                    'axis': {'range': [min_display, max_display]},
+                                    'bar': {'color': "blue"},
+                                    'steps': [
+                                        {'range': [min_display, low_val], 'color': "lightgray"},
+                                        {'range': [low_val, high_val], 'color': "lightblue"}
+                                    ],
+                                    'threshold': {
+                                        'line': {'color': "purple", 'width': 4},
+                                        'thickness': 0.75,
+                                        'value': mean_val
+                                    }
+                                },
+                                number = {'suffix': "€", 'font': {'size': 24}}
+                            ))
+                            
+                            # Ajouter des annotations pour les valeurs clés
+                            gauge_fig.add_annotation(
+                                x=0.5, y=1.15,
+                                text=f"Objectif moyen: {mean_val:.2f}€",
+                                showarrow=False,
+                                font=dict(size=16, color="purple")
+                            )
+                            
+                            gauge_fig.add_annotation(
+                                x=0.2, y=1.15,
+                                text=f"+bas: {low_val:.2f}€",
+                                showarrow=False,
+                                font=dict(size=14, color="lightgray")
+                            )
+                            
+                            gauge_fig.add_annotation(
+                                x=0.8, y=1.15,
+                                text=f"+haut: {high_val:.2f}€",
+                                showarrow=False,
+                                font=dict(size=14, color="lightblue")
+                            )
+                            
+                            gauge_fig.update_layout(
+                                height=300,
+                                margin=dict(l=20, r=20, t=80, b=20)
+                            )
+                            
+                            st.plotly_chart(gauge_fig, use_container_width=True)
 
                 # Onglet 2: Méthodes de valorisation
                 with valuation_tabs[1]:
@@ -3530,7 +3868,7 @@ def main():
                                         # Pour la ligne de tendance, utiliser les indices originaux
                                         x_full = np.arange(len(fcf_df))
                                         line_y = model.predict(x_full.reshape(-1, 1))
-                                        
+
                                         fig.add_trace(go.Scatter(
                                             x=fcf_df['Année'],
                                             y=line_y,
@@ -3624,77 +3962,79 @@ def main():
                                 st.markdown(f"**Ratio PER/PER sectoriel:** <span style='color:{per_ratio_color};'>{per_ratio:.2f}x</span>", unsafe_allow_html=True)
                                 
                                 # Calculer différentes valorisations basées sur des PER cibles
-                                st.write("##### Valorisations selon différents PER cibles")
-                                
-                                per_targets = {
-                                    "PER sectoriel": sector_per,
-                                    "PER futur estimé": per_fwd if per_fwd else per,
-                                    "PER historique bas": max(per * 0.8, sector_per * 0.7),
-                                    "PER historique haut": per * 1.2
-                                }
-                                
-                                per_values = []
-                                for label, per_target in per_targets.items():
-                                    value = eps * per_target
-                                    per_values.append({
-                                        "Scénario": label,
-                                        "PER cible": f"{per_target:.1f}x",
-                                        "Valorisation": f"{value:.2f} €",
-                                        "Potentiel": f"{((value / current_price) - 1) * 100:.1f}%"
-                                    })
-                                
-                                per_df = pd.DataFrame(per_values)
-                                
-                                # Coloriser le tableau
-                                def color_potential(val):
-                                    val_num = float(val.strip('%'))
-                                    return f'color: {"green" if val_num > 0 else "red"}'
-                                
-                                styled_df = per_df.style.map(color_potential, subset=['Potentiel'])
-                                st.dataframe(styled_df, use_container_width=True)
-                                
-                                # Visualisation graphique des différentes valorisations basées sur le PER
-                                fig = go.Figure()
-                                
-                                # Ajouter une ligne pour le prix actuel
-                                fig.add_shape(
-                                    type="line",
-                                    x0=-0.5,
-                                    y0=current_price,
-                                    x1=3.5,
-                                    y1=current_price,
-                                    line=dict(color="blue", width=2, dash="dash"),
-                                )
-                                
-                                # Ajouter les barres pour chaque scénario de PER
-                                fig.add_trace(go.Bar(
-                                    x=[scenario["Scénario"] for scenario in per_values],
-                                    y=[float(scenario["Valorisation"].split()[0]) for scenario in per_values],
-                                    marker_color=[
-                                        'green' if float(scenario["Potentiel"].strip('%')) > 0 else 'red'
-                                        for scenario in per_values
-                                    ],
-                                    text=[scenario["Potentiel"] for scenario in per_values],
-                                    textposition='auto'
-                                ))
-                                
-                                fig.update_layout(
-                                    title='Valorisations selon différents PER',
-                                    xaxis_title='Scénario de PER',
-                                    yaxis_title='Valorisation (€)',
-                                    annotations=[
-                                        dict(
-                                            x=-0.2,
-                                            y=current_price * 1.02,
-                                            text=f"Prix actuel: {current_price:.2f} €",
-                                            showarrow=False,
-                                            bgcolor="blue",
-                                            font=dict(color="white")
-                                        )
-                                    ]
-                                )
-                                
-                                st.plotly_chart(fig, use_container_width=True)
+                                per_col1, per_col2 = st.columns(2)
+                    
+                                with per_col2:
+                                    per_targets = {
+                                        "PER sectoriel": sector_per,
+                                        "PER futur estimé": per_fwd if per_fwd else per,
+                                        "PER historique bas": max(per * 0.8, sector_per * 0.7),
+                                        "PER historique haut": per * 1.2
+                                    }
+                                    
+                                    per_values = []
+                                    for label, per_target in per_targets.items():
+                                        value = eps * per_target
+                                        per_values.append({
+                                            "Scénario": label,
+                                            "PER cible": f"{per_target:.1f}x",
+                                            "Valorisation": f"{value:.2f} €",
+                                            "Potentiel": f"{((value / current_price) - 1) * 100:.1f}%"
+                                        })
+                                    
+                                    per_df = pd.DataFrame(per_values)
+
+                                    # Coloriser le tableau
+                                    def color_potential(val):
+                                        val_num = float(val.strip('%'))
+                                        return f'color: {"green" if val_num > 0 else "red"}'
+                                    
+                                    styled_df = per_df.style.map(color_potential, subset=['Potentiel'])
+                                    st.dataframe(styled_df, use_container_width=True)
+                                    
+                                with per_col1:
+                                    # Visualisation graphique des différentes valorisations basées sur le PER
+                                    fig = go.Figure()
+                                    
+                                    # Ajouter une ligne pour le prix actuel
+                                    fig.add_shape(
+                                        type="line",
+                                        x0=-0.5,
+                                        y0=current_price,
+                                        x1=3.5,
+                                        y1=current_price,
+                                        line=dict(color="blue", width=2, dash="dash"),
+                                    )
+                                    
+                                    # Ajouter les barres pour chaque scénario de PER
+                                    fig.add_trace(go.Bar(
+                                        x=[scenario["Scénario"] for scenario in per_values],
+                                        y=[float(scenario["Valorisation"].split()[0]) for scenario in per_values],
+                                        marker_color=[
+                                            'green' if float(scenario["Potentiel"].strip('%')) > 0 else 'red'
+                                            for scenario in per_values
+                                        ],
+                                        text=[scenario["Potentiel"] for scenario in per_values],
+                                        textposition='auto'
+                                    ))
+                                    
+                                    fig.update_layout(
+                                        title='Valorisations selon différents PER',
+                                        xaxis_title='Scénario de PER',
+                                        yaxis_title='Valorisation (€)',
+                                        annotations=[
+                                            dict(
+                                                x=-0.2,
+                                                y=current_price * 1.02,
+                                                text=f"Prix actuel: {current_price:.2f} €",
+                                                showarrow=False,
+                                                bgcolor="blue",
+                                                font=dict(color="white")
+                                            )
+                                        ]
+                                    )
+                                    
+                                    st.plotly_chart(fig, use_container_width=True)
                             else:
                                 st.warning("Données insuffisantes pour calculer la valorisation basée sur le PER.")
                         
@@ -3766,8 +4106,6 @@ def main():
 
                 # Onglet 3 : Avantage compétitif
                 with valuation_tabs[2]:
-                    st.write("#### 🛡️ Avantage compétitif")
-
                     with st.spinner("Analyse de l'avantage compétitif en cours..."):
                         moat_analysis = analyze_competitive_advantage(
                             income_stmt, 
@@ -3775,7 +4113,7 @@ def main():
                             cashflow, 
                             fundamental_data["Données générales"]
                         )
-                    
+                                      
                     if moat_analysis:
                         # Affichage de l'existence d'un avantage compétitif
                         moat_existence = moat_analysis.get('existence', 'Indéterminé')
@@ -3794,312 +4132,318 @@ def main():
                         # Affichage de l'avantage compétitif
                         st.markdown(f"""
                         <div style='background-color: {moat_color}; padding: 10px; border-radius: 5px; color: white;'>
-                            <h4 style='margin: 0;'>Avantage compétitif: {moat_existence}</h4>
+                            <h4 style='margin: 0;'>🛡️ Avantage compétitif: {moat_existence}</h4>
                         </div>
                         """, unsafe_allow_html=True)
+
+                    # Créer deux colonnes pour le moat
+                    moat_col1, moat_col2 = st.columns(2)
+                    with moat_col1:      
+                            # Facteurs contribuant à l'avantage compétitif
+                            if moat_factors:
+                                st.markdown("##### Facteurs contribuant à l'avantage compétitif:")
+                                for factor in moat_factors:
+                                    st.markdown(f"- {factor}")
+
+                    with moat_col2:
+                        st.markdown("")
+                        # Calcul du ROIC
+                        roic = calculate_roic(income_stmt, balance_sheet)
                         
-                        # Facteurs contribuant à l'avantage compétitif
-                        if moat_factors:
-                            st.markdown("##### Facteurs contribuant à l'avantage compétitif:")
-                            for factor in moat_factors:
-                                st.markdown(f"- {factor}")
+                        # Mise en page en colonnes
+                        quality_col1, quality_col2 = st.columns(2)
                         
-                        # Explication de l'analyse
-                        st.markdown(f"**Analyse:** {moat_explanation}")
-                    
-                    # Graphique des Free Cash Flows historiques
-                    st.subheader("💸 Évolution des Free Cash Flows")
-                    
-                    if not cashflow.empty and 'Free Cash Flow' in cashflow.index:
-                        # Extraction des FCF historiques
-                        fcf_data = cashflow.loc['Free Cash Flow'].to_dict()
-                        
-                        # Création d'un DataFrame pour le graphique
-                        fcf_df = pd.DataFrame({
-                            'Année': [str(year.year) for year in fcf_data.keys()],
-                            'FCF (millions)': [float(value) / 1e6 for value in fcf_data.values()]
-                        })
-                        
-                        # Tri par année
-                        fcf_df = fcf_df.sort_values('Année')
-                        
-                        # Calcul de la croissance annuelle moyenne
-                        if len(fcf_df) > 1:
-                            fcf_values = fcf_df['FCF (millions)'].values
-                            positive_values_only = fcf_values[fcf_values > 0]
-                            
-                            if len(positive_values_only) > 1:
-                                # Calcul du taux de croissance annuel moyen (CAGR)
-                                start_value = positive_values_only[0]
-                                end_value = positive_values_only[-1]
-                                years = len(positive_values_only) - 1
-                                cagr = ((end_value / start_value) ** (1 / years) - 1) * 100
-                                cagr_text = f"Croissance annuelle moyenne: {cagr:.2f}%"
-                            else:
-                                cagr_text = "Croissance annuelle moyenne: N/A"
-                        else:
-                            cagr_text = ""
-                        
-                        # Création du graphique
-                        fig = go.Figure()
-                        
-                        # Ajout des barres pour les FCF
-                        fig.add_trace(go.Bar(
-                            x=fcf_df['Année'],
-                            y=fcf_df['FCF (millions)'],
-                            marker_color=['green' if fcf >= 0 else 'red' for fcf in fcf_df['FCF (millions)']],
-                            text=[f"€{fcf:.2f}M" for fcf in fcf_df['FCF (millions)']],
-                            textposition='outside',
-                            name='Free Cash Flow'
-                        ))
-                        
-                        # Ajout d'une ligne de tendance
-                        if len(fcf_df) > 1:
-                        # Filtrer les valeurs NaN
-                            mask = ~np.isnan(fcf_df['FCF (millions)'].values)
-                            if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
-                                x = np.arange(len(fcf_df))[mask]
-                                y = fcf_df['FCF (millions)'].values[mask]
-                        
-                        # Régression linéaire simple
-                        model = LinearRegression().fit(x.reshape(-1, 1), y)
-                        
-                        # Pour la ligne de tendance, utiliser les indices originaux
-                        x_full = np.arange(len(fcf_df))
-                        line_y = model.predict(x_full.reshape(-1, 1))
-                            
-                        fig.add_trace(go.Scatter(
-                            x=fcf_df['Année'],
-                            y=line_y,
-                            mode='lines',
-                            line=dict(color='blue', width=2, dash='dash'),
-                            name='Tendance'
-                        ))
-                        
-                        # Configuration du graphique
-                        fig.update_layout(
-                            title=f"Évolution des Free Cash Flows<br><sup>{cagr_text}</sup>",
-                            xaxis_title="Année",
-                            yaxis_title="FCF (millions €)",
-                            height=400,
-                            margin=dict(l=50, r=50, t=80, b=50),
-                            hovermode="x unified"
-                        )
-                        
-                        # Affichage du graphique
-                        st.plotly_chart(fig, use_container_width=True)
-                    else:
-                        st.info("Données de Free Cash Flow non disponibles")
-                    
-                    # Indicateurs complémentaires
-                    st.subheader("🔍 Indicateurs de qualité")
-                    
-                    # Calcul du ROIC
-                    roic = calculate_roic(income_stmt, balance_sheet)
-                    
-                    # Mise en page en colonnes
-                    quality_col1, quality_col2 = st.columns(2)
-                    
-                    with quality_col1:
-                        # Affichage du ROIC
-                        if roic is not None:
-                            roic_color = "green" if roic > 10 else "orange" if roic > 5 else "red"
-                            st.markdown(f"""
-                            <div style='background-color: {roic_color}; padding: 10px; border-radius: 5px; color: white; text-align: center;'>
-                                <h4 style='margin: 0;'>ROIC: {roic:.2f}%</h4>
-                            </div>
-                            """, unsafe_allow_html=True)
-                            
-                            # Interprétation du ROIC
-                            if roic > 15:
-                                st.markdown("✅ **ROIC excellent** - L'entreprise génère des rendements très élevés sur son capital investi.")
-                            elif roic > 10:
-                                st.markdown("✅ **ROIC bon** - L'entreprise génère des rendements satisfaisants sur son capital investi.")
-                            elif roic > 5:
-                                st.markdown("⚠️ **ROIC moyen** - Les rendements sur le capital investi sont acceptables mais pas exceptionnels.")
-                            else:
-                                st.markdown("❌ **ROIC faible** - L'entreprise génère des rendements insuffisants sur son capital investi.")
-                        else:
-                            st.info("ROIC non disponible")
-                    
-                    with quality_col2:
-                        # Valeur Net-Net de Graham
-                        graham_netnet = get_graham_netnet_value(balance_sheet)
-                        
-                        if graham_netnet is not None:
-                            # Calcul du ratio Net-Net/Capitalisation
-                            market_cap = fundamental_data["Données de marché"].get('Capitalisation boursière', 0)
-                            if market_cap > 0:
-                                netnet_ratio = (graham_netnet / market_cap) * 100
-                                netnet_color = "green" if netnet_ratio > 90 else "orange" if netnet_ratio > 50 else "red"
-                                
+                        with quality_col1:
+                            # Affichage du ROIC
+                            if roic is not None:
+                                roic_color = "green" if roic > 10 else "orange" if roic > 5 else "red"
                                 st.markdown(f"""
-                                <div style='background-color: {netnet_color}; padding: 10px; border-radius: 5px; color: white; text-align: center;'>
-                                    <h4 style='margin: 0;'>Net-Net/Cap: {netnet_ratio:.2f}%</h4>
+                                <div style='background-color: {roic_color}; padding: 5px; border-radius: 5px; color: white; text-align: center;'>
+                                    <h4 style='margin: 0;'>ROIC: {roic:.2f}%</h4>
                                 </div>
                                 """, unsafe_allow_html=True)
                                 
-                                # Interprétation du ratio Net-Net
-                                if netnet_ratio > 100:
-                                    st.markdown("✅ **Valeur Net-Net > Capitalisation** - L'entreprise se négocie en dessous de sa valeur liquidative.")
-                                elif netnet_ratio > 70:
-                                    st.markdown("✅ **Valeur Net-Net significative** - L'entreprise a une marge de sécurité importante.")
-                                elif netnet_ratio > 40:
-                                    st.markdown("⚠️ **Valeur Net-Net moyenne** - Certains actifs courants soutiennent la valorisation.")
+                                # Interprétation du ROIC
+                                if roic > 15:
+                                    st.markdown("✅ **ROIC excellent** - L'entreprise génère des rendements très élevés sur son capital investi.")
+                                elif roic > 10:
+                                    st.markdown("✅ **ROIC bon** - L'entreprise génère des rendements satisfaisants sur son capital investi.")
+                                elif roic > 5:
+                                    st.markdown("⚠️ **ROIC moyen** - Les rendements sur le capital investi sont acceptables mais pas exceptionnels.")
                                 else:
-                                    st.markdown("❌ **Valeur Net-Net faible** - La valeur de l'entreprise repose principalement sur des actifs à long terme.")
+                                    st.markdown("❌ **ROIC faible** - L'entreprise génère des rendements insuffisants sur son capital investi.")
+                            else:
+                                st.info("ROIC non disponible")
+                        
+                        with quality_col2:
+                            # Valeur Net-Net de Graham
+                            graham_netnet = get_graham_netnet_value(balance_sheet)
+                            
+                            if graham_netnet is not None:
+                                # Calcul du ratio Net-Net/Capitalisation
+                                market_cap = fundamental_data["Données de marché"].get('Capitalisation boursière', 0)
+                                if market_cap > 0:
+                                    netnet_ratio = (graham_netnet / market_cap) * 100
+                                    netnet_color = "green" if netnet_ratio > 90 else "orange" if netnet_ratio > 50 else "red"
+                                    
+                                    st.markdown(f"""
+                                    <div style='background-color: {netnet_color}; padding: 5px; border-radius: 5px; color: white; text-align: center;'>
+                                        <h4 style='margin: 0;'>Net-Net/Cap: {netnet_ratio:.2f}%</h4>
+                                    </div>
+                                    """, unsafe_allow_html=True)
+                                    
+                                    # Interprétation du ratio Net-Net
+                                    if netnet_ratio > 100:
+                                        st.markdown("✅ **Valeur Net-Net > Capitalisation** - L'entreprise se négocie en dessous de sa valeur liquidative.")
+                                    elif netnet_ratio > 70:
+                                        st.markdown("✅ **Valeur Net-Net significative** - L'entreprise a une marge de sécurité importante.")
+                                    elif netnet_ratio > 40:
+                                        st.markdown("⚠️ **Valeur Net-Net moyenne** - Certains actifs courants soutiennent la valorisation.")
+                                    else:
+                                        st.markdown("❌ **Valeur Net-Net faible** - La valeur de l'entreprise repose principalement sur des actifs à long terme.")
+                            else:
+                                st.info("Valeur Net-Net de Graham non disponible")
+
+                    # Explication de l'analyse
+                    st.markdown(f"**Analyse:** {moat_explanation}")
+
+                    # Créer deux colonnes pour les métriques principaux
+                    main_col1, main_col2 = st.columns(2)
+                    
+                    with main_col1:
+                        # Graphique des Free Cash Flows historiques
+                        if not cashflow.empty and 'Free Cash Flow' in cashflow.index:
+                            # Extraction des FCF historiques
+                            fcf_data = cashflow.loc['Free Cash Flow'].to_dict()
+                            
+                            # Création d'un DataFrame pour le graphique
+                            fcf_df = pd.DataFrame({
+                                'Année': [str(year.year) for year in fcf_data.keys()],
+                                'FCF (millions)': [float(value) / 1e6 for value in fcf_data.values()]
+                            })
+                            
+                            # Tri par année
+                            fcf_df = fcf_df.sort_values('Année')
+                            
+                            # Calcul de la croissance annuelle moyenne
+                            if len(fcf_df) > 1:
+                                fcf_values = fcf_df['FCF (millions)'].values
+                                positive_values_only = fcf_values[fcf_values > 0]
+                                
+                                if len(positive_values_only) > 1:
+                                    # Calcul du taux de croissance annuel moyen (CAGR)
+                                    start_value = positive_values_only[0]
+                                    end_value = positive_values_only[-1]
+                                    years = len(positive_values_only) - 1
+                                    cagr = ((end_value / start_value) ** (1 / years) - 1) * 100
+                                    cagr_text = f"Croissance annuelle moyenne: {cagr:.2f}%"
+                                else:
+                                    cagr_text = "Croissance annuelle moyenne: N/A"
+                            else:
+                                cagr_text = ""
+                            
+                            # Création du graphique
+                            fig = go.Figure()
+                            
+                            # Ajout des barres pour les FCF
+                            fig.add_trace(go.Bar(
+                                x=fcf_df['Année'],
+                                y=fcf_df['FCF (millions)'],
+                                marker_color=['green' if fcf >= 0 else 'red' for fcf in fcf_df['FCF (millions)']],
+                                text=[f"€{fcf:.2f}M" for fcf in fcf_df['FCF (millions)']],
+                                textposition='outside',
+                                name='Free Cash Flow'
+                            ))
+                            
+                            # Ajout d'une ligne de tendance
+                            if len(fcf_df) > 1:
+                                # Filtrer les valeurs NaN
+                                mask = ~np.isnan(fcf_df['FCF (millions)'].values)
+                                if sum(mask) > 1:  # S'assurer qu'il reste au moins 2 points pour la régression
+                                    x = np.arange(len(fcf_df))[mask]
+                                    y = fcf_df['FCF (millions)'].values[mask]
+
+                                # Régression linéaire simple
+                                model = LinearRegression().fit(x.reshape(-1, 1), y)
+                                
+                                # Pour la ligne de tendance, utiliser les indices originaux
+                                x_full = np.arange(len(fcf_df))
+                                line_y = model.predict(x_full.reshape(-1, 1))
+                                
+                                fig.add_trace(go.Scatter(
+                                    x=fcf_df['Année'],
+                                    y=line_y,
+                                    mode='lines',
+                                    line=dict(color='blue', width=2, dash='dash'),
+                                    name='Tendance'
+                                ))
+                            
+                            # Configuration du graphique
+                            fig.update_layout(
+                                title=f"Évolution des Free Cash Flows<br><sup>{cagr_text}</sup>",
+                                xaxis_title="Année",
+                                yaxis_title="FCF (millions €)",
+                                height=400,
+                                margin=dict(l=50, r=50, t=80, b=50),
+                                hovermode="x unified"
+                            )
+                            
+                            # Affichage du graphique
+                            st.plotly_chart(fig, use_container_width=True)
                         else:
-                            st.info("Valeur Net-Net de Graham non disponible")
-                    
-                    # Stabilité des marges sur 5 ans (si disponible)
-                    if not income_stmt.empty and len(income_stmt.columns) >= 4:
-                        try:
-                            # Calcul des marges brutes sur les dernières années
-                            if 'Gross Profit' in income_stmt.index and 'Total Revenue' in income_stmt.index:
-                                gross_margins = []
-                                years = []
-                                
-                                for col in income_stmt.columns[:5]:  # Limiter à 5 ans maximum
-                                    try:
-                                        gross_profit = income_stmt.loc['Gross Profit', col]
-                                        total_revenue = income_stmt.loc['Total Revenue', col]
-                                        if gross_profit and total_revenue and total_revenue != 0:
-                                            margin = gross_profit / total_revenue * 100
-                                            gross_margins.append(margin)
-                                            years.append(str(col.year))
-                                    except:
-                                        continue
-                                
-                                if gross_margins:
-                                    st.markdown("##### Stabilité des marges brutes")
-                                    fig = go.Figure()
-                                    fig.add_trace(go.Bar(x=years, y=gross_margins, name='Marge brute (%)'))
-                                    fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
-                                    st.plotly_chart(fig, use_container_width=True)
+                            st.info("Données de Free Cash Flow non disponibles")
+
+                        # Stabilité des marges sur 5 ans (si disponible)
+                        if not income_stmt.empty and len(income_stmt.columns) >= 4:
+                            try:
+                                # Calcul des marges brutes sur les dernières années
+                                if 'Gross Profit' in income_stmt.index and 'Total Revenue' in income_stmt.index:
+                                    gross_margins = []
+                                    years = []
                                     
-                                    # Calcul de la stabilité (écart-type)
-                                    stability = np.std(gross_margins)
-                                    st.markdown(f"**Stabilité des marges (écart-type):** {stability:.2f}%")
-                                    if stability < 3:
-                                        st.markdown("🟢 **Marges très stables** (indicateur positif d'avantage compétitif)")
-                                    elif stability < 5:
-                                        st.markdown("🟡 **Marges relativement stables**")
-                                    else:
-                                        st.markdown("🔴 **Marges volatiles** (possible absence d'avantage compétitif)")
-                        except Exception as e:
-                            st.error(f"Erreur lors du calcul de la stabilité des marges: {e}")
-                    
-                    # Évolution du ROE sur 5 ans
-                    if not income_stmt.empty and not balance_sheet.empty and len(income_stmt.columns) >= 4:
-                        try:
-                            # Calcul du ROE sur les dernières années
-                            if 'Net Income' in income_stmt.index and 'Stockholders Equity' in balance_sheet.index:
-                                roe_values = []
-                                roe_years = []
-                                
-                                for year in range(min(5, len(income_stmt.columns))):
-                                    try:
-                                        if year < len(income_stmt.columns) and year < len(balance_sheet.columns):
-                                            net_income = income_stmt.loc['Net Income', income_stmt.columns[year]]
-                                            equity = balance_sheet.loc['Stockholders Equity', balance_sheet.columns[year]]
-                                            if net_income and equity and equity != 0:
-                                                roe = net_income / equity * 100
-                                                roe_values.append(roe)
-                                                roe_years.append(str(income_stmt.columns[year].year))
-                                    except:
-                                        continue
-                                
-                                if roe_values:
-                                    # Affichage de l'évolution du ROE
-                                    st.markdown("##### Evolution des capitaux propres (ROE)")
-                                    fig = go.Figure()
-                                    fig.add_trace(go.Scatter(x=roe_years, y=roe_values, name='ROE (%)', mode='lines+markers'))
-                                    fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
-                                    st.plotly_chart(fig, use_container_width=True)
+                                    for col in income_stmt.columns[:5]:  # Limiter à 5 ans maximum
+                                        try:
+                                            gross_profit = income_stmt.loc['Gross Profit', col]
+                                            total_revenue = income_stmt.loc['Total Revenue', col]
+                                            if gross_profit and total_revenue and total_revenue != 0:
+                                                margin = gross_profit / total_revenue * 100
+                                                gross_margins.append(margin)
+                                                years.append(str(col.year))
+                                        except:
+                                            continue
                                     
-                                    # Analyse de la qualité du ROE
-                                    avg_roe = np.mean(roe_values)
-                                    st.markdown(f"**ROE moyen sur la période:** {avg_roe:.2f}%")
-                                    if avg_roe > 15:
-                                        st.markdown("🟢 **ROE excellent** (entreprise très rentable)")
-                                    elif avg_roe > 10:
-                                        st.markdown("🟡 **ROE bon** (entreprise rentable)")
-                                    else:
-                                        st.markdown("🔴 **ROE faible** (rentabilité à améliorer)")
-                        except Exception as e:
-                            st.error(f"Erreur lors du calcul de l'évolution du ROE: {e}")
-                    
-                    # Analyse des ratios d'endettement
-                    if not income_stmt.empty and not balance_sheet.empty:
-                        try:
-                            st.markdown("##### Ratios d'endettement")
-                            
-                            debt_metrics = {}
-                            
-                            # Ratio dette à long terme / bénéfice net
-                            if 'Long Term Debt' in balance_sheet.index and 'Net Income' in income_stmt.index:
-                                long_term_debt = balance_sheet.loc['Long Term Debt', balance_sheet.columns[0]]
-                                net_income = income_stmt.loc['Net Income', income_stmt.columns[0]]
-                                if long_term_debt is not None and net_income is not None and net_income != 0:
-                                    debt_to_income = long_term_debt / net_income
-                                    debt_metrics["Dette LT / Bénéfice net"] = f"{debt_to_income:.2f}x"
-                                    if debt_to_income < 3:
-                                        debt_metrics["Évaluation"] = "🟢 Excellent (< 3x selon Buffett)"
-                                    elif debt_to_income < 5:
-                                        debt_metrics["Évaluation"] = "🟡 Acceptable (< 5x)"
-                                    else:
-                                        debt_metrics["Évaluation"] = "🔴 Élevé (> 5x)"
-                            
-                            # Charges d'intérêts / Résultat brut
-                            if 'Interest Expense' in income_stmt.index and 'Gross Profit' in income_stmt.index:
-                                interest_expense = abs(income_stmt.loc['Interest Expense', income_stmt.columns[0]]) if 'Interest Expense' in income_stmt.index else 0
-                                gross_profit = income_stmt.loc['Gross Profit', income_stmt.columns[0]]
-                                if interest_expense is not None and gross_profit is not None and gross_profit != 0:
-                                    interest_to_profit = interest_expense / gross_profit
-                                    debt_metrics["Charges d'intérêts / Résultat brut"] = f"{interest_to_profit:.2%}"
-                                    if interest_to_profit < 0.05:
-                                        debt_metrics["Charges/Résultat"] = "🟢 Très faible (< 5%)"
-                                    elif interest_to_profit < 0.15:
-                                        debt_metrics["Charges/Résultat"] = "🟡 Modéré (5-15%)"
-                                    else:
-                                        debt_metrics["Charges/Résultat"] = "🔴 Élevé (> 15%)"
-                            
-                            # Évolution de la dette sur 5 ans (si disponible)
-                            if 'Total Debt' in balance_sheet.index and len(balance_sheet.columns) >= 2:
-                                debt_years = []
-                                debt_values = []
-                                
-                                for col in balance_sheet.columns[:min(5, len(balance_sheet.columns))]:
-                                    try:
-                                        debt_value = balance_sheet.loc['Total Debt', col]
-                                        if debt_value is not None:
-                                            debt_values.append(debt_value / 1e6)  # En millions
-                                            debt_years.append(str(col.year))
-                                    except:
-                                        continue
-                                
-                                if debt_values:
-                                    # Affichage de l'évolution de la dette
-                                    fig = go.Figure()
-                                    fig.add_trace(go.Bar(x=debt_years, y=debt_values, name='Dette totale (M)'))
-                                    fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
-                                    st.plotly_chart(fig, use_container_width=True)
-                                    
-                                    # Analyse de la tendance
-                                    if len(debt_values) > 1:
-                                        if debt_values[0] < debt_values[-1]:
-                                            st.markdown("🔴 **Dette en augmentation** sur la période")
-                                        elif debt_values[0] > debt_values[-1]:
-                                            st.markdown("🟢 **Dette en diminution** sur la période")
+                                    if gross_margins:
+                                        st.markdown("#####")
+                                        st.markdown("##### Stabilité des marges brutes")
+                                        fig = go.Figure()
+                                        fig.add_trace(go.Bar(x=years, y=gross_margins, name='Marge brute (%)'))
+                                        fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
+                                        st.plotly_chart(fig, use_container_width=True)
+                                        
+                                        # Calcul de la stabilité (écart-type)
+                                        stability = np.std(gross_margins)
+                                        st.markdown(f"**Stabilité des marges (écart-type):** {stability:.2f}%")
+                                        if stability < 3:
+                                            st.markdown("🟢 **Marges très stables** (indicateur positif d'avantage compétitif)")
+                                        elif stability < 5:
+                                            st.markdown("🟡 **Marges relativement stables**")
                                         else:
-                                            st.markdown("🟡 **Dette stable** sur la période")
-                            
-                            # Afficher les métriques d'endettement dans un tableau
-                            if debt_metrics:
-                                df_debt = pd.DataFrame(debt_metrics.items(), columns=["Métrique", "Valeur"])
-                                st.dataframe(df_debt, use_container_width=True, hide_index=True)
-                        except Exception as e:
-                            st.error(f"Erreur lors de l'analyse d'endettement: {e}")
+                                            st.markdown("🔴 **Marges volatiles** (possible absence d'avantage compétitif)")
+                            except Exception as e:
+                                st.error(f"Erreur lors du calcul de la stabilité des marges: {e}")
+
+                    with main_col2:                                                
+                        # Évolution du ROE sur 5 ans
+                        if not income_stmt.empty and not balance_sheet.empty and len(income_stmt.columns) >= 4:
+                            try:
+                                # Calcul du ROE sur les dernières années
+                                if 'Net Income' in income_stmt.index and 'Stockholders Equity' in balance_sheet.index:
+                                    roe_values = []
+                                    roe_years = []
+                                    
+                                    for year in range(min(5, len(income_stmt.columns))):
+                                        try:
+                                            if year < len(income_stmt.columns) and year < len(balance_sheet.columns):
+                                                net_income = income_stmt.loc['Net Income', income_stmt.columns[year]]
+                                                equity = balance_sheet.loc['Stockholders Equity', balance_sheet.columns[year]]
+                                                if net_income and equity and equity != 0:
+                                                    roe = net_income / equity * 100
+                                                    roe_values.append(roe)
+                                                    roe_years.append(str(income_stmt.columns[year].year))
+                                        except:
+                                            continue
+                                    
+                                    if roe_values:
+                                        # Affichage de l'évolution du ROE
+                                        st.markdown("##### Evolution des capitaux propres (ROE)")
+                                        fig = go.Figure()
+                                        fig.add_trace(go.Scatter(x=roe_years, y=roe_values, name='ROE (%)', mode='lines+markers'))
+                                        fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
+                                        st.plotly_chart(fig, use_container_width=True)
+                                        
+                                        # Analyse de la qualité du ROE
+                                        avg_roe = np.mean(roe_values)
+                                        st.markdown(f"**ROE moyen sur la période:** {avg_roe:.2f}%")
+                                        if avg_roe > 15:
+                                            st.markdown("🟢 **ROE excellent** (entreprise très rentable)")
+                                        elif avg_roe > 10:
+                                            st.markdown("🟡 **ROE bon** (entreprise rentable)")
+                                        else:
+                                            st.markdown("🔴 **ROE faible** (rentabilité à améliorer)")
+                            except Exception as e:
+                                st.error(f"Erreur lors du calcul de l'évolution du ROE: {e}")
+                        
+                        # Analyse des ratios d'endettement
+                        if not income_stmt.empty and not balance_sheet.empty:
+                            try:
+                                st.markdown("##### Ratios d'endettement")
+                                
+                                debt_metrics = {}
+                                
+                                # Ratio dette à long terme / bénéfice net
+                                if 'Long Term Debt' in balance_sheet.index and 'Net Income' in income_stmt.index:
+                                    long_term_debt = balance_sheet.loc['Long Term Debt', balance_sheet.columns[0]]
+                                    net_income = income_stmt.loc['Net Income', income_stmt.columns[0]]
+                                    if long_term_debt is not None and net_income is not None and net_income != 0:
+                                        debt_to_income = long_term_debt / net_income
+                                        debt_metrics["Dette LT / Bénéfice net"] = f"{debt_to_income:.2f}x"
+                                        if debt_to_income < 3:
+                                            debt_metrics["Évaluation"] = "🟢 Excellent (< 3x selon Buffett)"
+                                        elif debt_to_income < 5:
+                                            debt_metrics["Évaluation"] = "🟡 Acceptable (< 5x)"
+                                        else:
+                                            debt_metrics["Évaluation"] = "🔴 Élevé (> 5x)"
+                                
+                                # Charges d'intérêts / Résultat brut
+                                if 'Interest Expense' in income_stmt.index and 'Gross Profit' in income_stmt.index:
+                                    interest_expense = abs(income_stmt.loc['Interest Expense', income_stmt.columns[0]]) if 'Interest Expense' in income_stmt.index else 0
+                                    gross_profit = income_stmt.loc['Gross Profit', income_stmt.columns[0]]
+                                    if interest_expense is not None and gross_profit is not None and gross_profit != 0:
+                                        interest_to_profit = interest_expense / gross_profit
+                                        debt_metrics["Charges d'intérêts / Résultat brut"] = f"{interest_to_profit:.2%}"
+                                        if interest_to_profit < 0.05:
+                                            debt_metrics["Charges/Résultat"] = "🟢 Très faible (< 5%)"
+                                        elif interest_to_profit < 0.15:
+                                            debt_metrics["Charges/Résultat"] = "🟡 Modéré (5-15%)"
+                                        else:
+                                            debt_metrics["Charges/Résultat"] = "🔴 Élevé (> 15%)"
+                                
+                                # Évolution de la dette sur 5 ans (si disponible)
+                                if 'Total Debt' in balance_sheet.index and len(balance_sheet.columns) >= 2:
+                                    debt_years = []
+                                    debt_values = []
+                                    
+                                    for col in balance_sheet.columns[:min(5, len(balance_sheet.columns))]:
+                                        try:
+                                            debt_value = balance_sheet.loc['Total Debt', col]
+                                            if debt_value is not None:
+                                                debt_values.append(debt_value / 1e6)  # En millions
+                                                debt_years.append(str(col.year))
+                                        except:
+                                            continue
+                                    
+                                    if debt_values:
+                                        # Affichage de l'évolution de la dette
+                                        fig = go.Figure()
+                                        fig.add_trace(go.Bar(x=debt_years, y=debt_values, name='Dette totale (M)'))
+                                        fig.update_layout(height=300, margin=dict(l=0, r=0, t=0, b=0))
+                                        st.plotly_chart(fig, use_container_width=True)
+                                        
+                                        # Analyse de la tendance
+                                        if len(debt_values) > 1:
+                                            if debt_values[0] < debt_values[-1]:
+                                                st.markdown("🔴 **Dette en augmentation** sur la période")
+                                            elif debt_values[0] > debt_values[-1]:
+                                                st.markdown("🟢 **Dette en diminution** sur la période")
+                                            else:
+                                                st.markdown("🟡 **Dette stable** sur la période")
+                                
+                                # Afficher les métriques d'endettement dans un tableau
+                                if debt_metrics:
+                                    df_debt = pd.DataFrame(debt_metrics.items(), columns=["Métrique", "Valeur"])
+                                    st.dataframe(df_debt, use_container_width=True, hide_index=True)
+                            except Exception as e:
+                                st.error(f"Erreur lors de l'analyse d'endettement: {e}")
 
                 # Onglet 4 : Dividendes
                 with valuation_tabs[3]:
@@ -4109,7 +4453,7 @@ def main():
                         selected_stock = st.session_state['selected_stock']
                         selected_stock_name = st.session_state['selected_stock_name']
                         ticker = st.session_state['ticker']
-                        
+
                         # Analyse des dividendes
                         with st.spinner("Analyse de la politique de dividendes en cours..."):
                             dividend_analysis = get_dividend_policy_analysis(ticker)
@@ -4119,6 +4463,16 @@ def main():
                             elif not dividend_analysis.get('has_dividends', False):
                                 st.info(f"{selected_stock_name} ne verse pas de dividendes actuellement.")
                             else:
+                                try:
+                                    stock = yf.Ticker(ticker)
+                                    stock_calendar = stock.calendar
+                                    next_dividend_date = stock_calendar.get('Ex-Dividend Date', 'Non disponible')
+                                    next_dividend_date_formatted = next_dividend_date.strftime("%d/%m/%Y")
+
+                                except Exception as e:
+                                    next_dividend_date_formatted = "Non disponible"
+                                    st.warning(f"Impossible de récupérer la date du prochain dividende: {str(e)}")
+                   
                                 # Créer une mise en page à deux colonnes
                                 col1, col2 = st.columns([1, 1])
                                 
@@ -4165,6 +4519,7 @@ def main():
                                     st.markdown("#### Détails supplémentaires")
                                     
                                     additional_metrics = [
+                                        ("Prochain dividende (ex-date)", next_dividend_date_formatted),
                                         ("Ratio de distribution", f"{dividend_analysis.get('payout_ratio', 0):.2f}%"),
                                         ("Durabilité", dividend_analysis.get('sustainability', 'Non évalué')),
                                         ("Tendance", dividend_analysis.get('dividend_trend')),
@@ -4510,12 +4865,12 @@ def main():
             if filter_type == "Par région":
                 # Récupérer la structure de marché
                 market_structure = get_market_structure()
-                region = list(market_structure['region'].keys())
-                selected_region = st.selectbox("Sélectionner une région", region)
+                regions = list(market_structure['regions'].keys())
+                selected_region = st.selectbox("Sélectionner une région", regions)
                 
                 # Si une région est sélectionnée, proposer les pays de cette région
                 if selected_region:
-                    pays_options = ["Tous les pays"] + list(market_structure['region'][selected_region].keys())
+                    pays_options = ["Tous les pays"] + list(market_structure['regions'][selected_region].keys())
                     selected_pays = st.selectbox("Sélectionner un pays", pays_options)
                     if selected_pays == "Tous les pays":
                         selected_pays = None
@@ -4928,24 +5283,24 @@ def main():
                     # Déterminer la recommandation technique
                     if tech_indicators['correlation'] > 0.7 and tech_indicators['model_growth'] > 5:
                         if tech_indicators['deviation'] < -1:
-                            tech_recommendation = "ACHAT"
+                            tech_recommendation = "ACHETER"
                         elif tech_indicators['deviation'] < 0:
-                            tech_recommendation = "ACCUMULATION"
+                            tech_recommendation = "RENFORCER"
                         elif tech_indicators['deviation'] > 1.5:
-                            tech_recommendation = "ALLÈGEMENT"
+                            tech_recommendation = "ALLEGER"
                         else:
                             tech_recommendation = "CONSERVER"
                     elif tech_indicators['correlation'] < -0.7 and tech_indicators['model_growth'] < -5:
                         if tech_indicators['deviation'] < -1.5:
                             tech_recommendation = "CONSERVER"  # Possible rebond technique
                         else:
-                            tech_recommendation = "VENTE"
+                            tech_recommendation = "VENDRE"
                     else:
                         # Recommandation basée sur l'écart par rapport à la tendance
                         if tech_indicators['deviation'] < -1.5:
-                            tech_recommendation = "ACCUMULATION"
+                            tech_recommendation = "RENFORCER"
                         elif tech_indicators['deviation'] > 1.5:
-                            tech_recommendation = "ALLÈGEMENT"
+                            tech_recommendation = "ALLEGER"
                 else:
                     tech_indicators = {}
                     tech_recommendation = "DONNÉES INSUFFISANTES"
@@ -4992,9 +5347,9 @@ def main():
                         # Créer un système de points
                         recommendation_points = {
                             "ACHAT": 2,
-                            "ACCUMULATION": 1,
+                            "RENFORCER": 1,
                             "CONSERVER": 0,
-                            "ALLÈGEMENT": -1,
+                            "ALLEGER": -1,
                             "VENTE": -2
                         }
                         
@@ -5006,13 +5361,13 @@ def main():
                         
                         # Convertir les points en recommandation
                         if weighted_points >= 1.5:
-                            combined_recommendation = "ACHAT"
+                            combined_recommendation = "ACHETER"
                         elif weighted_points >= 0.5:
-                            combined_recommendation = "ACCUMULATION"
+                            combined_recommendation = "RENFORCER"
                         elif weighted_points <= -1.5:
-                            combined_recommendation = "VENTE"
+                            combined_recommendation = "VENDRE"
                         elif weighted_points <= -0.5:
-                            combined_recommendation = "ALLÈGEMENT"
+                            combined_recommendation = "ALLEGER"
                         else:
                             combined_recommendation = "CONSERVER"
                     elif tech_recommendation != "DONNÉES INSUFFISANTES":
@@ -5075,27 +5430,27 @@ def main():
             # Définir les poids cibles selon les recommandations et le profil de risque
             recommendation_weights = {
                 'conservative': {
-                    'ACHAT': 1.5,
-                    'ACCUMULATION': 1.2,
+                    'ACHETER': 1.5,
+                    'RENFORCER': 1.2,
                     'CONSERVER': 1.0,
-                    'ALLÈGEMENT': 0.7,
-                    'VENTE': 0.3,
+                    'ALLEGER': 0.7,
+                    'VENDRE': 0.3,
                     'DONNÉES INSUFFISANTES': 0.8
                 },
                 'moderate': {
-                    'ACHAT': 2.0,
-                    'ACCUMULATION': 1.5,
+                    'ACHETER': 2.0,
+                    'RENFORCER': 1.5,
                     'CONSERVER': 1.0,
-                    'ALLÈGEMENT': 0.5,
-                    'VENTE': 0.2,
+                    'ALLEGER': 0.5,
+                    'VENDER': 0.2,
                     'DONNÉES INSUFFISANTES': 0.7
                 },
                 'aggressive': {
-                    'ACHAT': 2.5,
-                    'ACCUMULATION': 1.8,
+                    'ACHETER': 2.5,
+                    'RENFORCER': 1.8,
                     'CONSERVER': 1.0,
-                    'ALLÈGEMENT': 0.3,
-                    'VENTE': 0.1,
+                    'ALLEGER': 0.3,
+                    'VENDRE': 0.1,
                     'DONNÉES INSUFFISANTES': 0.6
                 }
             }
@@ -5153,11 +5508,11 @@ def main():
                 hole=.4,
                 marker=dict(
                     colors=[
-                        '#4CAF50',  # ACHAT (vert)
-                        '#8BC34A',  # ACCUMULATION (vert clair)
+                        '#4CAF50',  # ACHETER (vert)
+                        '#8BC34A',  # RENFORCER (vert clair)
                         '#FFC107',  # CONSERVER (jaune)
-                        '#FF9800',  # ALLÈGEMENT (orange)
-                        '#F44336',  # VENTE (rouge)
+                        '#FF9800',  # ALLEGER (orange)
+                        '#F44336',  # VENDRE (rouge)
                         '#9E9E9E'   # DONNÉES INSUFFISANTES (gris)
                     ]
                 )
@@ -5187,11 +5542,11 @@ def main():
             
             # Palette de couleurs pour les recommandations
             color_map = {
-                'ACHAT': '#4CAF50',
-                'ACCUMULATION': '#8BC34A',
+                'ACHETER': '#4CAF50',
+                'RENFORCER': '#8BC34A',
                 'CONSERVER': '#FFC107',
-                'ALLÈGEMENT': '#FF9800',
-                'VENTE': '#F44336',
+                'ALLEGER': '#FF9800',
+                'VENDRE': '#F44336',
                 'DONNÉES INSUFFISANTES': '#9E9E9E'
             }
             
