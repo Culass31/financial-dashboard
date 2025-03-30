@@ -1,6 +1,4 @@
 import streamlit as st
-import appdirs as ad
-ad.user_cache_dir = lambda *args: "/tmp"
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -602,7 +600,7 @@ def get_market_structure():
         
         for encoding in encodings:
             try:
-                df = pd.read_csv(r"https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/actions.csv", sep=";", encoding='utf-8-sig')
+                df = pd.read_csv(r"C:\Users\culas\OneDrive\Documents\Finances\actions.csv", sep=";", encoding='utf-8-sig')
                 print(f"Fichier lu avec succès avec l'encodage {encoding}:")
                 break
             except UnicodeDecodeError:
@@ -3110,6 +3108,77 @@ def main():
                                 )
                                 
                                 st.plotly_chart(momentum_chart, use_container_width=True)
+                            
+                            # Afficher le graphique des objectifs de cours
+                            ticker = yf.Ticker(ticker)
+                            if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
+                                st.markdown("<h4>Objectif de cours</h4>", unsafe_allow_html=True)
+                                
+                                target_data = ticker.analyst_price_targets
+                                
+                                # Créer un gauge chart pour visualiser l'objectif moyen par rapport au prix actuel
+                                gauge_fig = go.Figure()
+                                
+                                # Récupérer les valeurs d'objectifs
+                                current_val = target_data.get('current', current_price)
+                                mean_val = target_data.get('mean', current_price * 1.2)  # Valeur par défaut si non disponible
+                                low_val = target_data.get('low', current_price * 0.8)    # Valeur par défaut si non disponible
+                                high_val = target_data.get('high', current_price * 1.4)  # Valeur par défaut si non disponible
+                                
+                                # Calculer les écarts pour la visualisation
+                                # Déterminer la plage à afficher (avec un peu de marge)
+                                min_display = min(low_val, current_val) * 0.95
+                                max_display = max(high_val, current_val) * 1.05
+                                
+                                # Ajouter une trace pour le curseur actuel
+                                gauge_fig.add_trace(go.Indicator(
+                                    mode = "number+gauge",
+                                    value = current_val,
+                                    gauge = {
+                                        'axis': {'range': [min_display, max_display]},
+                                        'bar': {'color': "blue"},
+                                        'steps': [
+                                            {'range': [min_display, low_val], 'color': "lightgray"},
+                                            {'range': [low_val, high_val], 'color': "lightblue"}
+                                        ],
+                                        'threshold': {
+                                            'line': {'color': "purple", 'width': 4},
+                                            'thickness': 0.75,
+                                            'value': mean_val
+                                        }
+                                    },
+                                    number = {'suffix': "€", 'font': {'size': 24}}
+                                ))
+                                
+                                # Ajouter des annotations pour les valeurs clés
+                                gauge_fig.add_annotation(
+                                    x=0.5, y=1.15,
+                                    text=f"Objectif moyen: {mean_val:.2f}€",
+                                    showarrow=False,
+                                    font=dict(size=16, color="purple")
+                                )
+                                
+                                gauge_fig.add_annotation(
+                                    x=0.2, y=1.15,
+                                    text=f"+bas: {low_val:.2f}€",
+                                    showarrow=False,
+                                    font=dict(size=14, color="lightgray")
+                                )
+                                
+                                gauge_fig.add_annotation(
+                                    x=0.8, y=1.15,
+                                    text=f"+haut: {high_val:.2f}€",
+                                    showarrow=False,
+                                    font=dict(size=14, color="lightblue")
+                                )
+                                
+                                gauge_fig.update_layout(
+                                    height=300,
+                                    margin=dict(l=20, r=20, t=80, b=20)
+                                )
+                                
+                                st.plotly_chart(gauge_fig, use_container_width=True)
+
         else:
             st.error(f"Aucune donnée historique disponible pour {ticker}")
                 
@@ -3349,8 +3418,9 @@ def main():
                                 })
                                 
                                 # Ajouter l'objectif moyen des analystes s'il est disponible
-                                if hasattr(ticker, 'analyst_price_target') and ticker.analyst_price_target:
-                                    target_data = ticker.analyst_price_target
+                                ticker = yf.Ticker(ticker)
+                                if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
+                                    target_data = ticker.analyst_price_targets
                                     mean_target = target_data.get('mean', None)
                                     if mean_target:
                                         price_data.append({
@@ -3495,7 +3565,12 @@ def main():
                         st.write("#### Consensus des analystes")
                         
                         # Afficher les objectifs de cours
-                        ticker = yf.Ticker(ticker)
+                        # Vérifiez d'abord si ticker est une chaîne ou déjà un objet
+                        if isinstance(ticker, str):
+                            ticker_obj = yf.Ticker(ticker)
+                        else:
+                            ticker_obj = ticker  # ticker est déjà un objet Ticker
+
                         if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
                             target_data = ticker.analyst_price_targets
                             
@@ -3706,76 +3781,6 @@ def main():
                             )
                             
                             st.plotly_chart(rec_history_fig, use_container_width=True)
-                        
-                        # Afficher le graphique des objectifs de cours
-                        if hasattr(ticker, 'analyst_price_targets') and ticker.analyst_price_targets:
-                            st.write("### Objectifs de cours des analystes")
-                            
-                            target_data = ticker.analyst_price_targets
-                            
-                            # Créer un gauge chart pour visualiser l'objectif moyen par rapport au prix actuel
-                            gauge_fig = go.Figure()
-                            
-                            # Récupérer les valeurs d'objectifs
-                            current_val = target_data.get('current', current_price)
-                            mean_val = target_data.get('mean', current_price * 1.2)  # Valeur par défaut si non disponible
-                            low_val = target_data.get('low', current_price * 0.8)    # Valeur par défaut si non disponible
-                            high_val = target_data.get('high', current_price * 1.4)  # Valeur par défaut si non disponible
-                            
-                            # Calculer les écarts pour la visualisation
-                            # Déterminer la plage à afficher (avec un peu de marge)
-                            min_display = min(low_val, current_val) * 0.95
-                            max_display = max(high_val, current_val) * 1.05
-                            
-                            # Ajouter une trace pour le curseur actuel
-                            gauge_fig.add_trace(go.Indicator(
-                                mode = "number+gauge",
-                                value = current_val,
-                                title = {'text': "Prix actuel"},
-                                gauge = {
-                                    'axis': {'range': [min_display, max_display]},
-                                    'bar': {'color': "blue"},
-                                    'steps': [
-                                        {'range': [min_display, low_val], 'color': "lightgray"},
-                                        {'range': [low_val, high_val], 'color': "lightblue"}
-                                    ],
-                                    'threshold': {
-                                        'line': {'color': "purple", 'width': 4},
-                                        'thickness': 0.75,
-                                        'value': mean_val
-                                    }
-                                },
-                                number = {'suffix': "€", 'font': {'size': 24}}
-                            ))
-                            
-                            # Ajouter des annotations pour les valeurs clés
-                            gauge_fig.add_annotation(
-                                x=0.5, y=1.15,
-                                text=f"Objectif moyen: {mean_val:.2f}€",
-                                showarrow=False,
-                                font=dict(size=16, color="purple")
-                            )
-                            
-                            gauge_fig.add_annotation(
-                                x=0.2, y=1.15,
-                                text=f"+bas: {low_val:.2f}€",
-                                showarrow=False,
-                                font=dict(size=14, color="lightgray")
-                            )
-                            
-                            gauge_fig.add_annotation(
-                                x=0.8, y=1.15,
-                                text=f"+haut: {high_val:.2f}€",
-                                showarrow=False,
-                                font=dict(size=14, color="lightblue")
-                            )
-                            
-                            gauge_fig.update_layout(
-                                height=300,
-                                margin=dict(l=20, r=20, t=80, b=20)
-                            )
-                            
-                            st.plotly_chart(gauge_fig, use_container_width=True)
 
                 # Onglet 2: Méthodes de valorisation
                 with valuation_tabs[1]:
@@ -4792,7 +4797,7 @@ def main():
         else:
             st.info("Veuillez sélectionner une action pour voir l'analyse fondamentale et les projections.")
 
-# Onglet 3: Actualités récentes
+    # Onglet 3: Actualités récentes
     with tab3:     
         if st.session_state.get('selected_stock') is not None:
             selected_stock = st.session_state['selected_stock']
