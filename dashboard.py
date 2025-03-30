@@ -1,4 +1,6 @@
 import streamlit as st
+import appdirs as ad
+ad.user_cache_dir = lambda *args: "/tmp"
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -600,7 +602,7 @@ def get_market_structure():
         
         for encoding in encodings:
             try:
-                df = pd.read_csv(r"C:\Users\culas\OneDrive\Documents\Finances\actions.csv", sep=";", encoding='utf-8-sig')
+                df = pd.read_csv(r"https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/actions.csv", sep=";", encoding='utf-8-sig')
                 print(f"Fichier lu avec succès avec l'encodage {encoding}:")
                 break
             except UnicodeDecodeError:
