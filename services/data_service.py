@@ -12,7 +12,7 @@ def cached_get_market_structure():
     """Cache wrapper for market structure retrieval"""
     try:
         df = pd.read_csv(
-            r"https://raw.githubusercontent.com/Culass31/actions/refs/heads/main/actions.csv", 
+            r"https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/models/actions.csv", 
             sep=";", 
             encoding='utf-8-sig'
         )
