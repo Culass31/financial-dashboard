@@ -9,7 +9,8 @@ import yfinance as yf
 from datetime import datetime
 
 from services import DataService, AnalysisService, NewsService
-from utils.common import format_number, display_price_with_trend
+from utils.common import format_number
+from utils.ui_metrics import display_price_with_trend
 
 
 def render_fundamental_analysis_tab(selected_stock: Optional[Dict]):
