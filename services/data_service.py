@@ -9,6 +9,7 @@ import html
 
 @st.cache_data(ttl=3600)
 def get_market_structure():
+    """Cache wrapper for market structure retrieval"""
     try:
         df = pd.read_csv(
             r"https://raw.githubusercontent.com/Culass31/actions/refs/heads/main/actions.csv", 
@@ -64,6 +65,54 @@ def get_market_structure():
     except Exception as e:
         st.error(f"Erreur lors de la lecture du fichier: {e}")
         return {}
+
+def flatten_market_structure(market_structure, filter_type=None, level1=None, level2=None):
+    """
+    Convertit la structure hiérarchique en dictionnaire plat d'actions selon les filtres
+    
+    :param market_structure: Structure hiérarchique des marchés
+    :param filter_type: Type de filtre ('region', 'secteur', 'marche')
+    :param level1: Premier niveau de filtre (région, secteur ou marché)
+    :param level2: Deuxième niveau de filtre (pays ou industrie), si applicable
+    :return: Dictionnaire plat d'actions
+    """
+    flattened_stocks = {}
+    
+    # Si aucun filtre n'est spécifié, retourner toutes les actions
+    if not filter_type or not level1:
+        return market_structure['all_stocks']
+    
+    # Filtrage par région et pays
+    if filter_type == 'region':
+        if level1 in market_structure['regions']:
+            # Si un pays est spécifié
+            if level2 and level2 in market_structure['regions'][level1]:
+                return market_structure['regions'][level1][level2]
+            # Sinon, retourner toutes les actions de la région
+            else:
+                for pays, stocks in market_structure['regions'][level1].items():
+                    flattened_stocks.update(stocks)
+                return flattened_stocks
+    
+    # Filtrage par secteur et industrie
+    elif filter_type == 'secteur':
+        if level1 in market_structure['secteurs']:
+            # Si une industrie est spécifiée
+            if level2 and level2 in market_structure['secteurs'][level1]:
+                return market_structure['secteurs'][level1][level2]
+            # Sinon, retourner toutes les actions du secteur
+            else:
+                for industrie, stocks in market_structure['secteurs'][level1].items():
+                    flattened_stocks.update(stocks)
+                return flattened_stocks
+    
+    # Filtrage par marché
+    elif filter_type == 'marche':
+        if level1 in market_structure['marches']:
+            return market_structure['marches'][level1]
+    
+    # Si aucune correspondance n'est trouvée, retourner un dictionnaire vide
+    return {}
 
 class DataService:
     """Service responsible for all data operations"""
