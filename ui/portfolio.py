@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
 
-from core.portfolio import analyze_portfolio, optimize_portfolio_allocation
-from ui_components.common import (
+from services.portfolio_services import analyze_portfolio, optimize_portfolio_allocation
+from utils.common import (
     create_columns_layout, 
     create_expander, 
     display_success_message,
