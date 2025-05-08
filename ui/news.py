@@ -4,7 +4,7 @@ Composant pour l'onglet des actualités récentes
 import streamlit as st
 import pandas as pd
 
-from core.news import get_stock_news
+from services.news_services import get_stock_news
 
 
 def render_news_tab(selected_stock):
