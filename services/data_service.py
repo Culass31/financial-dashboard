@@ -8,8 +8,8 @@ import requests
 import html
 
 @st.cache_data(ttl=3600)
-def cached_get_market_structure():
-    """Cache wrapper for market structure retrieval"""
+def get_market_structure():
+
     try:
         df = pd.read_csv(
             r"https://raw.githubusercontent.com/Culass31/financial-dashboard/refs/heads/main/models/actions.csv", 
