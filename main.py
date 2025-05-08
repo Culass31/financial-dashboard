@@ -2,14 +2,14 @@
 Interface principale de l'application Analyse Marchés Mondiaux
 """
 import streamlit as st
-from ui_components.sidebar import render_sidebar
-from ui_components.technical_analysis import render_technical_analysis_tab
-from ui_components.fundamental_analysis import render_fundamental_analysis_tab
-from ui_components.news import render_news_tab
-from ui_components.screener import render_screener_tab
-from ui_components.portfolio import render_portfolio_tab
-from ui_components.styles import apply_custom_styles
-from core.market_data import get_market_structure
+from ui.sidebar import render_sidebar
+from ui.technical_analysis import render_technical_analysis_tab
+from ui.fundamental_analysis import render_fundamental_analysis_tab
+from ui.news import render_news_tab
+from ui.screener import render_screener_tab
+from ui.portfolio import render_portfolio_tab
+from utils.ui_styles import apply_custom_styles
+from services.data_service import get_market_structure
 
 # Configuration de l'application
 st.set_page_config(
