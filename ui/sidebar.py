@@ -2,7 +2,7 @@
 Composant sidebar pour la sélection d'actions
 """
 import streamlit as st
-from core.market_data import flatten_market_structure
+from services.data_service import flatten_market_structure
 
 def render_sidebar(market_structure):
     """Render la sidebar et retourne l'action sélectionnée"""
