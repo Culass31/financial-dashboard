@@ -7,10 +7,10 @@ from plotly.subplots import make_subplots
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-from core.market_data import get_stock_history, calculate_regression
-from core.analysis import create_gauge
-from ui_components.styles import create_info_box
-from ui_components.metrics import display_price_with_trend
+from services.data_service import get_stock_history, calculate_regression
+from services.analysis_service import create_gauge
+from utils.ui_styles import create_info_box
+from utils.ui_metrics import AppMetrics
 
 
 def render_technical_analysis_tab(selected_stock):
