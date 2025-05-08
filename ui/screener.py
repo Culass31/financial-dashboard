@@ -7,9 +7,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import io
 
-from core.analysis import buffett_graham_stock_screener
-from core.market_data import flatten_market_structure
-from ui_components.common import create_columns_layout, create_expander, display_info_message
+from services.analysis_service import buffett_graham_stock_screener
+from service.data_service import flatten_market_structure
+from utils.common import create_columns_layout, create_expander, display_info_message
 
 
 def render_screener_tab(market_structure):
