@@ -17,7 +17,22 @@ st.set_page_config(
     page_icon="📈", 
     layout="wide"
 )
-data_service = DataService()
+# Instance globale du data service (singleton pattern)
+@st.cache_resource
+def get_data_service():
+    return DataService()
+
+data_service = get_data_service()
+
+# Initialiser la session state
+if 'selected_stock' not in st.session_state:
+    st.session_state.selected_stock = None
+if 'selected_stock_name' not in st.session_state:
+    st.session_state.selected_stock_name = ""
+if 'ticker' not in st.session_state:
+    st.session_state.ticker = ""
+if 'data_cache' not in st.session_state:
+    st.session_state.data_cache = {}
 
 # Appliquer les styles personnalisés
 apply_custom_styles()
@@ -37,14 +52,34 @@ with st.spinner("Chargement des marchés...", show_time=True):
 # Render sidebar et récupérer la sélection
 selected_stock = render_sidebar(market_structure)
 
-# Onglets principaux
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📊 Analyse Technique", 
-    "📑 Analyse Fondamentale", 
-    "📰 Actualités", 
-    "🔎 Screener", 
-    "🧩 Portefeuille"
-])
+# Afficher un message si aucune action n'est sélectionnée
+if not selected_stock:
+    st.info("⬅️ Sélectionnez une action dans le menu latéral pour commencer l'analyse")
+    st.markdown("""
+    ## Bienvenue dans le Dashboard d'Analyse Financière
+    
+    Ce dashboard vous permet d'analyser en profondeur les actions des marchés mondiaux avec :
+    
+    - **📊 Analyse Technique** : Graphiques avancés, indicateurs techniques, tendances
+    - **📑 Analyse Fondamentale** : États financiers, valorisation, métriques clés
+    - **📰 Actualités** : Dernières nouvelles et événements importants
+    - **🔎 Screener** : Recherche d'actions selon les critères Buffett-Graham
+    - **🧩 Portefeuille** : Gestion et analyse de votre portefeuille
+    
+    ### Comment commencer ?
+    1. Choisissez une méthode de filtrage dans le menu latéral
+    2. Sélectionnez une action
+    3. Explorez les différents onglets d'analyse
+    """)
+else:
+    # Onglets principaux
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "📊 Analyse Technique", 
+        "📑 Analyse Fondamentale", 
+        "📰 Actualités", 
+        "🔎 Screener", 
+        "🧩 Portefeuille"
+    ])
 
 # Render each tab
 with tab1:

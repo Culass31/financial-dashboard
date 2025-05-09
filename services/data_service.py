@@ -7,6 +7,7 @@ from typing import Dict, Tuple, Optional
 from datetime import datetime, timedelta
 import functools
 from threading import Lock
+import time
 
 # Dictionnaire global pour stocker les derniers appels API par ticker
 _api_calls = {}
@@ -32,12 +33,31 @@ def rate_limit(min_interval_seconds=1.0):
         return wrapper
     return decorator
 
+# Cache partagé entre tous les appels
+@st.cache_data(ttl=3600)
+def cached_get_ticker_data(ticker: str) -> yf.Ticker:
+    """Get cached ticker object"""
+    return yf.Ticker(ticker)
+
+@st.cache_data(ttl=3600)
+def cached_get_ticker_info(ticker: str) -> Dict:
+    """Get cached ticker info"""
+    try:
+        ticker_obj = cached_get_ticker_data(ticker)
+        return ticker_obj.info
+    except Exception as e:
+        st.error(f"Error getting info for {ticker}: {str(e)}")
+        return {}
+
 @st.cache_data(ttl=3600)
 def cached_get_stock_history(ticker: str, period: str = '5y') -> pd.DataFrame:
     """Retrieve historical stock data (cached function)"""
     try:
-        stock_data = yf.Ticker(ticker)
-        df = stock_data.history(period=period)
+        # Attendez un peu avant l'appel pour respecter le rate limit
+        time.sleep(0.5)
+        
+        ticker_obj = cached_get_ticker_data(ticker)
+        df = ticker_obj.history(period=period)
         
         if df.empty:
             st.warning(f"No data available for {ticker}")
@@ -46,15 +66,21 @@ def cached_get_stock_history(ticker: str, period: str = '5y') -> pd.DataFrame:
         df['date_str'] = df.index.strftime('%Y-%m-%d')
         return df
     except Exception as e:
-        st.error(f"Error retrieving history for {ticker}: {str(e)}")
+        if "rate limit" in str(e).lower():
+            st.error(f"Rate limit reached for {ticker}. Please wait a moment.")
+            time.sleep(2)  # Wait 2 seconds on rate limit error
+        else:
+            st.error(f"Error retrieving history for {ticker}: {str(e)}")
         return pd.DataFrame()
 
 @st.cache_data(ttl=3600)
 def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
     """Retrieve fundamental data for a stock (cached function)"""
     try:
-        stock = yf.Ticker(ticker)
-        info = stock.info
+        # Attendez avant l'appel
+        time.sleep(0.5)
+        
+        info = cached_get_ticker_info(ticker)
         
         if not info:
             return None
@@ -150,18 +176,25 @@ def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
         }
     
     except Exception as e:
-        st.error(f"Error retrieving fundamental data for {ticker}: {str(e)}")
+        if "rate limit" in str(e).lower():
+            st.error(f"Rate limit reached for {ticker}. Please wait a moment.")
+            time.sleep(2)
+        else:
+            st.error(f"Error retrieving fundamental data for {ticker}: {str(e)}")
         return None
 
 @st.cache_data(ttl=3600)
 def cached_get_historical_financials(ticker: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Retrieve historical financial statements (cached function)"""
     try:
-        stock = yf.Ticker(ticker)
+        # Attendez avant l'appel
+        time.sleep(0.5)
         
-        income_stmt = stock.income_stmt
-        balance_sheet = stock.balance_sheet
-        cashflow = stock.cashflow
+        ticker_obj = cached_get_ticker_data(ticker)
+        
+        income_stmt = ticker_obj.income_stmt
+        balance_sheet = ticker_obj.balance_sheet
+        cashflow = ticker_obj.cashflow
         
         if income_stmt is None or income_stmt.empty:
             income_stmt = pd.DataFrame()
@@ -173,7 +206,11 @@ def cached_get_historical_financials(ticker: str) -> Tuple[pd.DataFrame, pd.Data
         return income_stmt, balance_sheet, cashflow
         
     except Exception as e:
-        st.error(f"Error retrieving financial data for {ticker}: {str(e)}")
+        if "rate limit" in str(e).lower():
+            st.error(f"Rate limit reached for {ticker}. Please wait a moment.")
+            time.sleep(2)
+        else:
+            st.error(f"Error retrieving financial data for {ticker}: {str(e)}")
         return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
 
 @st.cache_data(ttl=86400)
@@ -238,8 +275,8 @@ def cached_get_market_structure():
 def cached_get_isin_for_ticker(ticker: str) -> str:
     """Get ISIN for a ticker symbol (cached function)"""
     try:
-        stock = yf.Ticker(ticker)
-        isin = stock.isin if hasattr(stock, 'isin') else 'N/A'
+        ticker_obj = cached_get_ticker_data(ticker)
+        isin = ticker_obj.isin if hasattr(ticker_obj, 'isin') else 'N/A'
         return isin
     except:
         return 'N/A'
@@ -250,14 +287,17 @@ class DataService:
     def __init__(self):
         self.market_structure = None
     
+    @rate_limit(min_interval_seconds=1.0)
     def get_stock_history(self, ticker: str, period: str = '5y') -> pd.DataFrame:
         """Retrieve historical stock data"""
         return cached_get_stock_history(ticker, period)
     
+    @rate_limit(min_interval_seconds=1.0)
     def get_fundamental_data(self, ticker: str) -> Optional[Dict]:
         """Retrieve fundamental data for a stock"""
         return cached_get_fundamental_data(ticker)
     
+    @rate_limit(min_interval_seconds=1.0)
     def get_historical_financials(self, ticker: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Retrieve historical financial statements"""
         return cached_get_historical_financials(ticker)
@@ -306,6 +346,7 @@ class DataService:
         
         return {}
     
+    @rate_limit(min_interval_seconds=1.0)
     def get_isin_for_ticker(self, ticker: str) -> str:
         """Get ISIN for a ticker symbol"""
         return cached_get_isin_for_ticker(ticker)

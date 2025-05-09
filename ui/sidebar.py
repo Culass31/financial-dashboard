@@ -1,3 +1,4 @@
+# ui/sidebar.py
 """
 Module pour gérer la sidebar de l'application
 """
@@ -7,10 +8,8 @@ from services import DataService
 def render_sidebar(market_structure):
     """
     Render the sidebar for stock selection
-    
     Args:
         market_structure: Market structure dictionary
-        
     Returns:
         dict: Selected stock information or None
     """
@@ -113,9 +112,28 @@ def render_sidebar(market_structure):
             
             if selected_stock_name:
                 selected_stock = flattened_stocks[selected_stock_name]
-                st.session_state['selected_stock'] = selected_stock
-                st.session_state['selected_stock_name'] = selected_stock_name
-                st.session_state['ticker'] = selected_stock['ticker']
+                
+                # VÉRIFIER SI L'ACTION A CHANGÉ
+                if ('selected_stock' not in st.session_state or 
+                    st.session_state['selected_stock'].get('ticker') != selected_stock['ticker']):
+                    
+                    # Pré-charger les données pour éviter les appels multiples
+                    with st.spinner(f"Chargement des données pour {selected_stock['ticker']}..."):
+                        # Le cache va gérer automatiquement si les données sont déjà chargées
+                        _ = data_service.get_stock_history(selected_stock['ticker'], period='10y')
+                        _ = data_service.get_fundamental_data(selected_stock['ticker'])
+                        _ = data_service.get_historical_financials(selected_stock['ticker'])
+                    
+                    # Mettre à jour la session state
+                    st.session_state['selected_stock'] = selected_stock
+                    st.session_state['selected_stock_name'] = selected_stock_name
+                    st.session_state['ticker'] = selected_stock['ticker']
+                    
+                    # Nettoyer le cache des analyses si l'action change
+                    if 'technical_analysis_cache' in st.session_state:
+                        del st.session_state['technical_analysis_cache']
+                    if 'fundamental_analysis_cache' in st.session_state:
+                        del st.session_state['fundamental_analysis_cache']
                 
                 # Afficher les informations de l'action sélectionnée
                 st.markdown('<div class="selected-info">', unsafe_allow_html=True)
