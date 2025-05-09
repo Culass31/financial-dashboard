@@ -1,11 +1,10 @@
-# ui_components/fundamental_analysis.py
+# ui/fundamental_analysis.py
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from typing import Dict, Optional
-import yfinance as yf
 from datetime import datetime
 
 from services import DataService, AnalysisService, NewsService
@@ -90,7 +89,7 @@ def render_market_data(fundamental_data: Dict):
     previous_close = market_data.get('Précédente clôture')
     
     if current_price and previous_close:
-        display_price_with_trend("Prix actuel", current_price, previous_close)
+        AppMetrics.display_price_with_trend("Prix actuel", current_price, previous_close)
     
     # Market data in columns
     market_col1, market_col2 = st.columns(2)
@@ -238,7 +237,6 @@ def render_financial_statements(income_stmt: pd.DataFrame, balance_sheet: pd.Dat
     with financial_tabs[3]:
         render_financial_analysis_charts(income_stmt, balance_sheet, cashflow)
 
-
 def render_valuation_analysis(
     ticker: str, 
     stock_name: str,
@@ -279,7 +277,6 @@ def render_valuation_analysis(
     # AI-powered analysis
     with valuation_tabs[4]:
         render_ai_analysis(ticker, fundamental_data, income_stmt, balance_sheet, cashflow)
-
 
 def render_main_valuation(
     ticker: str,
@@ -719,10 +716,10 @@ def create_valuation_comparison_chart(
     })
     
     # Add analyst target if available
-    ticker_obj = yf.Ticker(ticker)
-    if hasattr(ticker_obj, 'analyst_price_targets') and ticker_obj.analyst_price_targets:
-        target_data = ticker_obj.analyst_price_targets
-        mean_target = target_data.get('mean', None)
+    data_service = DataService()
+    analyst_targets = data_service.get_stock_analyst_price_targets(ticker)
+    if analyst_targets:
+        mean_target = analyst_targets.get('mean', None)
         if mean_target:
             price_data.append({
                 'type': 'Objectif analystes',
@@ -780,17 +777,18 @@ def create_valuation_comparison_chart(
 def render_analyst_consensus(ticker: str, fundamental_data: Dict):
     """Render analyst consensus section"""
     
-    ticker_obj = yf.Ticker(ticker)
+    # Utiliser get_stock_info depuis data_service
+    data_service = DataService()
+    info = data_service.get_stock_info(ticker)
     current_price = fundamental_data['Données de marché'].get('Prix actuel')
     
     # Price targets
-    if hasattr(ticker_obj, 'analyst_price_targets') and ticker_obj.analyst_price_targets:
-        target_data = ticker_obj.analyst_price_targets
-        
+    analyst_targets = data_service.get_stock_analyst_price_targets(ticker)
+    if analyst_targets:
         pt_col1, pt_col2, pt_col3 = st.columns(3)
         
         with pt_col1:
-            mean_target = target_data.get('mean', None)
+            mean_target = analyst_targets.get('mean', None)
             if mean_target:
                 mean_color = "green" if mean_target > current_price else "red"
                 st.markdown(f"**Objectif moyen:** <span style='color:{mean_color};'>{mean_target:.2f} €</span>", unsafe_allow_html=True)
@@ -798,8 +796,8 @@ def render_analyst_consensus(ticker: str, fundamental_data: Dict):
                 st.markdown(f"**Potentiel:** <span style='color:{mean_color};'>{potential:.1f}%</span>", unsafe_allow_html=True)
         
         with pt_col2:
-            high_target = target_data.get('high', None)
-            low_target = target_data.get('low', None)
+            high_target = analyst_targets.get('high', None)
+            low_target = analyst_targets.get('low', None)
             if high_target and low_target:
                 st.markdown(f"**Plus haut:** <span style='color:green;'>{high_target:.2f} €</span>", unsafe_allow_html=True)
                 st.markdown(f"**Plus bas:** <span style='color:gray;'>{low_target:.2f} €</span>", unsafe_allow_html=True)
@@ -816,8 +814,9 @@ def render_analyst_consensus(ticker: str, fundamental_data: Dict):
         st.info("Aucune donnée d'objectif de cours disponible")
     
     # Recommendations
-    if hasattr(ticker_obj, 'recommendations_summary') and not ticker_obj.recommendations_summary.empty:
-        latest_rec = ticker_obj.recommendations_summary.iloc[0]
+    recommendations = data_service.get_stock_recommendations(ticker)
+    if recommendations is not None and not recommendations.empty:
+        latest_rec = recommendations.iloc[0]
         
         # Create recommendations visualization
         rec_fig = go.Figure()
@@ -878,11 +877,43 @@ def render_analyst_consensus(ticker: str, fundamental_data: Dict):
         st.markdown(f"**Consensus des analystes:** <span style='color:{cons_color};font-weight:bold;'>{cons_text}</span> (Score: {consensus_score:.2f})", unsafe_allow_html=True)
         
         # Historical recommendations
-        if len(ticker_obj.recommendations_summary) > 1:
-            rec_history_fig = create_recommendations_history_chart(ticker_obj.recommendations_summary)
+        if len(recommendations) > 1:
+            rec_history_fig = create_recommendations_history_chart(recommendations)
             st.plotly_chart(rec_history_fig, use_container_width=True)
     else:
         st.info("Aucune recommandation d'analyste disponible")
+
+def render_financial_analysis_charts(
+    income_stmt: pd.DataFrame,
+    balance_sheet: pd.DataFrame,
+    cashflow: pd.DataFrame
+):
+    """Render comprehensive financial analysis charts"""
+    
+    chart_type = st.selectbox(
+        "Sélectionnez le type d'analyse",
+        ["Évolution des marges", "Structure financière", "Efficacité opérationnelle", "Rentabilité"]
+    )
+    
+    if chart_type == "Évolution des marges":
+        if not income_stmt.empty:
+            fig = create_margins_evolution_chart(income_stmt)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Structure financière":
+        if not balance_sheet.empty:
+            fig = create_financial_structure_chart(balance_sheet)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Efficacité opérationnelle":
+        if not income_stmt.empty and not balance_sheet.empty:
+            fig = create_efficiency_metrics_chart(income_stmt, balance_sheet)
+            st.plotly_chart(fig, use_container_width=True)
+    
+    elif chart_type == "Rentabilité":
+        if not income_stmt.empty and not balance_sheet.empty:
+            fig = create_profitability_metrics_chart(income_stmt, balance_sheet)
+            st.plotly_chart(fig, use_container_width=True)
 
 
 def render_dcf_method(dcf_data: Dict, current_price: float, cashflow: pd.DataFrame):
@@ -1006,37 +1037,59 @@ def render_asset_method(asset_data: Dict, current_price: float, balance_sheet: p
         st.warning("Impossible de calculer la valeur patrimoniale pour cette entreprise.")
 
 
-def render_financial_analysis_charts(
-    income_stmt: pd.DataFrame,
-    balance_sheet: pd.DataFrame,
-    cashflow: pd.DataFrame
-):
-    """Render comprehensive financial analysis charts"""
+def create_moat_visualization(moat_analysis: Dict) -> go.Figure:
+    """Create moat strength visualization"""
     
-    chart_type = st.selectbox(
-        "Sélectionnez le type d'analyse",
-        ["Évolution des marges", "Structure financière", "Efficacité opérationnelle", "Rentabilité"]
+    categories = ['Marges', 'ROE', 'ROIC', 'FCF', 'Total']
+    
+    # Define scores based on analysis
+    scores = {
+        'Marges': 0,
+        'ROE': 0,
+        'ROIC': 0,
+        'FCF': 0,
+        'Total': moat_analysis.get('strength', 0) * 33.33
+    }
+    
+    # Assign scores based on factors
+    for factor in moat_analysis.get('factors', []):
+        if 'Marges' in factor:
+            scores['Marges'] = 50 if 'très stables' in factor else 30
+        elif 'ROE' in factor:
+            scores['ROE'] = 50 if 'élevé' in factor else 30
+        elif 'ROIC' in factor:
+            scores['ROIC'] = 50 if 'excellent' in factor else 30
+        elif 'FCF' in factor:
+            scores['FCF'] = 50 if 'Forte' in factor else 30
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatterpolar(
+        r=list(scores.values()),
+        theta=list(scores.keys()),
+        fill='toself',
+        fillcolor='rgba(64, 224, 208, 0.3)',
+        line=dict(color='rgb(64, 224, 208)', width=2),
+        name='Force des avantages'
+    ))
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 100],
+                tickfont=dict(size=10)
+            ),
+            angularaxis=dict(
+                tickfont=dict(size=12)
+            )
+        ),
+        title="Analyse de l'avantage compétitif",
+        height=400,
+        showlegend=False
     )
     
-    if chart_type == "Évolution des marges":
-        if not income_stmt.empty:
-            fig = create_margins_evolution_chart(income_stmt)
-            st.plotly_chart(fig, use_container_width=True)
-    
-    elif chart_type == "Structure financière":
-        if not balance_sheet.empty:
-            fig = create_financial_structure_chart(balance_sheet)
-            st.plotly_chart(fig, use_container_width=True)
-    
-    elif chart_type == "Efficacité opérationnelle":
-        if not income_stmt.empty and not balance_sheet.empty:
-            fig = create_efficiency_metrics_chart(income_stmt, balance_sheet)
-            st.plotly_chart(fig, use_container_width=True)
-    
-    elif chart_type == "Rentabilité":
-        if not income_stmt.empty and not balance_sheet.empty:
-            fig = create_profitability_metrics_chart(income_stmt, balance_sheet)
-            st.plotly_chart(fig, use_container_width=True)
+    return fig
 
 
 def render_moat_metrics(
@@ -1069,6 +1122,84 @@ def render_moat_metrics(
         # Debt analysis
         fig = create_debt_analysis_chart(income_stmt, balance_sheet)
         st.plotly_chart(fig, use_container_width=True)
+
+
+def create_dividend_charts(dividend_analysis: Dict) -> go.Figure:
+    """Create dividend visualization charts"""
+    
+    div_history = dividend_analysis['dividend_history']
+    dates = list(div_history.keys())
+    values = list(div_history.values())
+    
+    dividend_df = pd.DataFrame({
+        'date': pd.to_datetime(dates),
+        'dividend': values
+    })
+    
+    dividend_df = dividend_df.sort_values('date')
+    dividend_df['year'] = dividend_df['date'].dt.year
+    annual_div = dividend_df.groupby('year')['dividend'].sum().reset_index()
+    
+    # Create subplots
+    fig = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=('Historique des dividendes', 'Dividende annuel et croissance'),
+        specs=[[{"secondary_y": False}], [{"secondary_y": True}]],
+        vertical_spacing=0.1,
+        row_heights=[0.5, 0.5]
+    )
+    
+    # Quarterly dividends
+    fig.add_trace(
+        go.Bar(
+            x=dividend_df['date'],
+            y=dividend_df['dividend'],
+            marker_color='#1E88E5',
+            name='Dividende trimestriel'
+        ),
+        row=1, col=1
+    )
+    
+    # Annual dividends
+    fig.add_trace(
+        go.Bar(
+            x=annual_div['year'],
+            y=annual_div['dividend'],
+            name="Dividende annuel",
+            marker_color='#43A047'
+        ),
+        row=2, col=1,
+        secondary_y=False
+    )
+    
+    # Growth rate
+    if len(annual_div) > 1:
+        annual_div['growth'] = annual_div['dividend'].pct_change() * 100
+        
+        fig.add_trace(
+            go.Scatter(
+                x=annual_div['year'][1:],
+                y=annual_div['growth'][1:],
+                name="Taux de croissance",
+                mode='lines+markers',
+                line=dict(color='#E65100', width=3),
+                marker=dict(size=8)
+            ),
+            row=2, col=1,
+            secondary_y=True
+        )
+    
+    fig.update_layout(
+        height=600,
+        showlegend=True,
+        hovermode='x unified'
+    )
+    
+    fig.update_yaxes(title_text="Dividende par action", row=1, col=1)
+    fig.update_yaxes(title_text="Dividende par action", secondary_y=False, row=2, col=1)
+    fig.update_yaxes(title_text="Croissance annuelle (%)", secondary_y=True, row=2, col=1)
+    
+    return fig
 
 
 def render_dividend_quality_analysis(dividend_analysis: Dict):
@@ -1137,55 +1268,6 @@ def render_dividend_quality_analysis(dividend_analysis: Dict):
     st.info(recommendation)
 
 
-# Chart creation functions (implementations)
-
-def create_fcf_evolution_chart(cashflow: pd.DataFrame) -> go.Figure:
-    """Create Free Cash Flow evolution chart"""
-    
-    fcf_data = cashflow.loc['Free Cash Flow'].to_dict()
-    
-    fcf_df = pd.DataFrame({
-        'Année': [str(year.year) for year in fcf_data.keys()],
-        'FCF (millions)': [float(value) / 1e6 for value in fcf_data.values()]
-    })
-    
-    fcf_df = fcf_df.sort_values('Année')
-    
-    # Calculate CAGR
-    cagr_text = ""
-    if len(fcf_df) > 1:
-        fcf_values = fcf_df['FCF (millions)'].values
-        positive_values = fcf_values[fcf_values > 0]
-        
-        if len(positive_values) > 1:
-            start_value = positive_values[0]
-            end_value = positive_values[-1]
-            years = len(positive_values) - 1
-            cagr = ((end_value / start_value) ** (1 / years) - 1) * 100
-            cagr_text = f"Croissance annuelle moyenne: {cagr:.2f}%"
-    
-    fig = go.Figure()
-    
-    fig.add_trace(go.Bar(
-        x=fcf_df['Année'],
-        y=fcf_df['FCF (millions)'],
-        marker_color=['green' if fcf >= 0 else 'red' for fcf in fcf_df['FCF (millions)']],
-        text=[f"€{fcf:.2f}M" for fcf in fcf_df['FCF (millions)']],
-        textposition='outside',
-        name='Free Cash Flow'
-    ))
-    
-    fig.update_layout(
-        title=f"Évolution des Free Cash Flows<br><sup>{cagr_text}</sup>",
-        xaxis_title="Année",
-        yaxis_title="FCF (millions €)",
-        height=400,
-        margin=dict(l=50, r=50, t=80, b=50)
-    )
-    
-    return fig
-
-
 def create_recommendations_history_chart(recommendations: pd.DataFrame) -> go.Figure:
     """Create recommendations history chart"""
     
@@ -1239,6 +1321,55 @@ def create_recommendations_history_chart(recommendations: pd.DataFrame) -> go.Fi
             xanchor="right",
             x=1
         )
+    )
+    
+    return fig
+
+
+# Fonctions helpers supplémentaires pour les graphiques
+
+def create_fcf_evolution_chart(cashflow: pd.DataFrame) -> go.Figure:
+    """Create Free Cash Flow evolution chart"""
+    
+    fcf_data = cashflow.loc['Free Cash Flow'].to_dict()
+    
+    fcf_df = pd.DataFrame({
+        'Année': [str(year.year) for year in fcf_data.keys()],
+        'FCF (millions)': [float(value) / 1e6 for value in fcf_data.values()]
+    })
+    
+    fcf_df = fcf_df.sort_values('Année')
+    
+    # Calculate CAGR
+    cagr_text = ""
+    if len(fcf_df) > 1:
+        fcf_values = fcf_df['FCF (millions)'].values
+        positive_values = fcf_values[fcf_values > 0]
+        
+        if len(positive_values) > 1:
+            start_value = positive_values[0]
+            end_value = positive_values[-1]
+            years = len(positive_values) - 1
+            cagr = ((end_value / start_value) ** (1 / years) - 1) * 100
+            cagr_text = f"Croissance annuelle moyenne: {cagr:.2f}%"
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=fcf_df['Année'],
+        y=fcf_df['FCF (millions)'],
+        marker_color=['green' if fcf >= 0 else 'red' for fcf in fcf_df['FCF (millions)']],
+        text=[f"€{fcf:.2f}M" for fcf in fcf_df['FCF (millions)']],
+        textposition='outside',
+        name='Free Cash Flow'
+    ))
+    
+    fig.update_layout(
+        title=f"Évolution des Free Cash Flows<br><sup>{cagr_text}</sup>",
+        xaxis_title="Année",
+        yaxis_title="FCF (millions €)",
+        height=400,
+        margin=dict(l=50, r=50, t=80, b=50)
     )
     
     return fig
@@ -1356,7 +1487,6 @@ def create_balance_sheet_composition_chart(balance_sheet: pd.DataFrame) -> go.Fi
     
     return go.Figure()  # Empty figure if no data
 
-
 def create_margins_evolution_chart(income_stmt: pd.DataFrame) -> go.Figure:
     """Create margins evolution chart"""
     
@@ -1442,407 +1572,6 @@ def create_financial_structure_chart(balance_sheet: pd.DataFrame) -> go.Figure:
         yaxis_title='Montant (millions €)',
         height=400,
         hovermode='x unified'
-    )
-    
-    return fig
-
-
-def create_efficiency_metrics_chart(income_stmt: pd.DataFrame, balance_sheet: pd.DataFrame) -> go.Figure:
-    """Create efficiency metrics chart"""
-    
-    fig = go.Figure()
-    
-    years = [col.year for col in income_stmt.columns]
-    metrics = []
-    
-    # Asset turnover
-    if 'Total Revenue' in income_stmt.index and 'Total Assets' in balance_sheet.index:
-        asset_turnover = []
-        for i in range(min(len(income_stmt.columns), len(balance_sheet.columns))):
-            revenue = income_stmt.loc['Total Revenue', income_stmt.columns[i]]
-            assets = balance_sheet.loc['Total Assets', balance_sheet.columns[i]]
-            if revenue and assets and assets != 0:
-                asset_turnover.append(revenue / assets)
-        
-        if asset_turnover:
-            fig.add_trace(go.Scatter(
-                x=years[:len(asset_turnover)],
-                y=asset_turnover,
-                name='Rotation des actifs',
-                mode='lines+markers',
-                line=dict(color='blue', width=2)
-            ))
-    
-    # Receivables turnover
-    if 'Total Revenue' in income_stmt.index and 'Receivables' in balance_sheet.index:
-        receivables_turnover = []
-        for i in range(min(len(income_stmt.columns), len(balance_sheet.columns))):
-            revenue = income_stmt.loc['Total Revenue', income_stmt.columns[i]]
-            receivables = balance_sheet.loc['Receivables', balance_sheet.columns[i]]
-            if revenue and receivables and receivables != 0:
-                receivables_turnover.append(revenue / receivables)
-        
-        if receivables_turnover:
-            fig.add_trace(go.Scatter(
-                x=years[:len(receivables_turnover)],
-                y=receivables_turnover,
-                name='Rotation des créances',
-                mode='lines+markers',
-                line=dict(color='green', width=2)
-            ))
-    
-    fig.update_layout(
-        title='Métriques d\'efficacité opérationnelle',
-        xaxis_title='Année',
-        yaxis_title='Ratio',
-        height=400,
-        hovermode='x unified'
-    )
-    
-    return fig
-
-
-def create_profitability_metrics_chart(income_stmt: pd.DataFrame, balance_sheet: pd.DataFrame) -> go.Figure:
-    """Create profitability metrics chart"""
-    
-    fig = go.Figure()
-    
-    years = []
-    roe_values = []
-    roa_values = []
-    
-    # Calculate ROE and ROA
-    for i in range(min(len(income_stmt.columns), len(balance_sheet.columns))):
-        if 'Net Income' in income_stmt.index:
-            net_income = income_stmt.loc['Net Income', income_stmt.columns[i]]
-            
-            # ROE
-            if 'Stockholders Equity' in balance_sheet.index:
-                equity = balance_sheet.loc['Stockholders Equity', balance_sheet.columns[i]]
-                if net_income and equity and equity != 0:
-                    roe_values.append((net_income / equity) * 100)
-                    years.append(income_stmt.columns[i].year)
-            
-            # ROA
-            if 'Total Assets' in balance_sheet.index:
-                assets = balance_sheet.loc['Total Assets', balance_sheet.columns[i]]
-                if net_income and assets and assets != 0:
-                    roa_values.append((net_income / assets) * 100)
-    
-    if roe_values:
-        fig.add_trace(go.Scatter(
-            x=years,
-            y=roe_values,
-            name='ROE (%)',
-            mode='lines+markers',
-            line=dict(color='blue', width=2)
-        ))
-    
-    if roa_values:
-        fig.add_trace(go.Scatter(
-            x=years,
-            y=roa_values,
-            name='ROA (%)',
-            mode='lines+markers',
-            line=dict(color='green', width=2)
-        ))
-    
-    fig.update_layout(
-        title='Métriques de rentabilité',
-        xaxis_title='Année',
-        yaxis_title='Pourcentage (%)',
-        height=400,
-        hovermode='x unified'
-    )
-    
-    return fig
-
-
-def create_margin_stability_chart(income_stmt: pd.DataFrame) -> go.Figure:
-    """Create margin stability chart"""
-    
-    years = [col.year for col in income_stmt.columns[:5]]
-    gross_margins = []
-    
-    if 'Gross Profit' in income_stmt.index and 'Total Revenue' in income_stmt.index:
-        for col in income_stmt.columns[:5]:
-            gross_profit = income_stmt.loc['Gross Profit', col]
-            total_revenue = income_stmt.loc['Total Revenue', col]
-            if gross_profit and total_revenue and total_revenue != 0:
-                margin = gross_profit / total_revenue * 100
-                gross_margins.append(margin)
-    
-    fig = go.Figure()
-    
-    if gross_margins:
-        fig.add_trace(go.Bar(
-            x=years[:len(gross_margins)],
-            y=gross_margins,
-            name='Marge brute (%)',
-            marker_color='blue'
-        ))
-        
-        # Add average line
-        avg_margin = sum(gross_margins) / len(gross_margins)
-        fig.add_hline(
-            y=avg_margin,
-            line_dash="dash",
-            line_color="red",
-            annotation_text=f"Moyenne: {avg_margin:.1f}%"
-        )
-    
-    fig.update_layout(
-        title='Stabilité des marges brutes',
-        xaxis_title='Année',
-        yaxis_title='Marge brute (%)',
-        height=300
-    )
-    
-    return fig
-
-
-def create_roe_evolution_chart(income_stmt: pd.DataFrame, balance_sheet: pd.DataFrame) -> go.Figure:
-    """Create ROE evolution chart"""
-    
-    roe_values = []
-    roe_years = []
-    
-    for i in range(min(5, len(income_stmt.columns), len(balance_sheet.columns))):
-        if 'Net Income' in income_stmt.index and 'Stockholders Equity' in balance_sheet.index:
-            net_income = income_stmt.loc['Net Income', income_stmt.columns[i]]
-            equity = balance_sheet.loc['Stockholders Equity', balance_sheet.columns[i]]
-            if net_income and equity and equity != 0:
-                roe = net_income / equity * 100
-                roe_values.append(roe)
-                roe_years.append(income_stmt.columns[i].year)
-    
-    fig = go.Figure()
-    
-    if roe_values:
-        fig.add_trace(go.Scatter(
-            x=roe_years,
-            y=roe_values,
-            name='ROE (%)',
-            mode='lines+markers',
-            line=dict(color='blue', width=2)
-        ))
-        
-        # Add average line
-        avg_roe = sum(roe_values) / len(roe_values)
-        fig.add_hline(
-            y=avg_roe,
-            line_dash="dash",
-            line_color="red",
-            annotation_text=f"Moyenne: {avg_roe:.1f}%"
-        )
-    
-    fig.update_layout(
-        title='Évolution du ROE',
-        xaxis_title='Année',
-        yaxis_title='ROE (%)',
-        height=300
-    )
-    
-    return fig
-
-
-def create_debt_analysis_chart(income_stmt: pd.DataFrame, balance_sheet: pd.DataFrame) -> go.Figure:
-    """Create debt analysis chart"""
-    
-    debt_metrics = {}
-    
-    # Debt to equity ratio
-    if 'Total Debt' in balance_sheet.index and 'Stockholders Equity' in balance_sheet.index:
-        debt = balance_sheet.loc['Total Debt', balance_sheet.columns[0]]
-        equity = balance_sheet.loc['Stockholders Equity', balance_sheet.columns[0]]
-        if debt is not None and equity is not None and equity != 0:
-            debt_metrics["Dette/Capitaux propres"] = debt / equity
-    
-    # Interest coverage ratio
-    if 'EBIT' in income_stmt.index and 'Interest Expense' in income_stmt.index:
-        ebit = income_stmt.loc['EBIT', income_stmt.columns[0]]
-        interest = abs(income_stmt.loc['Interest Expense', income_stmt.columns[0]])
-        if ebit is not None and interest is not None and interest != 0:
-            debt_metrics["Couverture des intérêts"] = ebit / interest
-    
-    # Debt evolution
-    if 'Total Debt' in balance_sheet.index:
-        debt_years = []
-        debt_values = []
-        
-        for col in balance_sheet.columns[:5]:
-            debt_value = balance_sheet.loc['Total Debt', col]
-            if debt_value is not None:
-                debt_values.append(debt_value / 1e6)
-                debt_years.append(col.year)
-        
-        fig = go.Figure()
-        
-        if debt_values:
-            fig.add_trace(go.Bar(
-                x=debt_years,
-                y=debt_values,
-                name='Dette totale (M€)',
-                marker_color='red'
-            ))
-            
-            # Add trend analysis
-            if len(debt_values) > 1:
-                if debt_values[0] < debt_values[-1]:
-                    trend_text = "Dette en augmentation"
-                    trend_color = "red"
-                else:
-                    trend_text = "Dette en diminution"
-                    trend_color = "green"
-                
-                fig.add_annotation(
-                    x=debt_years[-1],
-                    y=max(debt_values) * 1.1,
-                    text=trend_text,
-                    showarrow=False,
-                    font=dict(color=trend_color, size=12, weight='bold')
-                )
-        
-        fig.update_layout(
-            title='Évolution de l\'endettement',
-            xaxis_title='Année',
-            yaxis_title='Dette (millions €)',
-            height=300
-        )
-        
-        return fig
-    
-    return go.Figure()
-
-
-def create_dividend_charts(dividend_analysis: Dict) -> go.Figure:
-    """Create dividend visualization charts"""
-    
-    div_history = dividend_analysis['dividend_history']
-    dates = list(div_history.keys())
-    values = list(div_history.values())
-    
-    dividend_df = pd.DataFrame({
-        'date': pd.to_datetime(dates),
-        'dividend': values
-    })
-    
-    dividend_df = dividend_df.sort_values('date')
-    dividend_df['year'] = dividend_df['date'].dt.year
-    annual_div = dividend_df.groupby('year')['dividend'].sum().reset_index()
-    
-    # Create subplots
-    fig = make_subplots(
-        rows=2, cols=1,
-        subplot_titles=('Historique des dividendes', 'Dividende annuel et croissance'),
-        specs=[[{"secondary_y": False}], [{"secondary_y": True}]],
-        vertical_spacing=0.1,
-        row_heights=[0.5, 0.5]
-    )
-    
-    # Quarterly dividends
-    fig.add_trace(
-        go.Bar(
-            x=dividend_df['date'],
-            y=dividend_df['dividend'],
-            marker_color='#1E88E5',
-            name='Dividende trimestriel'
-        ),
-        row=1, col=1
-    )
-    
-    # Annual dividends
-    fig.add_trace(
-        go.Bar(
-            x=annual_div['year'],
-            y=annual_div['dividend'],
-            name="Dividende annuel",
-            marker_color='#43A047'
-        ),
-        row=2, col=1,
-        secondary_y=False
-    )
-    
-    # Growth rate
-    if len(annual_div) > 1:
-        annual_div['growth'] = annual_div['dividend'].pct_change() * 100
-        
-        fig.add_trace(
-            go.Scatter(
-                x=annual_div['year'][1:],
-                y=annual_div['growth'][1:],
-                name="Taux de croissance",
-                mode='lines+markers',
-                line=dict(color='#E65100', width=3),
-                marker=dict(size=8)
-            ),
-            row=2, col=1,
-            secondary_y=True
-        )
-    
-    fig.update_layout(
-        height=600,
-        showlegend=True,
-        hovermode='x unified'
-    )
-    
-    fig.update_yaxes(title_text="Dividende par action", row=1, col=1)
-    fig.update_yaxes(title_text="Dividende par action", secondary_y=False, row=2, col=1)
-    fig.update_yaxes(title_text="Croissance annuelle (%)", secondary_y=True, row=2, col=1)
-    
-    return fig
-
-
-def create_moat_visualization(moat_analysis: Dict) -> go.Figure:
-    """Create moat strength visualization"""
-    
-    categories = ['Marges', 'ROE', 'ROIC', 'FCF', 'Total']
-    
-    # Define scores based on analysis
-    scores = {
-        'Marges': 0,
-        'ROE': 0,
-        'ROIC': 0,
-        'FCF': 0,
-        'Total': moat_analysis.get('strength', 0) * 33.33
-    }
-    
-    # Assign scores based on factors
-    for factor in moat_analysis.get('factors', []):
-        if 'Marges' in factor:
-            scores['Marges'] = 50 if 'très stables' in factor else 30
-        elif 'ROE' in factor:
-            scores['ROE'] = 50 if 'élevé' in factor else 30
-        elif 'ROIC' in factor:
-            scores['ROIC'] = 50 if 'excellent' in factor else 30
-        elif 'FCF' in factor:
-            scores['FCF'] = 50 if 'Forte' in factor else 30
-    
-    fig = go.Figure()
-    
-    fig.add_trace(go.Scatterpolar(
-        r=list(scores.values()),
-        theta=list(scores.keys()),
-        fill='toself',
-        fillcolor='rgba(64, 224, 208, 0.3)',
-        line=dict(color='rgb(64, 224, 208)', width=2),
-        name='Force des avantages'
-    ))
-    
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[0, 100],
-                tickfont=dict(size=10)
-            ),
-            angularaxis=dict(
-                tickfont=dict(size=12)
-            )
-        ),
-        title="Analyse de l'avantage compétitif",
-        height=400,
-        showlegend=False
     )
     
     return fig

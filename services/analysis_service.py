@@ -5,7 +5,6 @@ import streamlit as st
 from typing import Dict, Tuple, Optional
 from scipy import stats
 from sklearn.linear_model import LinearRegression
-import yfinance as yf
 
 from .data_service import DataService
 
@@ -361,8 +360,8 @@ class AnalysisService:
     def _get_sector_pe_ratio(self, ticker: str, market_structure: Optional[Dict] = None) -> Tuple[float, str]:
         """Get sector average PE ratio"""
         try:
-            company = yf.Ticker(ticker)
-            info = company.info
+            # Utiliser get_stock_info depuis data_service
+            info = self.data_service.get_stock_info(ticker)
             sector = info.get('sector', None)
             
             default_sector_pes = {
