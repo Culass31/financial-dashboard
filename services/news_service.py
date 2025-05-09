@@ -5,20 +5,31 @@ import yfinance as yf
 import html
 from datetime import datetime
 from typing import Dict, List, Optional
+import time
 
 from .data_service import DataService
+from utils.cache_manager import CacheManager
 
 
 class NewsService:
-    """Service responsible for news-related operations"""
+    """Service responsible for news-related operations with improved caching"""
     
     def __init__(self, data_service: DataService):
         self.data_service = data_service
+        self.cache_manager = CacheManager()
     
-    @st.cache_data(ttl=3600)
     def get_stock_news(self, ticker: str) -> pd.DataFrame:
-        """Retrieve and categorize stock news"""
+        """Retrieve and categorize stock news with caching"""
+        
+        # Essayer d'abord de récupérer depuis le cache
+        cached_news = self.cache_manager.get(f"news_{ticker}", ttl_seconds=1800)  # Cache 30 minutes
+        if cached_news is not None:
+            return cached_news
+        
         try:
+            # Attendre un peu pour respecter le rate limit
+            time.sleep(1)
+            
             ticker_obj = yf.Ticker(ticker)
             news_items = ticker_obj.news
             
@@ -52,7 +63,8 @@ class NewsService:
                 news_df['published_at'] = pd.to_datetime(news_df['pubDate']).dt.tz_localize(None)
                 news_df['date_formatted'] = news_df['published_at'].dt.strftime('%d/%m/%Y %H:%M')
             
-            # Get financial data for classification
+            # Get financial data for classification (from cache if possible)
+            ticker_obj = self.data_service.get_ticker_object(ticker)  # Utilise le cache
             dividends = ticker_obj.dividends
             stock_splits = ticker_obj.splits
             
@@ -62,10 +74,17 @@ class NewsService:
             # Sort by importance and date
             news_df = news_df.sort_values(by=['importance_score', 'published_at'], ascending=[False, False])
             
+            # Mettre en cache
+            self.cache_manager.set(f"news_{ticker}", news_df)
+            
             return news_df
         
         except Exception as e:
-            st.error(f"Error retrieving news for {ticker}: {str(e)}")
+            if "rate limit" in str(e).lower():
+                st.error(f"Rate limit reached for news {ticker}. Please wait a moment.")
+                time.sleep(5)
+            else:
+                st.error(f"Error retrieving news for {ticker}: {str(e)}")
             return pd.DataFrame()
     
     def _classify_news(
@@ -166,8 +185,17 @@ class NewsService:
         return any(keyword.lower() in text for keyword in keywords_list)
     
     def get_dividend_policy_analysis(self, ticker: str) -> Dict:
-        """Analyze dividend policy"""
+        """Analyze dividend policy with caching"""
+        
+        # Vérifier le cache
+        cached_analysis = self.cache_manager.get(f"dividend_analysis_{ticker}", ttl_seconds=3600)
+        if cached_analysis is not None:
+            return cached_analysis
+        
         try:
+            # Attendre un peu pour le rate limit
+            time.sleep(0.5)
+            
             ticker_obj = yf.Ticker(ticker)
             dividends = ticker_obj.dividends
             info = ticker_obj.info
@@ -253,8 +281,8 @@ class NewsService:
             # Analyze buyback trend and sustainability
             income_stmt, balance_sheet, cashflow = self.data_service.get_historical_financials(ticker)
             
-            if 'CommonStock' in balance_sheet.index:
-                common_stock = balance_sheet.loc['CommonStock']
+            if balance_sheet is not None and 'Common Stock' in balance_sheet.index:
+                common_stock = balance_sheet.loc['Common Stock']
                 
                 if len(common_stock) > 1:
                     oldest = common_stock.iloc[-1]
@@ -268,13 +296,13 @@ class NewsService:
                         analysis['buyback_trend'] = 'Stable'
             
             # Dividend sustainability analysis
-            if analysis['has_dividends'] and 'NetIncome' in income_stmt.index:
-                net_income = income_stmt.loc['NetIncome'].iloc[0]
+            if analysis['has_dividends'] and income_stmt is not None and 'Net Income' in income_stmt.index:
+                net_income = income_stmt.loc['Net Income'].iloc[0]
                 
                 # Calculate FCF payout ratio if possible
-                if 'OperatingCashFlow' in cashflow.index and 'CapitalExpenditures' in cashflow.index:
-                    operating_cash = cashflow.loc['OperatingCashFlow'].iloc[0]
-                    capex = cashflow.loc['CapitalExpenditures'].iloc[0]
+                if cashflow is not None and 'Operating Cash Flow' in cashflow.index and 'Capital Expenditures' in cashflow.index:
+                    operating_cash = cashflow.loc['Operating Cash Flow'].iloc[0]
+                    capex = cashflow.loc['Capital Expenditures'].iloc[0]
                     free_cash_flow = operating_cash - capex
                     
                     if free_cash_flow is not None and free_cash_flow > 0:
@@ -307,9 +335,16 @@ class NewsService:
                     
                     analysis['dividend_health'] = health_score
             
+            # Mettre en cache
+            self.cache_manager.set(f"dividend_analysis_{ticker}", analysis)
+            
             return analysis
             
         except Exception as e:
+            if "rate limit" in str(e).lower():
+                st.error(f"Rate limit reached for dividend analysis {ticker}. Please wait.")
+                time.sleep(5)
+                
             return {
                 'has_dividends': False,
                 'error': str(e)
