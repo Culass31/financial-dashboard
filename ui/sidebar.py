@@ -1,4 +1,3 @@
-# ui/sidebar.py
 """
 Module pour gérer la sidebar de l'application
 """
@@ -113,27 +112,26 @@ def render_sidebar(market_structure):
             if selected_stock_name:
                 selected_stock = flattened_stocks[selected_stock_name]
                 
-                # VÉRIFIER SI L'ACTION A CHANGÉ
-                if ('selected_stock' not in st.session_state or 
-                    st.session_state['selected_stock'].get('ticker') != selected_stock['ticker']):
-                    
-                    # Pré-charger les données pour éviter les appels multiples
-                    with st.spinner(f"Chargement des données pour {selected_stock['ticker']}..."):
-                        # Le cache va gérer automatiquement si les données sont déjà chargées
-                        _ = data_service.get_stock_history(selected_stock['ticker'], period='10y')
-                        _ = data_service.get_fundamental_data(selected_stock['ticker'])
-                        _ = data_service.get_historical_financials(selected_stock['ticker'])
-                    
-                    # Mettre à jour la session state
+                # Vérifier si une nouvelle action a été sélectionnée
+                current_ticker = st.session_state.get('ticker')
+                new_ticker = selected_stock['ticker']
+                
+                if current_ticker != new_ticker:
+                    # Une nouvelle action a été sélectionnée
                     st.session_state['selected_stock'] = selected_stock
                     st.session_state['selected_stock_name'] = selected_stock_name
-                    st.session_state['ticker'] = selected_stock['ticker']
+                    st.session_state['ticker'] = new_ticker
                     
-                    # Nettoyer le cache des analyses si l'action change
-                    if 'technical_analysis_cache' in st.session_state:
-                        del st.session_state['technical_analysis_cache']
-                    if 'fundamental_analysis_cache' in st.session_state:
-                        del st.session_state['fundamental_analysis_cache']
+                    # Force la recharge des données en effaçant les caches pertinents
+                    if 'stock_data' in st.session_state:
+                        del st.session_state['stock_data']
+                    if 'fundamental_data' in st.session_state:
+                        del st.session_state['fundamental_data']
+                    if 'technical_data' in st.session_state:
+                        del st.session_state['technical_data']
+                    
+                    # Forcer le rechargement
+                    st.rerun()
                 
                 # Afficher les informations de l'action sélectionnée
                 st.markdown('<div class="selected-info">', unsafe_allow_html=True)
