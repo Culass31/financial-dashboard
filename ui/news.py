@@ -4,8 +4,7 @@ Composant pour l'onglet des actualités récentes
 import streamlit as st
 import pandas as pd
 
-from services import DataService, NewsService
-from services.data_service import get_ticker_object
+from services import NewsService, DataService
 
 
 def render_news_tab(selected_stock):
@@ -20,6 +19,10 @@ def render_news_tab(selected_stock):
     
     # Titre principal
     st.markdown(f"### 📰 Actualités récentes pour {stock_name} ({ticker})")
+    
+    # Initialiser les services
+    data_service = DataService()
+    news_service = NewsService(data_service)
     
     # Options de filtrage
     col1, col2, col3 = st.columns(3)
@@ -45,8 +48,6 @@ def render_news_tab(selected_stock):
     
     # Récupérer les actualités
     with st.spinner("Chargement des actualités..."):
-        data_service = DataService()
-        news_service = NewsService(data_service)
         news_df = news_service.get_stock_news(ticker)
     
     if news_df.empty:

@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from typing import Dict, Tuple, Optional
-from datetime import datetime, timedelta
+from curl_cffi.requests import Session
+from datetime import datetime
 import time
 from functools import wraps
 from threading import Lock
@@ -76,26 +77,58 @@ def rate_limit(min_interval_seconds=RATE_LIMIT_DELAY):
     return decorator
 
 @st.cache_data(ttl=1800)  # Cache réduit à 30 minutes pour les données de marché
-def cached_get_stock_history_with_session(ticker: str, period: str = '10y', session=None) -> pd.DataFrame:
-    """Retrieve historical stock data with custom session"""
+def cached_get_stock_history_with_session(_session: Session, ticker: str, period: str = '10y') -> pd.DataFrame:
+    """
+    Récupère l'historique d'un titre avec une session personnalisée (cached function)
+    
+    Args:
+        _session: Session curl_cffi (avec underscore pour éviter le haching)
+        ticker: Symbole du titre
+        period: Période d'historique
+        
+    Returns:
+        DataFrame avec l'historique
+    """
     try:
-        if session is None:
-            session = get_chrome_session()
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
         
-        # Créer l'objet Ticker avec la session personnalisée
-        stock = yf.Ticker(ticker, session=session)
+        params = {
+            "range": period,
+            "interval": "1d",
+            "includePrePost": "false",
+            "events": "div,splits,capitalGains"
+        }
         
-        # Récupérer l'historique
-        df = stock.history(period=period)
+        response = _session.get(url, params=params)
         
-        if df.empty:
-            logger.warning(f"No data available for {ticker}")
+        if response.status_code == 200:
+            data = response.json()
+            chart_data = data["chart"]["result"][0]
+            
+            # Extraire les données
+            timestamps = chart_data["timestamp"]
+            quotes = chart_data["indicators"]["quote"][0]
+            
+            # Créer le DataFrame
+            df = pd.DataFrame({
+                "Date": pd.to_datetime(timestamps, unit='s'),
+                "Open": quotes["open"],
+                "High": quotes["high"],
+                "Low": quotes["low"],
+                "Close": quotes["close"],
+                "Volume": quotes["volume"]
+            })
+            
+            df.set_index("Date", inplace=True)
+            df = df[df['Volume'].notna()]  # Filtrer les jours non tradés
+            
+            return df
+        else:
+            st.warning(f"Erreur lors de la récupération des données pour {ticker}: {response.status_code}")
             return pd.DataFrame()
-        
-        df['date_str'] = df.index.strftime('%Y-%m-%d')
-        return df
+            
     except Exception as e:
-        logger.error(f"Error retrieving history for {ticker}: {str(e)}")
+        st.error(f"Erreur lors de la récupération de l'historique pour {ticker}: {str(e)}")
         return pd.DataFrame()
 
 @st.cache_data(ttl=300)
@@ -231,6 +264,65 @@ def cached_get_historical_financials_with_session(ticker: str, session=None) -> 
     except Exception as e:
         logger.error(f"Error retrieving financial data for {ticker}: {str(e)}")
         return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+
+@st.cache_data(ttl=86400)
+def cached_get_market_structure():
+    """Retrieve market structure data (cached function)"""
+    try:
+        df = pd.read_csv(
+            r"https://raw.githubusercontent.com/Culass31/actions/refs/heads/main/actions.csv", 
+            sep=";", 
+            encoding='utf-8-sig'
+        )
+        
+        market_structure = {
+            'regions': {},
+            'secteurs': {},
+            'industries': {},
+            'marches': {},
+            'all_stocks': {}
+        }
+        
+        for _, row in df.iterrows():
+            nom = row['name']
+            ticker = row['ticker']
+            region = row['region']
+            pays = row['pays_fr']
+            secteur = row['sector_fr']
+            industrie = row['industry_fr']
+            marche = row['indice']
+            
+            stock_info = {
+                'ticker': ticker,
+                'region': region,
+                'pays': pays,
+                'secteur': secteur,
+                'industrie': industrie,
+                'marche': marche
+            }
+            
+            market_structure['all_stocks'][nom] = stock_info
+            
+            if region not in market_structure['regions']:
+                market_structure['regions'][region] = {}
+            if pays not in market_structure['regions'][region]:
+                market_structure['regions'][region][pays] = {}
+            market_structure['regions'][region][pays][nom] = stock_info
+            
+            if secteur not in market_structure['secteurs']:
+                market_structure['secteurs'][secteur] = {}
+            if industrie not in market_structure['secteurs'][secteur]:
+                market_structure['secteurs'][secteur][industrie] = {}
+            market_structure['secteurs'][secteur][industrie][nom] = stock_info
+            
+            if marche not in market_structure['marches']:
+                market_structure['marches'][marche] = {}
+            market_structure['marches'][marche][nom] = stock_info
+        
+        return market_structure
+    except Exception as e:
+        st.error(f"Erreur lors de la lecture du fichier: {e}")
+        return {}
 
 class DataService:
     """Service responsible for all data operations with rate limiting"""
