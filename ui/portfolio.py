@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
 
-from services.portfolio_services import analyze_portfolio, optimize_portfolio_allocation
+from services import PortfolioService
 from utils.common import (
     create_columns_layout, 
     create_expander, 
@@ -470,13 +470,6 @@ def render_optimization_export(optimized_df):
             file_name=filename,
             mime="text/csv"
         )
-Performance (%)",
-        yaxis_title="Potentiel de hausse (%)",
-        height=400
-    )
-    
-    return fig
-
 
 def render_positions_table(results_df):
     """Render le tableau des positions analysées"""
@@ -591,13 +584,14 @@ def render_allocation_visualization(optimized_df):
     
     fig = go.Figure()
     
-    # Convertir les pourcentages en float
-    optimized_df['Poids actuel (%)'] = optimized_df['Poids actuel (%)'].apply(
-        lambda x: float(x.rstrip('%')) if isinstance(x, str) else x
-    )
-    optimized_df['Poids cible (%)'] = optimized_df['Poids cible (%)'].apply(
-        lambda x: float(x.rstrip('%')) if isinstance(x, str) else x
-    )
+    # Convertir les pourcentages en float si nécessaire
+    if isinstance(optimized_df['Poids actuel (%)'].iloc[0], str):
+        optimized_df['Poids actuel (%)'] = optimized_df['Poids actuel (%)'].apply(
+            lambda x: float(x.rstrip('%')) if isinstance(x, str) else x
+        )
+        optimized_df['Poids cible (%)'] = optimized_df['Poids cible (%)'].apply(
+            lambda x: float(x.rstrip('%')) if isinstance(x, str) else x
+        )
     
     # Barres pour allocation actuelle
     fig.add_trace(go.Bar(
@@ -617,4 +611,32 @@ def render_allocation_visualization(optimized_df):
     
     fig.update_layout(
         title="Comparaison des allocations",
-        xaxis_title="
+        xaxis_title="Ticker",
+        yaxis_title="Allocation (%)",
+        barmode='group',
+        height=500,
+        margin=dict(l=50, r=20, t=40, b=50)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+
+# Fonctions utilitaires
+def analyze_portfolio(portfolio_df):
+    """Analyse un portefeuille d'actions"""
+    from services import DataService, PortfolioService
+    
+    data_service = DataService()
+    portfolio_service = PortfolioService(data_service)
+    
+    return portfolio_service.analyze_portfolio(portfolio_df)
+
+
+def optimize_portfolio_allocation(results_df, risk_profile):
+    """Optimise l'allocation du portefeuille"""
+    from services import DataService, PortfolioService
+    
+    data_service = DataService()
+    portfolio_service = PortfolioService(data_service)
+    
+    return portfolio_service.optimize_portfolio_allocation(results_df, risk_profile)

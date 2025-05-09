@@ -9,7 +9,7 @@ from ui.news import render_news_tab
 from ui.screener import render_screener_tab
 from ui.portfolio import render_portfolio_tab
 from utils.ui_styles import apply_custom_styles
-from services.data_service import get_market_structure
+from services import DataService
 
 # Configuration de l'application
 st.set_page_config(
@@ -17,6 +17,7 @@ st.set_page_config(
     page_icon="📈", 
     layout="wide"
 )
+data_service = DataService()
 
 # Appliquer les styles personnalisés
 apply_custom_styles()
@@ -26,9 +27,8 @@ st.title("📈 Dashboard d'Analyse des Marchés Financiers")
 st.markdown("#### Analyse technique, fondamentale et screening d'actions")
 
 # Charger la structure du marché
-@st.cache_data(ttl=86400)  # Cache pour 24 heures
 def load_market_structure():
-    return get_market_structure()
+    return data_service.get_market_structure()
 
 # Charger les données
 with st.spinner("Chargement des marchés...", show_time=True):

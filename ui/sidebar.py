@@ -1,18 +1,28 @@
 """
-Composant sidebar pour la sélection d'actions
+Module pour gérer la sidebar de l'application
 """
 import streamlit as st
-from services.data_service import flatten_market_structure
+from services import DataService
 
 def render_sidebar(market_structure):
-    """Render la sidebar et retourne l'action sélectionnée"""
+    """
+    Render the sidebar for stock selection
     
+    Args:
+        market_structure: Market structure dictionary
+        
+    Returns:
+        dict: Selected stock information or None
+    """
+    # Créer une instance de DataService
+    data_service = DataService()
+    
+    # Initialisation des valeurs par défaut dans session_state si c'est la première exécution
+    if 'filter_method' not in st.session_state:
+        st.session_state.filter_method = "Géographique"
+
     with st.sidebar:
         st.title("🔍 Sélection du Marché")
-        
-        # Initialiser les valeurs par défaut dans session_state
-        if 'filter_method' not in st.session_state:
-            st.session_state.filter_method = "Géographique"
         
         # Méthode de filtrage
         st.markdown('<p class="sidebar-title">Méthode de filtrage</p>', unsafe_allow_html=True)
@@ -31,8 +41,6 @@ def render_sidebar(market_structure):
         # Approche géographique
         if filter_method == "Géographique":
             regions = list(market_structure['regions'].keys())
-            
-            # Sélection de la région
             selected_region = st.selectbox(
                 "Région", 
                 regions, 
@@ -42,8 +50,6 @@ def render_sidebar(market_structure):
             
             if selected_region:
                 pays_list = list(market_structure['regions'][selected_region].keys())
-                
-                # Sélection du pays
                 selected_pays = st.selectbox(
                     "Pays", 
                     pays_list, 
@@ -51,9 +57,8 @@ def render_sidebar(market_structure):
                     key="selected_pays"
                 )
                 
-                # Récupérer les actions filtrées
-                flattened_stocks = flatten_market_structure(
-                    market_structure, 
+                # Utiliser la méthode d'instance sans passer market_structure
+                flattened_stocks = data_service.flatten_market_structure(
                     filter_type='region', 
                     level1=selected_region, 
                     level2=selected_pays
@@ -68,9 +73,8 @@ def render_sidebar(market_structure):
                 industries = list(market_structure['secteurs'][selected_secteur].keys())
                 selected_industrie = st.selectbox("Industrie", industries)
                 
-                # Récupérer les actions filtrées
-                flattened_stocks = flatten_market_structure(
-                    market_structure, 
+                # Utiliser la méthode d'instance sans passer market_structure
+                flattened_stocks = data_service.flatten_market_structure(
                     filter_type='secteur', 
                     level1=selected_secteur, 
                     level2=selected_industrie
@@ -82,9 +86,8 @@ def render_sidebar(market_structure):
             selected_marche = st.selectbox("Place de marché", marches)
             
             if selected_marche:
-                # Récupérer les actions filtrées
-                flattened_stocks = flatten_market_structure(
-                    market_structure, 
+                # Utiliser la méthode d'instance sans passer market_structure
+                flattened_stocks = data_service.flatten_market_structure(
                     filter_type='marche', 
                     level1=selected_marche
                 )
@@ -102,7 +105,6 @@ def render_sidebar(market_structure):
             stock_names = list(flattened_stocks.keys())
             stock_names.sort()
             
-            # Recherche avec autocomplétion
             selected_stock_name = st.selectbox(
                 "Sélectionnez une action",
                 stock_names,
