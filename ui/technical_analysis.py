@@ -586,72 +586,72 @@ class TechnicalAnalysisComponent:
             st.plotly_chart(momentum_chart, use_container_width=True)
     
     def _render_analyst_targets(self, ticker: str):
-    """Affiche les objectifs de cours des analystes"""
-    # Utiliser get_stock_info et get_stock_analyst_price_targets depuis data_service
-    info = self.data_service.get_stock_info(ticker)
-    analyst_targets = self.data_service.get_stock_analyst_price_targets(ticker)
-    
-    if info and analyst_targets:
-        st.markdown("<h4>Objectif de cours</h4>", unsafe_allow_html=True)
+        """Affiche les objectifs de cours des analystes"""
+        # Utiliser get_stock_info et get_stock_analyst_price_targets depuis data_service
+        info = self.data_service.get_stock_info(ticker)
+        analyst_targets = self.data_service.get_stock_analyst_price_targets(ticker)
         
-        current_price = info.get('currentPrice', 0)
-        mean_target = analyst_targets.get('mean', 0)
-        low_target = analyst_targets.get('low', 0)
-        high_target = analyst_targets.get('high', 0)
-        
-        if all([current_price, mean_target, low_target, high_target]):
-            # Créer un gauge chart
-            fig = go.Figure()
+        if info and analyst_targets:
+            st.markdown("<h4>Objectif de cours</h4>", unsafe_allow_html=True)
             
-            min_display = min(low_target, current_price) * 0.95
-            max_display = max(high_target, current_price) * 1.05
+            current_price = info.get('currentPrice', 0)
+            mean_target = analyst_targets.get('mean', 0)
+            low_target = analyst_targets.get('low', 0)
+            high_target = analyst_targets.get('high', 0)
             
-            fig.add_trace(go.Indicator(
-                mode="number+gauge",
-                value=current_price,
-                gauge={
-                    'axis': {'range': [min_display, max_display]},
-                    'bar': {'color': "blue"},
-                    'steps': [
-                        {'range': [min_display, low_target], 'color': "lightgray"},
-                        {'range': [low_target, high_target], 'color': "lightblue"}
-                    ],
-                    'threshold': {
-                        'line': {'color': "purple", 'width': 4},
-                        'thickness': 0.75,
-                        'value': mean_target
-                    }
-                },
-                number={'suffix': "€", 'font': {'size': 24}}
-            ))
-            
-            fig.add_annotation(
-                x=0.5, y=1.15,
-                text=f"Objectif moyen: {mean_target:.2f}€",
-                showarrow=False,
-                font=dict(size=16, color="purple")
-            )
-            
-            fig.add_annotation(
-                x=0.2, y=1.15,
-                text=f"+ bas: {low_target:.2f}€",
-                showarrow=False,
-                font=dict(size=14, color="lightgray")
-            )
-            
-            fig.add_annotation(
-                x=0.8, y=1.15,
-                text=f"+ haut: {high_target:.2f}€",
-                showarrow=False,
-                font=dict(size=14, color="lightblue")
-            )
-            
-            fig.update_layout(
-                height=300,
-                margin=dict(l=20, r=20, t=80, b=20)
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
+            if all([current_price, mean_target, low_target, high_target]):
+                # Créer un gauge chart
+                fig = go.Figure()
+                
+                min_display = min(low_target, current_price) * 0.95
+                max_display = max(high_target, current_price) * 1.05
+                
+                fig.add_trace(go.Indicator(
+                    mode="number+gauge",
+                    value=current_price,
+                    gauge={
+                        'axis': {'range': [min_display, max_display]},
+                        'bar': {'color': "blue"},
+                        'steps': [
+                            {'range': [min_display, low_target], 'color': "lightgray"},
+                            {'range': [low_target, high_target], 'color': "lightblue"}
+                        ],
+                        'threshold': {
+                            'line': {'color': "purple", 'width': 4},
+                            'thickness': 0.75,
+                            'value': mean_target
+                        }
+                    },
+                    number={'suffix': "€", 'font': {'size': 24}}
+                ))
+                
+                fig.add_annotation(
+                    x=0.5, y=1.15,
+                    text=f"Objectif moyen: {mean_target:.2f}€",
+                    showarrow=False,
+                    font=dict(size=16, color="purple")
+                )
+                
+                fig.add_annotation(
+                    x=0.2, y=1.15,
+                    text=f"+ bas: {low_target:.2f}€",
+                    showarrow=False,
+                    font=dict(size=14, color="lightgray")
+                )
+                
+                fig.add_annotation(
+                    x=0.8, y=1.15,
+                    text=f"+ haut: {high_target:.2f}€",
+                    showarrow=False,
+                    font=dict(size=14, color="lightblue")
+                )
+                
+                fig.update_layout(
+                    height=300,
+                    margin=dict(l=20, r=20, t=80, b=20)
+                )
+                
+                st.plotly_chart(fig, use_container_width=True)
     
     def _render_detailed_analysis_section(self, ticker: str):
         """Render la section d'analyse détaillée"""
