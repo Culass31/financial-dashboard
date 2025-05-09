@@ -1846,6 +1846,3 @@ def create_moat_visualization(moat_analysis: Dict) -> go.Figure:
     )
     
     return fig
-
-        
-    
