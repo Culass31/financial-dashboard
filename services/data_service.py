@@ -5,18 +5,46 @@ import numpy as np
 import streamlit as st
 from typing import Dict, Tuple, Optional
 from datetime import datetime, timedelta
-import functools
-from threading import Lock
 import time
+from functools import wraps
+from threading import Lock
+import logging
+
+# Configuration du logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Import de curl_cffi pour contourner les limitations
+try:
+    from curl_cffi import requests as curl_requests
+except ImportError:
+    logger.warning("curl_cffi not installed. Installing...")
+    import subprocess
+    import sys
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "curl_cffi"])
+    from curl_cffi import requests as curl_requests
 
 # Dictionnaire global pour stocker les derniers appels API par ticker
 _api_calls = {}
 _api_lock = Lock()
+_session_cache = None
+
+# Configuration des délais
+RATE_LIMIT_DELAY = 2.0  # Délai entre les requêtes en secondes
+MAX_RETRIES = 3
+RETRY_DELAY = 5
+
+def get_chrome_session():
+    """Créer ou récupérer une session Chrome pour contourner les limitations"""
+    global _session_cache
+    if _session_cache is None:
+        _session_cache = curl_requests.Session(impersonate="chrome")
+    return _session_cache
 
 # Décorateur pour gérer le rate limiting
-def rate_limit(min_interval_seconds=1.0):
+def rate_limit(min_interval_seconds=RATE_LIMIT_DELAY):
     def decorator(func):
-        @functools.wraps(func)
+        @wraps(func)
         def wrapper(self, ticker, *args, **kwargs):
             with _api_lock:
                 now = datetime.now()
@@ -25,43 +53,68 @@ def rate_limit(min_interval_seconds=1.0):
                 if last_call is not None:
                     time_since_last_call = (now - last_call).total_seconds()
                     if time_since_last_call < min_interval_seconds:
-                        time.sleep(min_interval_seconds - time_since_last_call)
+                        sleep_time = min_interval_seconds - time_since_last_call
+                        logger.info(f"Rate limiting: sleeping for {sleep_time:.2f} seconds for {ticker}")
+                        time.sleep(sleep_time)
                 
-                result = func(self, ticker, *args, **kwargs)
-                _api_calls[ticker] = datetime.now()
-                return result
+                # Essayer plusieurs fois en cas d'échec
+                last_exception = None
+                for attempt in range(MAX_RETRIES):
+                    try:
+                        result = func(self, ticker, *args, **kwargs)
+                        _api_calls[ticker] = datetime.now()
+                        return result
+                    except Exception as e:
+                        last_exception = e
+                        if attempt < MAX_RETRIES - 1:
+                            logger.warning(f"Attempt {attempt + 1} failed for {ticker}: {str(e)}. Retrying in {RETRY_DELAY} seconds...")
+                            time.sleep(RETRY_DELAY)
+                        else:
+                            logger.error(f"All attempts failed for {ticker}: {str(e)}")
+                            raise last_exception
         return wrapper
     return decorator
 
-@st.cache_data(ttl=3600)
-def cached_get_stock_history(ticker: str, period: str = '5y') -> pd.DataFrame:
-    """Retrieve historical stock data (cached function)"""
+@st.cache_data(ttl=1800)  # Cache réduit à 30 minutes pour les données de marché
+def cached_get_stock_history_with_session(ticker: str, period: str = '10y', session=None) -> pd.DataFrame:
+    """Retrieve historical stock data with custom session"""
     try:
-        stock_data = yf.Ticker(ticker)
-        df = stock_data.history(period=period)
+        if session is None:
+            session = get_chrome_session()
+        
+        # Créer l'objet Ticker avec la session personnalisée
+        stock = yf.Ticker(ticker, session=session)
+        
+        # Récupérer l'historique
+        df = stock.history(period=period)
         
         if df.empty:
-            st.warning(f"No data available for {ticker}")
+            logger.warning(f"No data available for {ticker}")
             return pd.DataFrame()
         
         df['date_str'] = df.index.strftime('%Y-%m-%d')
         return df
     except Exception as e:
-        st.error(f"Error retrieving history for {ticker}: {str(e)}")
+        logger.error(f"Error retrieving history for {ticker}: {str(e)}")
         return pd.DataFrame()
 
-@st.cache_data(ttl=3600)
-def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
-    """Retrieve fundamental data for a stock (cached function)"""
+@st.cache_data(ttl=300)
+def cached_get_fundamental_data_with_session(ticker: str, session=None) -> Optional[Dict]:
+    """Retrieve fundamental data with custom session"""
     try:
-        stock = yf.Ticker(ticker)
+        if session is None:
+            session = get_chrome_session()
+            
+        stock = yf.Ticker(ticker, session=session)
         info = stock.info
         
         if not info:
             return None
         
-        income_stmt, balance_sheet, cashflow = cached_get_historical_financials(ticker)
+        # Récupération des états financiers avec la même session
+        income_stmt, balance_sheet, cashflow = cached_get_historical_financials_with_session(ticker, session)
         
+        # Construction des données fondamentales
         general_data = {
             "Nom": info.get('longName', None),
             "Secteur": info.get('sector', None),
@@ -86,7 +139,6 @@ def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
             "Rendement du dividende": f"{info.get('dividendYield', 0) * 100:.2f}%" if info.get('dividendYield') else None,
             "Ex-Date dividende": info.get('exDividendDate', None),
             "Actions en circulation": info.get('sharesOutstanding', None),
-            "Actions ordinaires": balance_sheet.loc['Ordinary Shares Number', income_stmt.columns[0]] if 'Ordinary Shares Number' in balance_sheet.index and not balance_sheet.empty else None,
             "Volume": info.get('volume', None),
             "Volume moyen": info.get('averageVolume', None),
             "Volume moyen (10j)": info.get('averageVolume10days', None),
@@ -112,13 +164,13 @@ def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
             "Croissance du CA (%)": info.get('revenueGrowth', 0) * 100 if info.get('revenueGrowth') else None,
             "Dividende": info.get('dividendRate', None),
             "Rendement du dividende (%)": info.get('dividendYield', 0) if info.get('dividendYield') else None,
-            "Ratio dette/capitaux propres": info.get('debtToEquity', None),
             "Quick Ratio": info.get('quickRatio', None),
             "Current Ratio": info.get('currentRatio', None),
             "EV/EBITDA": info.get('enterpriseToEbitda', None),
             "EV/Revenue": info.get('enterpriseToRevenue', None),
         }
         
+        # Données financières additionnelles
         financial_data = {}
         
         if not income_stmt.empty and len(income_stmt.columns) > 0:
@@ -151,14 +203,17 @@ def cached_get_fundamental_data(ticker: str) -> Optional[Dict]:
         }
     
     except Exception as e:
-        st.error(f"Error retrieving fundamental data for {ticker}: {str(e)}")
+        logger.error(f"Error retrieving fundamental data for {ticker}: {str(e)}")
         return None
 
-@st.cache_data(ttl=3600)
-def cached_get_historical_financials(ticker: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Retrieve historical financial statements (cached function)"""
+@st.cache_data(ttl=300)
+def cached_get_historical_financials_with_session(ticker: str, session=None) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Retrieve historical financial statements with custom session"""
     try:
-        stock = yf.Ticker(ticker)
+        if session is None:
+            session = get_chrome_session()
+            
+        stock = yf.Ticker(ticker, session=session)
         
         income_stmt = stock.income_stmt
         balance_sheet = stock.balance_sheet
@@ -174,120 +229,30 @@ def cached_get_historical_financials(ticker: str) -> Tuple[pd.DataFrame, pd.Data
         return income_stmt, balance_sheet, cashflow
         
     except Exception as e:
-        st.error(f"Error retrieving financial data for {ticker}: {str(e)}")
+        logger.error(f"Error retrieving financial data for {ticker}: {str(e)}")
         return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
 
-@st.cache_data(ttl=86400)
-def cached_get_market_structure():
-    try:
-        df = pd.read_csv(
-            r"https://raw.githubusercontent.com/Culass31/actions/refs/heads/main/actions.csv", 
-            sep=";", 
-            encoding='utf-8-sig'
-        )
-        
-        market_structure = {
-            'regions': {},
-            'secteurs': {},
-            'industries': {},
-            'marches': {},
-            'all_stocks': {}
-        }
-        
-        for _, row in df.iterrows():
-            nom = row['name']
-            ticker = row['ticker']
-            region = row['region']
-            pays = row['pays_fr']
-            secteur = row['sector_fr']
-            industrie = row['industry_fr']
-            marche = row['indice']
-            
-            stock_info = {
-                'ticker': ticker,
-                'region': region,
-                'pays': pays,
-                'secteur': secteur,
-                'industrie': industrie,
-                'marche': marche
-            }
-            
-            market_structure['all_stocks'][nom] = stock_info
-            
-            if region not in market_structure['regions']:
-                market_structure['regions'][region] = {}
-            if pays not in market_structure['regions'][region]:
-                market_structure['regions'][region][pays] = {}
-            market_structure['regions'][region][pays][nom] = stock_info
-            
-            if secteur not in market_structure['secteurs']:
-                market_structure['secteurs'][secteur] = {}
-            if industrie not in market_structure['secteurs'][secteur]:
-                market_structure['secteurs'][secteur][industrie] = {}
-            market_structure['secteurs'][secteur][industrie][nom] = stock_info
-            
-            if marche not in market_structure['marches']:
-                market_structure['marches'][marche] = {}
-            market_structure['marches'][marche][nom] = stock_info
-        
-        return market_structure
-    except Exception as e:
-        st.error(f"Erreur lors de la lecture du fichier: {e}")
-        return {}
-
-@st.cache_data(ttl=3600)
-def cached_get_isin_for_ticker(ticker: str) -> str:
-    """Get ISIN for a ticker symbol (cached function)"""
-    try:
-        stock = yf.Ticker(ticker)
-        isin = stock.isin if hasattr(stock, 'isin') else 'N/A'
-        return isin
-    except:
-        return 'N/A'
-
-# Fonctions pour récupérer les données spécifiques sans les mettre en cache
-@st.cache_resource(ttl=3600)
-def get_ticker_object(ticker: str):
-    """Get a yfinance Ticker object - cached as resource"""
-    return yf.Ticker(ticker)
-
-def get_stock_info(ticker: str) -> Dict:
-    """Get stock info without caching the Ticker object"""
-    ticker_obj = get_ticker_object(ticker)
-    return ticker_obj.info
-
-def get_stock_news(ticker: str) -> list:
-    """Get stock news without caching the Ticker object"""
-    ticker_obj = get_ticker_object(ticker)
-    return ticker_obj.news
-
-def get_stock_recommendations(ticker: str) -> pd.DataFrame:
-    """Get stock recommendations without caching the Ticker object"""
-    ticker_obj = get_ticker_object(ticker)
-    return ticker_obj.recommendations_summary
-
-def get_stock_analyst_price_targets(ticker: str) -> Dict:
-    """Get analyst price targets without caching the Ticker object"""
-    ticker_obj = get_ticker_object(ticker)
-    return ticker_obj.analyst_price_targets
-
 class DataService:
-    """Service responsible for all data operations"""
+    """Service responsible for all data operations with rate limiting"""
     
     def __init__(self):
         self.market_structure = None
+        self.session = get_chrome_session()
     
+    @rate_limit()
     def get_stock_history(self, ticker: str, period: str = '5y') -> pd.DataFrame:
-        """Retrieve historical stock data"""
-        return cached_get_stock_history(ticker, period)
+        """Retrieve historical stock data with rate limiting"""
+        return cached_get_stock_history_with_session(ticker, period, self.session)
     
+    @rate_limit()
     def get_fundamental_data(self, ticker: str) -> Optional[Dict]:
-        """Retrieve fundamental data for a stock"""
-        return cached_get_fundamental_data(ticker)
+        """Retrieve fundamental data with rate limiting"""
+        return cached_get_fundamental_data_with_session(ticker, self.session)
     
+    @rate_limit()
     def get_historical_financials(self, ticker: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        """Retrieve historical financial statements"""
-        return cached_get_historical_financials(ticker)
+        """Retrieve historical financial statements with rate limiting"""
+        return cached_get_historical_financials_with_session(ticker, self.session)
     
     def get_market_structure(self) -> Dict:
         """Get or refresh market structure"""
@@ -333,22 +298,12 @@ class DataService:
         
         return {}
     
+    @rate_limit()
     def get_isin_for_ticker(self, ticker: str) -> str:
-        """Get ISIN for a ticker symbol"""
-        return cached_get_isin_for_ticker(ticker)
-    
-    def get_stock_info(self, ticker: str) -> Dict:
-        """Get stock info data"""
-        return get_stock_info(ticker)
-    
-    def get_stock_news(self, ticker: str) -> list:
-        """Get stock news data"""
-        return get_stock_news(ticker)
-    
-    def get_stock_recommendations(self, ticker: str) -> pd.DataFrame:
-        """Get stock recommendations"""
-        return get_stock_recommendations(ticker)
-    
-    def get_stock_analyst_price_targets(self, ticker: str) -> Dict:
-        """Get analyst price targets"""
-        return get_stock_analyst_price_targets(ticker)
+        """Get ISIN for a ticker symbol with rate limiting"""
+        try:
+            stock = yf.Ticker(ticker, session=self.session)
+            isin = stock.isin if hasattr(stock, 'isin') else 'N/A'
+            return isin
+        except:
+            return 'N/A'

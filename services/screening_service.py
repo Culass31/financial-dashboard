@@ -56,7 +56,7 @@ class ScreeningService:
             ticker = stock_info['ticker']
             try:
                 # Get stock data
-                stock_data = yf.Ticker(ticker)
+                stock_data = yf.Ticker(ticker, session=self.session)
                 info = stock_data.info
                 time.sleep(0.5)  # Rate limiting
                 

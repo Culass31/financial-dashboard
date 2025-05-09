@@ -14,13 +14,14 @@ class NewsService:
     
     def __init__(self, data_service: DataService):
         self.data_service = data_service
+        self.session = data_service.session  # Utiliser la même session
     
-    @st.cache_data(ttl=3600)
+    @st.cache_data(ttl=3600)  # Cache de 1 heure pour les news
     def get_stock_news(self, ticker: str) -> pd.DataFrame:
         """Retrieve and categorize stock news"""
         try:
-            # Utiliser la méthode du data_service au lieu de créer directement un Ticker
-            news_items = self.data_service.get_stock_news(ticker)
+            ticker_obj = yf.Ticker(ticker, session=self.session)
+            news_items = ticker_obj.news
             
             if not news_items or len(news_items) == 0:
                 return pd.DataFrame()
